@@ -110,16 +110,16 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Projects</span>
+                            <span class="menu-title">users</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/projects/list.html">
+                                <a class="menu-link" href="{{route('account.user')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">My Projects</span>
+                                    <span class="menu-title">account</span>
                                 </a>
                             </div>
                             <div class="menu-item">

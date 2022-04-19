@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Area extends Model
+class Address extends Model
 {
     use HasFactory;
-    // area belong to city
-    public function city()
+    public function City()
     {
         return $this->belongsTo(City::class);
     }
-
-
-
     protected $fillable = [
-        'area',
-        'rate',
+        'address_line',
+        'building',
+        'apartment',
+        'user_id',
         'city_id',
+        'area_id',
+        'contact_id',
     ];
 }

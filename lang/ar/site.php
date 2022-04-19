@@ -35,6 +35,8 @@ return [
     'close' => 'الغاء',
     'area' => 'منطقة',
     'delete' => 'حذف',
+    'all_city' => 'كل المدن',
+    'update' => 'تعديل',
 
 
 

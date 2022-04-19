@@ -17,8 +17,8 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $area = Area::with('city')->get();
-        return view('Dashboard.admin.area.index', ['area' => $area]);
+        // $area = Area::with('city')->get();
+        // return view('Dashboard.admin.area.index', ['area' => $area]);
     }
 
     /**
@@ -37,26 +37,30 @@ class AreaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    //add area belong to city
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'city' => 'required|string',
-            'rate' => 'string|min:1|max:7',
-
+            'area' => 'required|string',
+            'rate' => 'max:7',
         ]);
-        $rate_city = '';
-        if ($request->rate == null) {
-            $rate_city = City::where('id', $request->city_id)->get('rate');
-        } else {
-            $rate_city = $request->rate;
-        }
 
         if (!$validator->fails()) {
-            $isSaved = Area::create([
-                'city' => $request->input('city'),
-                'rate' => $rate_city,
-                'city_id' => $request->city_id,
-            ]);
+            if ($request->rate == null) {
+                $ratee = City::where('id', $request->city_id)->pluck('rate');
+                $isSaved = Area::create([
+                    'area' => $request->input('area'),
+                    'rate' => $ratee[0],
+                    'city_id' => $request->city_id,
+                ]);
+            } else {
+                $isSaved = Area::create([
+                    'area' => $request->input('area'),
+                    'rate' => $request->input('rate'),
+                    'city_id' => $request->city_id,
+                ]);
+            }
+
             return response()->json(
                 [
                     'message' => $isSaved ? 'City created successfully' : 'Create failed!'
@@ -74,9 +78,14 @@ class AreaController extends Controller
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function show(Area $area)
+    // get area belong to city
+    public function show(Request $request)
     {
-        //
+        // dd($request->input(['a']));
+        // $areas =  Area::with('city')->where('city_id', '==', $request->id)->get();
+        // dd($areas);
+
+        // return view('Dashboard.admin.area.index', ['area' => $areas, 'city' => $request->id]);
     }
 
     /**
@@ -87,7 +96,7 @@ class AreaController extends Controller
      */
     public function edit(Area $area)
     {
-        //
+        return response()->view('Dashboard.admin.area.edit', ['area' => $area]);
     }
 
     /**
@@ -99,7 +108,27 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        //
+        $validator = Validator($request->all(), [
+            'area' => 'string',
+            'rate' => 'max:7',
+        ]);
+
+        if (!$validator->fails()) {
+            $isSaved = $area->update([
+                'area' => $request->input('area'),
+                'rate' => $request->input('rate'),
+
+            ]);
+
+            return response()->json(
+                [
+                    'message' => $isSaved ? 'Area updated successfully' : 'update failed!'
+                ],
+                $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+            );
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

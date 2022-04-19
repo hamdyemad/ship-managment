@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
 
-    
+
     public function showLogin(Request $request)
     {
         $request->merge(["guard" => $request->guard]);
@@ -56,6 +56,6 @@ class AuthController extends Controller
         $guard = auth('web')->check() ? 'web' : 'admin';
         Auth::guard($guard)->logout();
         $request->session()->invalidate();
-        return redirect()->route('dashborad.login', $guard);
+        return redirect()->route('dashboard.login', $guard);
     }
 }

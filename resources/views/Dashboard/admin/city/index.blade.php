@@ -1,15 +1,36 @@
 @extends('Dashboard.app')
 
-@section('page_name','Home')
+@section('title',__('site.city'))
 
+@section('page_name',__('site.city'))
 
-@section('pages','City')
+@section('pages')
+
+<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">Home</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">City</li>
+    <!--end::Item-->
+</ul>
+
+@endsection
 
 @section('css')
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" rel="stylesheet"
     type="text/css" />
 <link href="https://cdn.datatables.net/1.11.5/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css" />
+
+
 
 @endsection
 
@@ -41,80 +62,97 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{('site.close')}}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('site.close')}}</button>
                 <button type="button" onclick="addcity()" class="btn btn-primary">{{__('site.add')}}</button>
             </div>
         </div>
     </div>
 </div>
 
-<table id="example" class="ui celled table" style="width:100%">
-    <thead>
-        <tr>
-            <th>{{__('site.id')}}</th>
-            <th>{{__('site.city')}}</th>
-            <th>{{__('site.rate')}}</th>
-            <th>{{__('site.sitting')}}</th>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="example" class="ui celled table table-hover " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                {{__('site.id')}}</th>
+                            <th>
+                                {{__('site.city')}}
+                            </th>
+                            <th>
+                                {{__('site.rate')}}
+                            </th>
+                            <th>
+                                {{__('site.sitting')}}
+                            </th>
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($city as $city)
-        <tr>
-            <td>{{$city->id}}</td>
-            <td>{{$city->city}}</td>
-            <td>{{$city->rate}}</td>
-            <td class="text-end">
-                <a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click"
-                    data-kt-menu-placement="bottom-end">Actions
-                    <span class="svg-icon svg-icon-5 m-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                fill="black" />
-                        </svg>
-                    </span>
+                        </tr>
+                    </thead>
+                    <tbody id="list_tbody">
+                        @foreach ($city as $city)
+                        <tr>
+                            <td st>{{$city->id}}</td>
+                            <td>{{$city->city}}</td>
+                            <td>{{$city->rate}}</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                    <span class="svg-icon svg-icon-5 m-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path
+                                                d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                fill="black" />
+                                        </svg>
+                                    </span>
 
-                </a>
+                                </a>
 
-                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
-                    data-kt-menu="true">
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                    data-kt-menu="true">
 
-                    <div class="menu-item px-3">
-                        <a href="{{route('area.index')}}" city_id="{{$city->id}}" id="editf"
-                            class="menu-link px-3">{{__('site.area')}}</a>
-                        {{-- <button type="button" value="{{$city->id}}" class="menu-link px-3"
-                            id="#editf">update</button> --}}
-                    </div>
+                                    <div class="menu-item px-3">
+                                        <a href="{{route('city.show',$city->id)}}"
+                                            class="menu-link px-3">{{__('site.area')}}</a>
+                                    </div>
 
-                    <div class="menu-item px-3">
-                        <a href="" class="menu-link px-3"
-                            data-kt-customer-table-filter="delete_row">{{__('site.delete')}}</a>
-                    </div>
+                                    <div class="menu-item px-3">
+                                        <a href="{{route('city.edit',$city->id)}}" id="editf"
+                                            class="menu-link px-3">{{__('site.update')}}</a>
+                                    </div>
 
-                </div>
+                                    <div class="menu-item px-3">
+                                        <a href="#" onclick="confirmDelete('{{$city->id}}',this)" class="menu-link px-3"
+                                            data-kt-customer-table-filter="delete_row">{{__('site.delete')}}</a>
+                                    </div>
 
-            </td>
+                                </div>
 
-        </tr>
-        @endforeach
-    </tbody>
+                            </td>
 
-</table>
+                        </tr>
+                        @endforeach
+                    </tbody>
 
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 @endsection
 
 @section('js')
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.semanticui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('#example').DataTable();
+
     });
 
     // add city
@@ -133,6 +171,9 @@
             timer: 1500
             });
             document.getElementById('create-form').reset();
+            $('#exampleModal').modal('hide');
+            location.reload();
+
         })
         .catch(function (error) {
             console.log(error);
@@ -145,6 +186,56 @@
             })
         });
     }
+
+    // show message to be sure to delete
+    function confirmDelete(id,reference) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            performDelete(id,reference);
+            }
+        });
+    }
+
+    // delete City with his area ....
+    function performDelete(id,reference) {
+        var table1 = $('#example').DataTable();
+        axios.delete('/dashboard/city/'+id)
+        .then(function (response) {
+            //2xx
+            console.log(response);
+            Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+            });
+            reference.closest('tr').remove();
+            location.reload();
+
+        })
+        .catch(function (error) {
+            //4xx - 5xx
+            console.log(error);
+            Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: error.response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+            });
+        });
+    }
+
+
 
 </script>
 @endsection

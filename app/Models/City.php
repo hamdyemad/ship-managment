@@ -11,12 +11,19 @@ class City extends Model
     protected $fillable = [
         'city',
         'rate',
-
     ];
+
+
 
     //city has many areas
     public function areas()
     {
         return $this->hasMany(Area::class);
+    }
+
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 }

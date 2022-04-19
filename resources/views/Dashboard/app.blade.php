@@ -15,8 +15,7 @@ License: For each use you must have a valid license purchased only from above li
 
 <head>
     <base href="">
-    <title>Metronic - the world's #1 selling Bootstrap Admin Theme Ecosystem for HTML, Vue, React, Angular &amp; Laravel
-        by Keenthemes</title>
+    <title>@yield('title')</title>
     <meta name="description"
         content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
     <meta name="keywords"
@@ -47,6 +46,15 @@ License: For each use you must have a valid license purchased only from above li
         #kt_aside,
         #menu {
             direction: rtl;
+        }
+
+        #example_filter {
+            /* margin-left: 100px; */
+            margin-right: 26.3ch;
+        }
+
+        #example_paginate {
+            margin-right: 33ch;
         }
     </style>
     @else
@@ -2257,8 +2265,17 @@ License: For each use you must have a valid license purchased only from above li
                                             <!--end::Menu item-->
                                             <!--begin::Menu item-->
                                             <div class="menu-item px-5">
-                                                <a href="../../demo1/dist/authentication/flows/basic/sign-in.html"
-                                                    class="menu-link px-5">Sign Out</a>
+
+                                                <a class="menu-link px-5" href="{{ route('dashboard.logout') }}"
+                                                    onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                                    {{ __('site.Logout') }}
+                                                </a>
+
+                                                <form id="logout-form" action="{{ route('dashboard.logout') }}"
+                                                    method="post" class="d-none">
+                                                    @csrf
+                                                </form>
+
                                             </div>
                                             <!--end::Menu item-->
                                             <!--begin::Menu separator-->
@@ -3561,6 +3578,12 @@ License: For each use you must have a valid license purchased only from above li
     <script src="{{asset('assets/js/custom/apps/chat/chat.js')}}"></script>
     <script src="{{asset('assets/js/custom/modals/create-app.js')}}"></script>
     <script src="{{asset('assets/js/custom/modals/upgrade-plan.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.semanticui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     @yield('js')
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->

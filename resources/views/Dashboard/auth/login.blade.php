@@ -148,20 +148,31 @@ License: For each use you must have a valid license purchased only from above li
             axios.post('/login', {
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
-                // remember: document.getElementById('remember').checked,
                 guard: '{{$guard}}',
             })
             .then(function (response) {
                 //2xx
                 console.log(response);
                 console.log(email);
-                // toastr.success(response.data.message);
-                window.location.href = '/';
+                    Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                    });
+                window.location.href = '/dashboard';
             })
             .catch(function (error) {
                 //4xx - 5xx
                 // console.log(error.response.data.message);
-                // toastr.error(error.response.data.message);
+                    Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                    });
             });
         }
     </script>

@@ -35,6 +35,9 @@ return [
     'close' => 'Close',
     'area' => 'Area',
     'delete' => 'Delete',
+    'update' => 'Update',
+    'all_city' => 'All City',
+    'update' => 'Update',
 
 
 

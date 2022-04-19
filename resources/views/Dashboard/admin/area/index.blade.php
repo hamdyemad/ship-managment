@@ -1,9 +1,43 @@
 @extends('Dashboard.app')
 
-@section('page-name','Area')
+@section('title',__('site.area'))
+
+@section('page_name',__('site.area'))
 
 
-@section('pages','Area')
+@section('pages')
+
+<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">Home</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">{{__('site.area')}}</li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="" class="text-muted text-hover-primary">
+            @foreach ($area as $areas)
+            {{$areas->city->city}}
+            @endforeach
+        </a>
+    </li>
+    <!--end::Item-->
+</ul>
+
+@endsection
 
 @section('css')
 
@@ -15,10 +49,11 @@
 
 @section('button')
 
-@foreach ($area as $areas)
-<button type="button" city_id="{{$area->city}}" class="btn btn-primary" data-bs-toggle="modal"
+
+<button type="button" id="button_arae" value="{{$city}}" class="btn btn-primary" data-bs-toggle="modal"
     data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add Area</button>
-@endforeach
+
+
 
 @endsection
 
@@ -35,8 +70,8 @@
                 <form id="create-form">
                     @csrf
                     <div class="mb-3">
-                        <label for="city" class="col-form-label">area</label>
-                        <input type="text" class="form-control" id="city" name="city">
+                        <label for="area" class="col-form-label">area</label>
+                        <input type="text" class="form-control" id="area" name="area">
                     </div>
                     <div class="mb-3">
                         <label for="rate" class="col-form-label">rate</label>
@@ -46,7 +81,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="addcity()" class="btn btn-primary">Send message</button>
+                <button type="button" onclick="addarea()" class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>
@@ -56,7 +91,7 @@
     <thead>
         <tr>
             <th>{{__('site.id')}}</th>
-            <th>{{__('site.city')}}</th>
+            <th>{{__('site.area')}}</th>
             <th>{{__('site.rate')}}</th>
             <th>{{__('site.sitting')}}</th>
 
@@ -85,10 +120,7 @@
                     data-kt-menu="true">
 
                     <div class="menu-item px-3">
-                        <a href="{{route('area.index')}}" area_id="{{$area->id}}" id="editf"
-                            class="menu-link px-3">area</a>
-                        {{-- <button type="button" value="{{$city->id}}" class="menu-link px-3"
-                            id="#editf">update</button> --}}
+                        <a href="{{route('area.edit',$area->id)}}" class="menu-link px-3">update</a>
                     </div>
 
                     <div class="menu-item px-3">
@@ -121,11 +153,12 @@
     });
 
     // add area
-    function addcity(){
+    function addarea(){
         axios.post('/dashboard/area', {
-        city: document.getElementById('city').value,
+        area: document.getElementById('area').value,
         rate: document.getElementById('rate').value,
-        city_id = var city_id = $(this).attr('city_id');
+        city_id: document.getElementById('button_arae').value,
+
         })
         .then(function (response) {
             console.log(response);
@@ -137,6 +170,8 @@
             timer: 1500
             });
             document.getElementById('create-form').reset();
+            $('#exampleModal').modal('hide');
+            location.reload();
         })
         .catch(function (error) {
             console.log(error);
@@ -149,6 +184,8 @@
             })
         });
     }
+
+
 
 </script>
 @endsection

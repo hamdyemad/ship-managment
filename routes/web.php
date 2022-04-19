@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +26,7 @@ Route::middleware('guest:web,admin')->group(function () {
     Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('dashboard.login');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 });
+
 /* ############################### end login ############################### */
 
 Route::group(
@@ -34,16 +38,22 @@ Route::group(
 
         Route::prefix('dashboard')->group(function () {
             Route::view('/', 'Dashboard.app')->name('app');
+            /* ############################### admin ############################### */
             Route::get('/sitting', [AdminController::class, 'show'])->name('dashboard.sitting');
-            // Route::get('/edit/city', [CityController::class, 'edit'])->name('dashboard.ed');
             Route::resource('city', CityController::class);
             Route::resource('area', AreaController::class);
+            /* ############################### end admin ############################### */
+
+            Route::resource('user', UserController::class);
+            Route::resource('address', AddressController::class);
+            Route::get('users', [Controller::class, 'index'])->name('account.user');
+            Route::post('/user/sitting/fetch/', [Controller::class, 'fetch'])->name('dynamicdependent.fetch');
         });
     }
 );
 
 /* ############################### logout ############################### */
 Route::middleware('auth:web,admin')->group(function () {
-    Route::get('logout', [AuthController::class, 'logout'])->name('dashboard.logout');
+    Route::post('logout', [AuthController::class, 'logout'])->name('dashboard.logout');
 });
 /* ############################### end logout ############################### */

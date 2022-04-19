@@ -1,10 +1,15 @@
 @extends('Dashboard.app')
 
-@section('page-name')
+@section('title')
+
+
+
+@section('page_name')
 
 
 @section('pages')
 
+@endsection
 
 @section('css')
 

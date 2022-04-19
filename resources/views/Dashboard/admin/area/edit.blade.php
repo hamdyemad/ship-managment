@@ -1,20 +1,47 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.city'))
+@section('title',__('site.area'))
 
-@section('page_title',__('site.all_city'))
 
-@section('page_name',__('site.home'))
 
-@section('pages',__('site.city'))
+@section('page_name',__('site.area'))
 
+
+@section('pages')
+
+<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">{{__('site.home')}}</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('area.index')}}" class="text-muted text-hover-primary">{{__('site.area')}}</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">{{$area->area}}</li>
+    <!--end::Item-->
+</ul>
+
+@endsection
 
 @section('css')
 
 @endsection
 
 @section('content')
-
 
 <!--begin::Card-->
 <div class="card">
@@ -30,23 +57,23 @@
                 <div class="row gx-10 mb-5">
                     <!--begin::Col-->
                     <div class="col-lg-12">
-                        <label class="form-label fs-6 fw-bolder text-gray-700 mb-3">{{__('site.city')}}</label>
+                        <label class="form-label fs-6 fw-bolder text-gray-700 mb-3">{{__('site.area')}}</label>
                         <!--begin::Input city-->
                         <div class="mb-5">
-                            <input type="text" class="form-control form-control-solid" id="city" name="city"
-                                value="{{$city->city}}">
+                            <input type="text" class="form-control form-control-solid" id="area" name="area"
+                                value="{{$area->area}}">
                         </div>
                         <!--end::Input city-->
                         <label class="form-label fs-6 fw-bolder text-gray-700 mb-3">{{__('site.rate')}}</label>
                         <!--begin::Input rate-->
                         <div class="mb-5">
                             <input type="text" class="form-control form-control-solid" id="rate" name="rate"
-                                value="{{$city->rate}}">
+                                value="{{$area->rate}}">
                         </div>
                         <!--end::Input rate-->
 
                         <div class="modal-footer">
-                            <button type="button" id="button_value" value="{{$city->rate}}" onclick="updatecity()"
+                            <button type="button" onclick="updatearea()"
                                 class="btn btn-primary">{{__('site.update')}}</button>
                         </div>
 
@@ -65,20 +92,16 @@
 </div>
 <!--end::Card-->
 
-
 @endsection
 
 @section('js')
 
 <script>
-    // update city .
-    function updatecity(){
-        axios.put('/dashboard/city/{{$city->id}}', {
-        city: document.getElementById('city').value,
+    // update area .
+    function updatearea(){
+        axios.put('/dashboard/area/{{$area->id}}', {
+        area: document.getElementById('area').value,
         rate: document.getElementById('rate').value,
-        id:'{{$city->id}}',
-        old_value: document.getElementById('button_value').value,
-
         })
         .then(function (response) {
             console.log(response);
@@ -89,7 +112,8 @@
             showConfirmButton: false,
             timer: 1500
             });
-            window.location.href = '/dashboard/city';
+            // window.location.href = '/dashboard/area/';
+            window.history.back();
         })
         .catch(function (error) {
             console.log(error);
