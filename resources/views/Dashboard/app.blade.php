@@ -32,6 +32,7 @@ License: For each use you must have a valid license purchased only from above li
 
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
     @yield('css')
 
     @if (app()->getLocale() == 'ar')
@@ -58,7 +59,7 @@ License: For each use you must have a valid license purchased only from above li
         }
     </style>
     @else
-
+    <link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="{{asset('assets/media/logos/favicon.ico')}}" />
     <link href="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css')}}" rel="stylesheet"
         type="text/css" />
@@ -3573,6 +3574,7 @@ License: For each use you must have a valid license purchased only from above li
     <!--begin::Page Vendors Javascript(used by this page)-->
     <script src="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
     <!--end::Page Vendors Javascript-->
+
     <!--begin::Page Custom Javascript(used by this page)-->
     <script src="{{asset('assets/js/custom/widgets.js')}}"></script>
     <script src="{{asset('assets/js/custom/apps/chat/chat.js')}}"></script>
@@ -3585,6 +3587,7 @@ License: For each use you must have a valid license purchased only from above li
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     @yield('js')
+    @stack('scripts')
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
 </body>

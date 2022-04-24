@@ -302,8 +302,6 @@
 
                                                     <!--begin::address line-->
                                                     <div class="col-lg-12 fv-row fv-plugins-icon-container">
-                                                        {{-- <textarea name="" id="" cols="30" rows="10"></textarea>
-                                                        --}}
                                                         <textarea id="address_line" name="address_line"
                                                             class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
                                                             placeholder="address line"></textarea>
@@ -537,33 +535,33 @@
             contact_mobile: document.getElementById('contact_mobile').value,
             contact_email:document.getElementById('contact_email').value,
         })
-    .then(function (response) {
-        //2xx
-        console.log(response);
+        .then(function (response) {
+            //2xx
+            console.log(response);
+                Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: response.data.message,
+                showConfirmButton: false,
+                timer: 1500
+                });
+
+        })
+        .catch(function (error) {
+            //4xx - 5xx
+            console.log(error.response.data.message);
             Swal.fire({
             position: 'top-end',
-            icon: 'success',
-            title: response.data.message,
+            icon: 'error',
+            title: error.response.data.message,
             showConfirmButton: false,
             timer: 1500
             });
 
-    })
-    .catch(function (error) {
-        //4xx - 5xx
-        console.log(error.response.data.message);
-        Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: error.response.data.message,
-        showConfirmButton: false,
-        timer: 1500
         });
-
-    });
     }
 
-
+    //show city and his area in select tag
 $(document).ready(function(){
 
     $('.dynamic').change(function(){

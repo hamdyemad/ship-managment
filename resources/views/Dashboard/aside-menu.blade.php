@@ -110,7 +110,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">users</span>
+                            <span class="menu-title">{{__('site.user')}}</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
@@ -119,15 +119,15 @@
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">account</span>
+                                    <span class="menu-title">{{__('site.account')}}</span>
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/projects/project.html">
+                                <a class="menu-link" href="{{route('shipment.index')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">View Project</span>
+                                    <span class="menu-title">{{__('site.shipment')}}</span>
                                 </a>
                             </div>
                             <div class="menu-item">

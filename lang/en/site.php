@@ -6,8 +6,8 @@ return [
     'Logout' => 'logout',
     'employee' => 'Employees',
     'index' => 'All Employee',
-    'create' => 'Add Employee ',
-    'create_employess' => 'Add New Employee ',
+    'create' => 'Add Shipment ',
+    // 'create_employess' => 'Add New Shipment ',
     'name' => 'Name',
     'lastn' => 'Last Name',
     'gender' => 'Gender',
@@ -38,9 +38,25 @@ return [
     'update' => 'Update',
     'all_city' => 'All City',
     'update' => 'Update',
+    'user' => 'User',
+    'shipment' => 'Shipment',
+    'business' => 'Business',
+    'shipment_type' => 'Shipment type',
+    'receiver' => 'Receiver Details',
+    'package' => 'Package Details',
+    'price' => ' Price',
+    'note' => 'Note',
+    'add' => 'Add',
+    'add_shipment' => 'Add Shipment',
+    'status' => 'Status',
+    'address' => 'Address',
+    'export' => 'Export',
+    'showshipment' => 'Shipment Details',
 
 
 
+
+    // 'receiver' => 'Receiver Details',
 
 
 

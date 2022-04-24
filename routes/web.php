@@ -6,6 +6,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ShippmentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,10 +45,17 @@ Route::group(
             Route::resource('area', AreaController::class);
             /* ############################### end admin ############################### */
 
+            /* ############################### user ############################### */
             Route::resource('user', UserController::class);
             Route::resource('address', AddressController::class);
+            Route::resource('shipment', ShippmentController::class);
+            Route::get('/downloadPDF/{id}', [Controller::class, 'download'])->name('print');
+            // Route::get('/select', [Controller::class, 'select'])->name('shipment.print');
+            Route::post('ViewPages', [Controller::class, 'index1'])->name('pdf');
             Route::get('users', [Controller::class, 'index'])->name('account.user');
             Route::post('/user/sitting/fetch/', [Controller::class, 'fetch'])->name('dynamicdependent.fetch');
+
+            /* ############################### end user ############################### */
         });
     }
 );

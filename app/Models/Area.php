@@ -14,7 +14,10 @@ class Area extends Model
         return $this->belongsTo(City::class);
     }
 
-
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 
     protected $fillable = [
         'area',
