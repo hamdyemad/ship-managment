@@ -6,7 +6,7 @@ return [
     'Logout' => 'logout',
     'employee' => 'Employees',
     'index' => 'All Employee',
-    'create' => 'Add Shipment ',
+    'create' => 'Create',
     // 'create_employess' => 'Add New Shipment ',
     'name' => 'Name',
     'lastn' => 'Last Name',
@@ -52,6 +52,28 @@ return [
     'address' => 'Address',
     'export' => 'Export',
     'showshipment' => 'Shipment Details',
+    'edit' => 'Edit',
+    'pickup' => 'Pick Up',
+    'location' => 'Location',
+    'time' => 'Time',
+    'date' => 'Date',
+    'pickupid' => 'Pickup ID',
+    'pickupdate' => 'Pickup Date',
+    'add_pickup' => 'Add Pick Up',
+    'add_seller' => 'Add Seller',
+    'package' => 'Package',
+    'print' => 'Print',
+    'details' => 'Details',
+    'admin' => 'Admin',
+    'permission' => 'Permission',
+    'seller' => 'Seller',
+    'add_driver' => 'Add Driver',
+    'driver' => 'Driver',
+
+
+
+
+
 
 
 

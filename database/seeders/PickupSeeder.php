@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Shippment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ShippmentSeeder extends Seeder
+class PickupSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +14,6 @@ class ShippmentSeeder extends Seeder
      */
     public function run()
     {
-        Shippment::factory(5)->create();
+        //
     }
 }

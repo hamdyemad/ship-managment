@@ -61,10 +61,24 @@
                     <span class="menu-arrow"></span>
                 </span>
                 <div class="menu-sub menu-sub-accordion menu-active-bg">
+                    {{-- ========== profile ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
+                                <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Design/Color-profile.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path
+                                                d="M12,10.9996338 C12.8356605,10.3719448 13.8743941,10 15,10 C17.7614237,10 20,12.2385763 20,15 C20,17.7614237 17.7614237,20 15,20 C13.8743941,20 12.8356605,19.6280552 12,19.0003662 C11.1643395,19.6280552 10.1256059,20 9,20 C6.23857625,20 4,17.7614237 4,15 C4,12.2385763 6.23857625,10 9,10 C10.1256059,10 11.1643395,10.3719448 12,10.9996338 Z M13.3336047,12.504354 C13.757474,13.2388026 14,14.0910788 14,15 C14,15.9088933 13.7574889,16.761145 13.3336438,17.4955783 C13.8188886,17.8206693 14.3938466,18 15,18 C16.6568542,18 18,16.6568542 18,15 C18,13.3431458 16.6568542,12 15,12 C14.3930587,12 13.8175971,12.18044 13.3336047,12.504354 Z"
+                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <circle fill="#000000" cx="12" cy="9" r="5" />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
                             </span>
                             <span class="menu-title">Profile</span>
                             <span class="menu-arrow"></span>
@@ -105,6 +119,9 @@
 
                         </div>
                     </div>
+                    {{-- ========== end profile ========== --}}
+
+                    {{-- ========== user ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">
@@ -131,11 +148,11 @@
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/projects/targets.html">
+                                <a class="menu-link" href="{{route('pickup.index')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Targets</span>
+                                    <span class="menu-title">{{__('site.pickup')}}</span>
                                 </a>
                             </div>
                             <div class="menu-item">
@@ -180,60 +197,68 @@
                             </div>
                         </div>
                     </div>
+                    {{-- ========== end user ========== --}}
+
+                    {{-- ========== seller ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Wizards</span>
+                            <span class="menu-title">Seller</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/wizards/horizontal.html">
+                                <a class="menu-link" href="{{route('user.index')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Horizontal</span>
+                                    <span class="menu-title">Seller List</span>
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/wizards/vertical.html">
+                                <a class="menu-link" href="{{route('user.create')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Vertical</span>
+                                    <span class="menu-title">Add Seller</span>
                                 </a>
                             </div>
                         </div>
                     </div>
+                    {{-- ========== end seller ========== --}}
+
+                    {{-- ========== Driver ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Search</span>
+                            <span class="menu-title">Driver</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/search/horizontal.html">
+                                <a class="menu-link" href="{{route('driver.index')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Horizontal</span>
+                                    <span class="menu-title">driver List</span>
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/search/vertical.html">
+                                <a class="menu-link" href="{{route('driver.create')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Vertical</span>
+                                    <span class="menu-title">Add Driver</span>
                                 </a>
                             </div>
                         </div>
                     </div>
+                    {{-- ========== end Driver ========== --}}
+
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">

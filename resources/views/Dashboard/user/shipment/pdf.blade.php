@@ -311,7 +311,7 @@
                             <tbody>
                                 <tr>
                                     <td class="content-wrap aligncenter">
-                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                        {{-- <table width="100%" cellpadding="0" cellspacing="0">
                                             <tbody>
                                                 <tr>
                                                     <td class="content-block">
@@ -368,6 +368,51 @@
                                                 <tr>
                                                     <td class="content-block">
                                                         Company Inc. 123 Van Ness, San Francisco 94102
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table> --}}
+
+                                        <table border="1" class="main" width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <th style="background-color: #D6EEEE;">city</th>
+                                                    <td style="width: 20%;text-align: center;">{{$show->city->city}}
+                                                    </td>
+                                                    <th colspan="3" style="background-color: #D6EEEE;">address</th>
+
+
+
+                                                </tr>
+                                                <tr>
+                                                    <th style="background-color: #D6EEEE;">area</th>
+                                                    <td style="text-align: center;">{{$show->area->area}}</td>
+                                                    <td colspan="3" style="text-align: center;">{{$show->address}}
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <th style="background-color: #D6EEEE;">name</th>
+                                                    <td colspan="2" style="text-align: center;">{{$show->receiver_name}}
+                                                    </td>
+                                                    <th style="background-color: #D6EEEE;text-align: center;">phone</th>
+                                                    <td style="text-align: center;">{{$show->receiver_phone}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th style="background-color: #D6EEEE;">shipper</th>
+                                                    <td style="text-align: center;">{{auth()->user()->name}}</td>
+                                                    <th style="background-color: #D6EEEE;">price</th>
+                                                    <td style="text-align: center;">{{$show->price}}</td>
+                                                    <th style="background-color: #D6EEEE;">cash</th>
+
+                                                </tr>
+                                                <tr>
+
+                                                    <td colspan="3">{{$show->note}}</td>
+                                                    <td colspan="2">
+                                                        <div class="mb-3">
+                                                            <?php echo DNS1D::getBarcodeHTML($show->barcode, "C39+",1,45); ?>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>

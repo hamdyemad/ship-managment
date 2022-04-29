@@ -9,6 +9,15 @@ class Shippment extends Model
 {
     use HasFactory;
 
+    public function users()
+    {
+        return $this->morphedByMany(User::class, 'taggable');
+    }
+    public function pickup()
+    {
+        return $this->hasOne(Pickup::class);
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class);

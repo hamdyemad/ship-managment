@@ -26,10 +26,11 @@ return new class extends Migration
             $table->string('note')->nullable();
             $table->string('status')->nullable();
             $table->string('barcode');
-            $table->string('sku');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('city_id')->constrained();
             $table->foreignId('area_id')->constrained();
+
+
             $table->timestamps();
         });
     }

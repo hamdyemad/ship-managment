@@ -1,22 +1,53 @@
 @extends('Dashboard.app')
 
-@section('page-name')
+@section('title',__('site.details'))
+
+@section('page_name',__('site.details'))
 
 
 @section('pages')
 
+<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">{{__('site.home')}}</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="" class="text-muted text-hover-primary">{{__('site.admin')}}</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('pickup.index')}}" class="text-muted text-hover-primary">{{__('site.details')}}</a>
+    </li>
+    <!--end::Item-->
 
+</ul>
+
+@endsection
 @section('css')
 
 @endsection
 
 @section('content')
 
-<!--begin::Layout-->
+
 <div class="d-flex flex-column flex-xl-row">
-    <!--begin::Sidebar-->
-    <div class="flex-column flex-lg-row-auto w-100 w-xl-350px mb-10">
-        <!--begin::Card-->
+
+    <div class="flex-lg-row-fluid">
+
         <div class="card mb-5 mb-xl-8">
 
             <!--begin::Card body-->
@@ -102,12 +133,12 @@
                                 <!--end::Input img-->
 
                                 <!--begin::Input Name-->
-                                <div class="row mb-6">
+                                <div class="row mb-12">
                                     <!--begin::Label-->
                                     <label class="">{{__('site.name')}}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
-                                    <div class="col-lg-10 fv-row">
+                                    <div class="col-lg-12 fv-row">
                                         <input type="text" name="name"
                                             class="form-control form-control-lg form-control-solid"
                                             value="{{auth()->user()->name}}" />
@@ -116,47 +147,46 @@
                                 </div>
                                 <!--end::Input Name-->
 
-                                <!--begin::Input Email-->
+                                <!--begin::email && phone-->
                                 <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="">{{__('site.email')}}</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-10 fv-row">
-                                        <input type="email" name="email"
-                                            class="form-control form-control-lg form-control-solid"
-                                            value="{{auth()->user()->email}}" />
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input Email-->
 
-                                <!--begin::Input phone-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="">
-                                        <span class="required">{{__('site.phone')}}</span>
-                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                                            title="Phone number must be active"></i>
-                                    </label>
-                                    <!--end::Label-->
                                     <!--begin::Col-->
-                                    <div class="col-lg-10 fv-row">
-                                        <input type="string" name="phone"
-                                            class="form-control form-control-lg form-control-solid"
-                                            value="{{auth()->user()->phone}}" />
+                                    <div class="col-lg-12">
+                                        <!--begin::Row-->
+                                        <div class="row">
+                                            <!--begin::email-->
+                                            <div class="col-lg-6 fv-row">
+                                                <label
+                                                    class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.email')}}</label>
+                                                <input type="email" id="email" name="email"
+                                                    value="{{auth()->user()->email}}"
+                                                    class="form-control form-control-lg form-control-solid">
+                                            </div>
+                                            <!--end::email-->
+
+                                            <!--begin::phone-->
+                                            <div class="col-lg-6 fv-row">
+                                                <label
+                                                    class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.phone')}}</label>
+                                                <input type="text" id="phone" name="phone"
+                                                    value="{{auth()->user()->phone}}"
+                                                    class="form-control form-control-lg form-control-solid">
+                                            </div>
+                                            <!--end::phone-->
+                                        </div>
+                                        <!--end::Row-->
                                     </div>
                                     <!--end::Col-->
                                 </div>
-                                <!--end::Input phone-->
+                                <!--end::email && phone-->
 
                                 <!--begin::Input password-->
-                                <div class="row mb-6">
+                                <div class="row mb-12">
                                     <!--begin::Label-->
                                     <label class="">{{__('site.password')}}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
-                                    <div class="col-lg-10 fv-row">
+                                    <div class="col-lg-12 fv-row">
                                         <input type="password" name="password"
                                             class="form-control form-control-lg form-control-solid" />
                                     </div>
@@ -165,36 +195,18 @@
                                 <!--end::Input password-->
 
                                 <!--begin::Input password_confirmation-->
-                                <div class="row mb-6">
+                                <div class="row mb-12">
                                     <!--begin::Label-->
                                     <label class="">{{__('site.password_confirmation')}}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
-                                    <div class="col-lg-10 fv-row">
+                                    <div class="col-lg-12 fv-row">
                                         <input type="password" name="password_confirmation"
                                             class="form-control form-control-lg form-control-solid" value="" />
                                     </div>
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Input password_confirmation-->
-
-
-                                <!--begin::Input group-->
-                                <div class="row mb-0">
-                                    <!--begin::Label-->
-                                    <label class="">Allow Marketing</label>
-                                    <!--begin::Label-->
-                                    <!--begin::Label-->
-                                    <div class="col-lg-8 d-flex align-items-center">
-                                        <div class="form-check form-check-solid form-switch fv-row">
-                                            <input class="form-check-input w-45px h-30px" type="checkbox"
-                                                id="allowmarketing" checked="checked" />
-                                            <label class="form-check-label" for="allowmarketing"></label>
-                                        </div>
-                                    </div>
-                                    <!--begin::Label-->
-                                </div>
-                                <!--end::Input group-->
 
                             </div>
                             <!--end::Card body-->
@@ -214,41 +226,10 @@
             <!--end::Card body-->
 
         </div>
-        <!--end::Card-->
-
 
     </div>
-    <!--end::Sidebar-->
-
-    <!--begin::Content-->
-    <div class="flex-lg-row-fluid ms-lg-15">
-
-        <!--begin:::Tab content-->
-        <div class="tab-content" id="myTabContent">
-            <!--begin:::Tab pane-->
-            <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
-
-                <!--begin::Card-->
-                <div class="card card-flush mb-6 mb-xl-9">
-                    <!--begin::Card header-->
-                    <div class="card-header mt-6">
-
-                    </div>
-                    <!--end::Card header-->
-                </div>
-                <!--end::Card-->
-
-
-            </div>
-            <!--end:::Tab pane-->
-        </div>
-        <!--end:::Tab content-->
-    </div>
-    <!--end::Content-->
 
 </div>
-<!--end::Layout-->
-
 
 @endsection
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Area;
 use App\Models\City;
 use App\Models\Shippment;
@@ -42,6 +43,40 @@ class Controller extends BaseController
         echo $output;
     }
 
+    function fetch2(Request $request)
+    {
+
+        $select = $request->get('select');
+        $value = $request->get('value');
+        $dependent = $request->get('dependent');
+        $data = Address::where('id', $value)->get();
+
+        $output = "";
+
+        foreach ($data as $row) {
+            $output .= '<input name="name" class="form-control form-control-lg form-control-solid" id="contact_name" value="' . $row->contact_name . '">';
+            $output .= '<div class="row mb-6">';
+            $output .= '<div class="col-lg-12">';
+            $output .= '<div class="row">';
+            $output .= ' <div class="col-lg-6 fv-row">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">email</label>
+                                <input type="text" id="email" name="email" value="' . $row->contact_email . '" class="form-control form-control-lg form-control-solid dynamic">
+                            </div>';
+            $output .= '<div class="col-lg-6 fv-row">
+                                <label for="phone" class="col-lg-4 col-form-label fw-bold fs-6">phone</label>
+                                <input type="text" id="phone" name="phone" value="' . $row->contact_phone . '"
+                                    class="form-control form-control-lg form-control-solid dynamic">
+
+                            </div>';
+            // $output .= '<input name="name" class="form-control form-control-lg form-control-solid" id="name" value="' . $row->contact_name . '">';
+            // $output .= '<input name="name" class="form-control form-control-lg form-control-solid" id="name" value="' . $row->contact_name . '">';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</div>';
+        }
+        echo $output;
+    }
+
     //download special shipment
     function download($id)
     {
@@ -51,12 +86,6 @@ class Controller extends BaseController
         return $pdf->download('disney.pdf');
     }
 
-    // function select()
-    // {
-    //     return view('dashboard.user.shipment.select');
-    // }
-
-    // print table contain selected shipment
     function index1(Request $req)
     {
         $method = $req->method();

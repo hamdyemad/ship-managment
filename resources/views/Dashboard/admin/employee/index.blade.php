@@ -1,8 +1,8 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.shipment'))
+@section('title',__('site.seller'))
 
-@section('page_name',__('site.shipment'))
+@section('page_name',__('site.seller'))
 
 @section('pages')
 
@@ -22,16 +22,7 @@
         <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
     </li>
     <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
-    </li>
-    <!--end::Item-->
+
 </ul>
 
 @endsection
@@ -42,13 +33,15 @@
 
 @section('content')
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- ========== export ========== --}}
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">add the date</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <div class="modal-body">
                 <form action="ViewPages" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -72,9 +65,11 @@
                 </form>
             </div>
 
+
         </div>
     </div>
-</div>
+</div> --}}
+{{-- ========== end export ========== --}}
 
 <!--begin::Card-->
 <div class="card">
@@ -158,17 +153,17 @@
                 <!--end::Menu 1-->
                 <!--end::Filter-->
 
-                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-whatever="@mdo">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
                     </span>
                     <!--end::Svg Icon-->Export
-                </button>
+                </button> --}}
                 <!--begin::Add shipment-->
 
-                <a href="{{route('shipment.create')}}" class="btn btn-primary">
+                <a href="{{route('user.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -177,7 +172,7 @@
                             <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->{{__('site.add_shipment')}}
+                    <!--end::Svg Icon-->{{__('site.add_seller')}}
                 </a>
                 <!--end::Add shipment-->
 
@@ -211,12 +206,11 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.user')}}</th>
-                    <th class="min-w-125px">{{__('site.status')}}</th>
-                    <th class="min-w-125px">{{__('site.print')}}</th>
+                    <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
-                    <th class="min-w-125px">{{__('site.address')}}</th>
-                    <th class="min-w-125px">{{__('site.price')}}</th>
+                    <th class="min-w-125px">{{__('site.email')}}</th>
+                    <th class="min-w-125px">{{__('site.permission')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -226,7 +220,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($shipment as $shipment)
+                @foreach ($user as $user)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -240,39 +234,25 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->id}}"
-                                data-bs-toggle="modal" role="button">{{$shipment->receiver_name}}</a>
-                            <a href="https://wa.me/{{$shipment->receiver_phone}}">
-                                <i class="fa fa-user"></i>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$user->id}}"
+                                data-bs-toggle="modal" role="button">{{$user->id}}</a>
 
-                            </a>
 
                         </div>
                         <!--begin::User details-->
                     </td>
-                    <!--end::User=-->
 
-                    <td>{{$shipment->status}}</td>
-                    <td>
-                        {{-- <div class="card-toolbar">
-                            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}
-                                <a href="{{route('print',$shipment->id)}}">
-                                    <i class="fa fa-print"></i>
-                                    {{-- {{__('site.export')}} --}}
-                                </a>
-                                {{--
-                            </div>
-                        </div> --}}
-                    </td>
 
-                    <td>{{$shipment->receiver_phone}}</td>
+                    <td>{{$user->name}}</td>
+
+                    <td>{{$user->phone}}</td>
 
                     <td>
-                        <div class="badge badge-light fw-bolder">{{$shipment->address}}</div>
+                        <div class="badge badge-light fw-bolder">{{$user->email}}</div>
                     </td>
 
 
-                    <td>{{$shipment->price}}</td>
+                    <td>USer</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -293,16 +273,17 @@
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                             data-kt-menu="true">
                             <!--begin::Menu item-->
+                            {{-- <div class="menu-item px-3">
+                                <a href="{{route('shipment.show',$user->id)}}" class="menu-link px-3">show</a>
+                            </div> --}}
                             <div class="menu-item px-3">
-                                <a href="{{route('shipment.show',$shipment->id)}}" class="menu-link px-3">show</a>
-                            </div>
-                            <div class="menu-item px-3">
-                                <a href="{{route('shipment.edit',$shipment->id)}}" class="menu-link px-3">Edit</a>
+                                <a href="{{route('user.edit',$user->id)}}"
+                                    class="menu-link px-3">{{__('site.edit')}}</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$shipment->id}}',this)" class="menu-link px-3"
+                                <a href="#" onclick="confirmDelete('{{$user->id}}',this)" class="menu-link px-3"
                                     data-kt-users-table-filter="delete_row">Delete</a>
                             </div>
                             <!--end::Menu item-->
@@ -317,6 +298,7 @@
                 @endforeach
 
             </tbody>
+
             <!--end::Table body-->
         </table>
         <!--end::Table-->
@@ -351,9 +333,9 @@
             }
         });
     }
-    // delete shipment
+    // delete user
     function performDelete(id,reference) {
-        axios.delete('/dashboard/shipment/'+id)
+        axios.delete('/dashboard/user/'+id)
         .then(function (response) {
         //2xx
         console.log(response);

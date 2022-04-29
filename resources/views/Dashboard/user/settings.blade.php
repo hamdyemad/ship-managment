@@ -180,7 +180,7 @@
                                 </div>
                                 <!--end::Input password_confirmation-->
 
-
+                                {{--
                                 <!--begin::Input group-->
                                 <div class="row mb-0">
                                     <!--begin::Label-->
@@ -196,7 +196,7 @@
                                     </div>
                                     <!--begin::Label-->
                                 </div>
-                                <!--end::Input group-->
+                                <!--end::Input group--> --}}
 
                             </div>
                             <!--end::Card body-->
@@ -258,7 +258,7 @@
                                     <!--begin::Card body-->
                                     <div class="card-body border-top p-9">
 
-                                        <div class="row mb-6">
+                                        {{-- <div class="row mb-6">
                                             <!--begin::Label-->
                                             <label class="col-lg-4 col-form-label required fw-bold fs-6">Full
                                                 Name</label>
@@ -289,7 +289,7 @@
                                                 <!--end::Row-->
                                             </div>
                                             <!--end::Col-->
-                                        </div>
+                                        </div> --}}
 
                                         <!--begin::Input building-->
                                         <div class="row mb-12">

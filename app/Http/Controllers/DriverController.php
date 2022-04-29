@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
-use App\Models\City;
-use App\Models\User;
+use App\Models\Driver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class DriverController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
-        return view('Dashboard.admin.seller.index', ['user' => $user]);
+        $driver = Driver::all();
+        return view('Dashboard.admin.driver.index', ['driver' => $driver]);
     }
 
     /**
@@ -29,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Dashboard.admin.seller.create');
+        return view('Dashboard.admin.driver.create');
     }
 
     /**
@@ -45,18 +43,19 @@ class UserController extends Controller
             'email' => 'required|email',
             'phone' => 'required |numeric',
             'password' => 'required',
+            'password_confirmation' => 'required',
 
         ]);
         if (!$validator->fails()) {
-            $user = new User();
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->phone = $request->input('phone');
-            $user->password = Hash::make($request->input('password'));
-            $isSaved = $user->save();
+            $driver = new Driver();
+            $driver->name = $request->input('name');
+            $driver->email = $request->input('email');
+            $driver->phone = $request->input('phone');
+            $driver->password = Hash::make($request->input('password'));
+            $isSaved = $driver->save();
             return response()->json(
                 [
-                    'message' => $isSaved ? 'User created successfully' : 'Create failed!'
+                    'message' => $isSaved ? 'driver created successfully' : 'Create failed!'
                 ],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             );
@@ -68,35 +67,35 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Driver $driver)
     {
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Driver $driver)
     {
-        $user = User::findOrFail($id);
-        return view('Dashboard.admin.seller.edit', ['user' => $user]);
+        // $driver = Driver::findOrFail($id);
+        return view('Dashboard.admin.driver.edit', ['driver' => $driver]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Driver $driver)
     {
-
         $validator = Validator($request->all(), [
             'name' => ' max:100',
             'email' => 'email',
@@ -107,16 +106,16 @@ class UserController extends Controller
         if (!$validator->fails()) {
 
 
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->phone = $request->input('phone');
-            $user->password = Hash::make($request->input('password'));
-            $isSaved = $user->save();
+            $driver->name = $request->input('name');
+            $driver->email = $request->input('email');
+            $driver->phone = $request->input('phone');
+            $driver->password = Hash::make($request->input('password'));
+            $isSaved = $driver->save();
 
 
             return response()->json(
                 [
-                    'message' => $isSaved ? 'user updated successfully' : 'Create failed!'
+                    'message' => $isSaved ? 'driver updated successfully' : 'Create failed!'
                 ],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             );
@@ -128,13 +127,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Driver $driver)
     {
-        $user = User::findOrFail($id);
-        $isDeleted = $user->delete();
+        $isDeleted = $driver->delete();
         return response()->json(
             ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
             $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST

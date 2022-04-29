@@ -17,8 +17,6 @@ class AreaController extends Controller
      */
     public function index()
     {
-        // $area = Area::with('city')->get();
-        // return view('Dashboard.admin.area.index', ['area' => $area]);
     }
 
     /**
@@ -81,11 +79,7 @@ class AreaController extends Controller
     // get area belong to city
     public function show(Request $request)
     {
-        // dd($request->input(['a']));
-        // $areas =  Area::with('city')->where('city_id', '==', $request->id)->get();
-        // dd($areas);
-
-        // return view('Dashboard.admin.area.index', ['area' => $areas, 'city' => $request->id]);
+        
     }
 
     /**

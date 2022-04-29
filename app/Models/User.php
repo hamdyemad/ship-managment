@@ -10,6 +10,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    public function shipments()
+    {
+        return $this->morphToMany(Shippment::class, 'taggable');
+    }
     use HasApiTokens, HasFactory, Notifiable;
 
     /**

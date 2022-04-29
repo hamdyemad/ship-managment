@@ -18,7 +18,7 @@ class ShippmentController extends Controller
      */
     public function index()
     {
-        $shipment = Shippment::all();
+        $shipment = Shippment::where('user_id', auth()->user()->id)->get();
         return view('Dashboard.user.shipment.index1', ['shipment' => $shipment]);
     }
 
@@ -67,9 +67,8 @@ class ShippmentController extends Controller
             $shipment->package_details = $request->input('package_details');
             $shipment->address = $request->input('address');
             $shipment->note = $request->input('note');
-            $shipment->status = 'created';
+            $shipment->status = 'requested';
             $shipment->barcode = random_int(100000, 999999);
-            $shipment->sku = '33';
             $isSaved = $shipment->save();
             return response()->json(
                 [
@@ -102,9 +101,15 @@ class ShippmentController extends Controller
      * @param  \App\Models\Shippment  $shippment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shippment $shippment)
+    public function edit($id)
     {
-        //
+        $city = City::all();
+        $shipment = Shippment::findOrFail($id);
+        $type = ['forward', 'exchange', 'cash_collection'];
+        return view(
+            'Dashboard.user.shipment.edit',
+            ['shipment' => $shipment, 'city' => $city, 'type' => $type]
+        );
     }
 
     /**
@@ -114,9 +119,38 @@ class ShippmentController extends Controller
      * @param  \App\Models\Shippment  $shippment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shippment $shippment)
+    public function update(Request $request, $id)
     {
-        //
+
+        $validator = Validator($request->all(), [
+            'receiver_phone' => 'numeric',
+            'package' => 'max:150',
+            'price' => 'numeric',
+            'note' => 'max:150',
+        ]);
+        if (!$validator->fails()) {
+            $shipment = Shippment::findOrFail($id);
+            $shipment->shippment_type = $request->input('shipment_type');
+            $shipment->city_id = $request->input('city');
+            $shipment->area_id = $request->input('area');
+            $shipment->business_referance = $request->input('business');
+            $shipment->receiver_name = $request->input('receiver_name');
+            $shipment->receiver_phone = $request->input('receiver_phone');
+            $shipment->user_id = $request->input('user_id');
+            $shipment->price = $request->input('price');
+            $shipment->package_details = $request->input('package_details');
+            $shipment->address = $request->input('address');
+            $shipment->note = $request->input('note');
+            $isSaved = $shipment->save();
+            return response()->json(
+                [
+                    'message' => $isSaved ? 'Shipment created successfully' : 'Create failed!'
+                ],
+                $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+            );
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

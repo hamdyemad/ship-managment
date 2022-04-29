@@ -41,13 +41,10 @@
     <!--begin::Item-->
 
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.showshipment')}}</a>
+        <a href="" class="text-muted text-hover-primary">{{__('site.edit')}}</a>
     </li>
     <!--end::Item-->
 </ul>
-
-{{-- <a href="{{route('print',$shippment->id)}}"> print</a> --}}
-{{-- <a href="{{route('shipment.print')}}">print</a> --}}
 
 @endsection
 
@@ -59,24 +56,13 @@
 
 <div class="card mb-5 mb-xl-10">
     <!--begin::Card header-->
-    <div class="card-header border-0 cursor-pointer" role="button" data-bs-target="#kt_account_profile_details"
-        aria-expanded="true" aria-controls="kt_account_profile_details">
+    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
+        data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
             <h3 class="fw-bolder m-0">{{__('site.shipment')}}</h3>
         </div>
         <!--end::Card title-->
-
-        {{-- //export link --}}
-        <div class="card-toolbar">
-            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                <a href="{{route('print',$shippment->id)}}" class="btn btn-primary">
-                    <i class="fa fa-print"></i>
-                    {{__('site.print')}}
-                </a>
-            </div>
-        </div>
-
     </div>
     <!--begin::Card header-->
 
@@ -102,12 +88,12 @@
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment_type')}}</label>
                                 <select name="shipment_type" id="shipment_type" data-placeholder="date_period"
                                     class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
-                                    <option value="{{$shippment->shippment_type}}" disabled selected>
-                                        {{$shippment->shippment_type}}
+                                    <option value="" disabled selected>Select one ..
                                     </option>
-                                    {{-- <option value="forward">Forward </option>
-                                    <option value="exchange">exchange </option>
-                                    <option value="cash_collection">cash collection </option> --}}
+                                    @foreach ($type as $type)
+                                    <option value="{{$type}}" @if($type==$shipment->shippment_type) selected
+                                        @endif>{{$type}}</option>
+                                    @endforeach
 
                                 </select>
                             </div>
@@ -118,7 +104,7 @@
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.business')}}</label>
                                 <input type="text" id="business" name="business"
-                                    value="{{$shippment->business_referance}}"
+                                    value="{{$shipment->business_referance}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
                             <!--end::Col-->
@@ -134,11 +120,11 @@
                         aria-expanded="" aria-controls="kt_user_view_details">
                         {{__('site.receiver')}}
                         <span class="ms-2 rotate-180">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+
                             <span class="svg-icon svg-icon-3">
 
                             </span>
-                            <!--end::Svg Icon-->
+
                         </span>
                     </div>
 
@@ -155,7 +141,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.name')}}</label>
                                 <input type="text" id="receiver_name" name="receiver_name"
-                                    value="{{$shippment->receiver_name}}"
+                                    value="{{$shipment->receiver_name}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
                             <!--end::receiver name-->
@@ -165,7 +151,7 @@
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.phone')}}</label>
                                 <input type="text" id="receiver_phone" name="receiver_phone"
-                                    value="{{$shippment->receiver_phone}}"
+                                    value="{{$shipment->receiver_phone}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
                             <!--end::phone-->
@@ -182,8 +168,8 @@
                     <div class="form-floating">
                         {{-- <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.address')}}</label>
                         --}}
-                        <input type="text" id="address" name="address"
-                            class="form-control form-control-lg form-control-solid" value="{{$shippment->address}}">
+                        <input type="text" id="address" name="address" value="{{$shipment->address}}"
+                            class="form-control form-control-lg form-control-solid">
                         <label for="address" class="col-lg-4 col-form-label fw-bold fs-6">address</label>
                     </div>
                     <!--end::Col-->
@@ -199,10 +185,13 @@
                             <select data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
                                 data-control="select2" data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid dynamic">
-                                <option value="{{$shippment->city->city}}" disabled selected>
-                                    {{$shippment->city->city}}
+                                <option value="" disabled selected>City
                                 </option>
-
+                                @foreach ($city as $city)
+                                <option id="cityid" value="{{$city->id}}" @if($city->id==$shipment->city_id) selected
+                                    @endif>
+                                    {{$city->city}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div><br><br>
@@ -214,13 +203,10 @@
                             <select name="area" id="area" aria-label="Select a Timezone" data-control="select2"
                                 data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid dynamic">
-                                <option value="{{$shippment->area->area}}" disabled selected>
-                                    {{$shippment->area->area}}
+                                <option value="{{$shipment->area_id}}" disabled selected>
+                                    {{$shipment->area->area}}
                                 </option>
 
-                                {{-- @foreach ($area as $area)
-                                <option value="{{$area->id}}">{{$area->area}}</option>
-                                @endforeach --}}
                             </select>
                         </div>
                         {{ csrf_field() }}
@@ -250,7 +236,7 @@
                     <!--begin::Col-->
                     <div class="form-floating">
                         <textarea class="form-control form-control-lg form-control-solid" name="package" id="package"
-                            style="height: 100px" aria-valuemax="{{$shippment->package_details}}"></textarea>
+                            style="height: 100px">{{$shipment->package_details}}</textarea>
                         <label for="package">{{__('site.package')}}</label>
 
                     </div>
@@ -262,8 +248,8 @@
                 <div class="row mb-6">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <input type="number" id="price" name="price"
-                            class="form-control form-control-lg form-control-solid" value="{{$shippment->price}}">
+                        <input type="number" id="price" name="price" value="{{$shipment->price}}"
+                            class="form-control form-control-lg form-control-solid">
                         <label for="price" class="col-lg-4 col-form-label fw-bold fs-6">{{__('site.price')}}</label>
                     </div>
                     <!--end::Col-->
@@ -275,7 +261,7 @@
                     <!--begin::Col-->
                     <div class="form-floating">
                         <textarea class="form-control form-control-lg form-control-solid" name="note" id="note"
-                            style="height: 100px" aria-valuemax="{{$shippment->note}}"></textarea>
+                            style="height: 100px">{{$shipment->note}}</textarea>
                         <label for="note">{{__('site.note')}}</label>
                     </div>
                     <!--end::Col-->
@@ -286,12 +272,16 @@
             <!--end::Card body-->
 
             <!--begin::Actions-->
-            {{-- <div class="card-footer d-flex justify-content-end py-6 px-9">
+            <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <button type="button" class="btn btn-secondary" id="kt_account_profile_details_submit1">
+                    {{__('site.close')}}
+                </button>
+                <p>&nbsp;</p>
                 <button type="button" onclick="addshipment()" class="btn btn-primary"
                     id="kt_account_profile_details_submit">
                     {{__('site.add')}}
                 </button>
-            </div> --}}
+            </div>
             <!--end::Actions-->
         </form>
         <!--end::Form-->
@@ -310,20 +300,20 @@
             $('.dynamic').change(function(){
                 if($(this).val() != '')
                 {
-                var select = $(this).attr("id");
-                var value = $(this).val();
-                var dependent = $(this).data('dependent');
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                url:"{{ route('dynamicdependent.fetch') }}",
-                method:"POST",
-                data:{select:select, value:value, _token:_token, dependent:dependent},
-                success:function(result)
-                {
-                $('#'+ dependent).html(result);
-                }
+                    var select = $(this).attr("id");
+                    var value = $(this).val();
+                    var dependent = $(this).data('dependent');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                    url:"{{ route('dynamicdependent.fetch') }}",
+                    method:"POST",
+                    data:{select:select, value:value, _token:_token, dependent:dependent},
+                    success:function(result)
+                    {
+                    $('#'+ dependent).html(result);
+                    }
 
-                })
+                    })
                 }
             });
 
@@ -336,9 +326,8 @@
 
         //add shipment details
         function addshipment() {
-            axios.post('/dashboard/shipment', {
+            axios.put('/dashboard/shipment/{{$shipment->id}}', {
                 user_id:{{auth()->user()->id}},
-                // address_line: document.getElementById('address_line').value,
                 area: document.getElementById('area').value,
                 city: document.getElementById('city').value,
                 shipment_type: document.getElementById('shipment_type').value,
@@ -360,7 +349,8 @@
                 showConfirmButton: false,
                 timer: 1500
                 });
-                document.getElementById('kt_account_profile_details_form').reset();
+                // document.getElementById('kt_account_profile_details_form').reset();
+                window.location.href = "/dashboard/shipment";
 
             })
             .catch(function (error) {
@@ -376,6 +366,10 @@
 
             });
         }
+
+        $("#kt_account_profile_details_submit1").on('click', function(){
+        window.location.href = "/dashboard/shipment";
+        });
 
 </script>
 
