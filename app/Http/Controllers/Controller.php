@@ -109,4 +109,37 @@ class Controller extends BaseController
             return view('import', ['ViewsPage' => $ViewsPage]);
         }
     }
+
+    // get all shipment to admin with advanced search
+    function getshipment()
+    {
+        $shipment = Shippment::all();
+        return view('Dashboard.admin.search', ['shipment' => $shipment]);
+    }
+
+    // get shipment after do scan using driver
+    function getshipmentscan(Request $request)
+    {
+
+        $barcode = $request->sometext;
+        $shippment = Shippment::where('barcode', $barcode)->first();
+
+        if ($shippment != null) {
+            return view('Dashboard.admin.driver.show', ['shippment' => $shippment]);
+        } else {
+
+            return redirect()->back()->withErrors(
+                [
+                    'withErrors' =>  'shippment does not exist'
+                ],
+            );
+        }
+    }
+
+    function drivershipment()
+    {
+        $shipment = Shippment::all();
+        // dd($shipment);
+        return view('Dashboard.driver.shipment', ['shipment' => $shipment]);
+    }
 }

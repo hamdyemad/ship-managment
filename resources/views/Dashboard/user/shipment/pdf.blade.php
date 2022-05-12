@@ -409,10 +409,16 @@
                                                 <tr>
 
                                                     <td colspan="3">{{$show->note}}</td>
-                                                    <td colspan="2">
-                                                        <div class="mb-3">
-                                                            <?php echo DNS1D::getBarcodeHTML($show->barcode, "C39+",1,45); ?>
+                                                    <td colspan="2" style="text-align: center;">
+                                                        <br>
+                                                        <div style="margin-left: 10%">
+                                                            <?php
+                                                            $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+                                                            echo $generator->getBarcode($show->barcode, $generator::TYPE_CODE_128);
+
+                                                             ?>
                                                         </div>
+                                                        <br>
                                                     </td>
                                                 </tr>
                                             </tbody>

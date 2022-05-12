@@ -79,7 +79,6 @@ class AreaController extends Controller
     // get area belong to city
     public function show(Request $request)
     {
-        
     }
 
     /**
@@ -108,12 +107,16 @@ class AreaController extends Controller
         ]);
 
         if (!$validator->fails()) {
-            $isSaved = $area->update([
-                'area' => $request->input('area'),
-                'rate' => $request->input('rate'),
+            // $isSaved = $area->update([
+            //     'area' => $request->input('area'),
+            //     'rate' => $request->input('rate'),
 
-            ]);
+            // ]);
+            $area->area = $request->input('area');
+            $area->rate = $request->input('rate');
+            $isSaved = $area->save();
 
+            // return Redirect::back()->;
             return response()->json(
                 [
                     'message' => $isSaved ? 'Area updated successfully' : 'update failed!'

@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Driver;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DriverSeeder extends Seeder
+class DeliverySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +14,6 @@ class DriverSeeder extends Seeder
      */
     public function run()
     {
-        Driver::factory(5)->create();
+        //
     }
 }

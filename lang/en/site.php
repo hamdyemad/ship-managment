@@ -48,6 +48,7 @@ return [
     'note' => 'Note',
     'add' => 'Add',
     'add_shipment' => 'Add Shipment',
+    'add_employee' => 'Add Employee',
     'status' => 'Status',
     'address' => 'Address',
     'export' => 'Export',

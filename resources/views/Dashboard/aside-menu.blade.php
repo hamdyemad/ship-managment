@@ -37,7 +37,7 @@
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">Crafted</span>
                 </div>
             </div>
-
+            {{-- ========================page========================= --}}
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 <span class="menu-link">
                     <span class="menu-icon">
@@ -101,6 +101,14 @@
                                 </a>
                             </div>
                             <div class="menu-item">
+                                <a class="menu-link" href="{{route('getshipment')}}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{__('site.shipment')}}</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
                                 <a class="menu-link" href="../../demo1/dist/pages/profile/campaigns.html">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
@@ -119,7 +127,7 @@
 
                         </div>
                     </div>
-                    {{-- ========== end profile ========== --}}
+                    {{-- ========== end::profile ========== --}}
 
                     {{-- ========== user ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
@@ -197,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- ========== end user ========== --}}
+                    {{-- ========== end::user ========== --}}
 
                     {{-- ========== seller ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
@@ -227,7 +235,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- ========== end seller ========== --}}
+                    {{-- ========== end::seller ========== --}}
 
                     {{-- ========== Driver ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
@@ -257,35 +265,38 @@
                             </div>
                         </div>
                     </div>
-                    {{-- ========== end Driver ========== --}}
+                    {{-- ========== end::Driver ========== --}}
 
+                    {{-- ========== employee ========== --}}
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Blog</span>
+                            <span class="menu-title">Employee</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/blog/home.html">
+                                <a class="menu-link" href="{{route('employee.index')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Blog Home</span>
+                                    <span class="menu-title">Employee List</span>
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a class="menu-link" href="../../demo1/dist/pages/blog/post.html">
+                                <a class="menu-link" href="{{route('employee.create')}}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Blog Post</span>
+                                    <span class="menu-title">Employee create</span>
                                 </a>
                             </div>
                         </div>
                     </div>
+                    {{-- ========== end::employee ========== --}}
+
                     <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-bullet">
@@ -401,6 +412,84 @@
                     </div>
                 </div>
             </div>
+            {{-- ========================end page========================= --}}
+
+            {{-- ======================== driver ========================= --}}
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <span class="menu-link">
+                    <span class="menu-icon">
+                        <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path
+                                    d="M21 9V11C21 11.6 20.6 12 20 12H14V8H20C20.6 8 21 8.4 21 9ZM10 8H4C3.4 8 3 8.4 3 9V11C3 11.6 3.4 12 4 12H10V8Z"
+                                    fill="black" />
+                                <path d="M15 2C13.3 2 12 3.3 12 5V8H15C16.7 8 18 6.7 18 5C18 3.3 16.7 2 15 2Z"
+                                    fill="black" />
+                                <path opacity="0.3"
+                                    d="M9 2C10.7 2 12 3.3 12 5V8H9C7.3 8 6 6.7 6 5C6 3.3 7.3 2 9 2ZM4 12V21C4 21.6 4.4 22 5 22H10V12H4ZM20 12V21C20 21.6 19.6 22 19 22H14V12H20Z"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-title">Driver</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <div class="menu-sub menu-sub-accordion menu-active-bg">
+
+                    {{-- ========== profile ========== --}}
+                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                        <span class="menu-link">
+                            <span class="menu-bullet">
+                                <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Design/Color-profile.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path
+                                                d="M12,10.9996338 C12.8356605,10.3719448 13.8743941,10 15,10 C17.7614237,10 20,12.2385763 20,15 C20,17.7614237 17.7614237,20 15,20 C13.8743941,20 12.8356605,19.6280552 12,19.0003662 C11.1643395,19.6280552 10.1256059,20 9,20 C6.23857625,20 4,17.7614237 4,15 C4,12.2385763 6.23857625,10 9,10 C10.1256059,10 11.1643395,10.3719448 12,10.9996338 Z M13.3336047,12.504354 C13.757474,13.2388026 14,14.0910788 14,15 C14,15.9088933 13.7574889,16.761145 13.3336438,17.4955783 C13.8188886,17.8206693 14.3938466,18 15,18 C16.6568542,18 18,16.6568542 18,15 C18,13.3431458 16.6568542,12 15,12 C14.3930587,12 13.8175971,12.18044 13.3336047,12.504354 Z"
+                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <circle fill="#000000" cx="12" cy="9" r="5" />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                            </span>
+                            <span class="menu-title">Profile</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+
+                            <div class="menu-item">
+                                <a class="menu-link" href="{{route('driver.shipment')}}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{__('site.account')}}</span>
+                                </a>
+                            </div>
+
+                            {{-- <div class="menu-item">
+                                <a class="menu-link" href="{{route('city.index')}}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{__('site.zones')}}</span>
+                                </a>
+                            </div> --}}
+
+
+                        </div>
+                    </div>
+                    {{-- ========== end::profile ========== --}}
+
+                </div>
+            </div>
+            {{-- ========================end driver========================= --}}
+
 
             <div class="menu-item">
                 <div class="menu-content">

@@ -20,7 +20,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="{{route('user.index')}}" class="text-muted text-hover-primary">{{__('site.user')}}</a>
+        <a href="{{route('user.index')}}" class="text-muted text-hover-primary">{{__('site.employee')}}</a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -41,7 +41,7 @@
     <!--begin::Item-->
 
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{$user->name}}</a>
+        <a href="" class="text-muted text-hover-primary">{{$employee->name}}</a>
     </li>
     <!--end::Item-->
 </ul>
@@ -60,7 +60,7 @@
         data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
-            <h3 class="fw-bolder m-0">{{__('site.Seller')}}</h3>
+            <h3 class="fw-bolder m-0">{{__('site.employee')}}</h3>
         </div>
         <!--end::Card title-->
     </div>
@@ -78,7 +78,7 @@
                 <div class="row mb-12">
                     <!--begin::Col-->
                     <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.name')}}</label>
-                    <input type="text" id="name" name="name" value="{{$user->name}}"
+                    <input type="text" id="name" name="name" value="{{$employee->name}}"
                         class="form-control form-control-lg form-control-solid">
 
                 </div>
@@ -95,7 +95,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.email')}}</label>
-                                <input type="email" id="email" name="email" value="{{$user->email}}"
+                                <input type="email" id="email" name="email" value="{{$employee->email}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
                             <!--end::email-->
@@ -104,7 +104,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.phone')}}</label>
-                                <input type="text" id="phone" name="phone" value="{{$user->phone}}"
+                                <input type="text" id="phone" name="phone" value="{{$employee->phone}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
                             <!--end::phone-->
@@ -148,7 +148,7 @@
 
             <!--begin::Actions-->
             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                <button type="button" onclick="updateseller()" class="btn btn-primary"
+                <button type="button" onclick="updatemployee()" class="btn btn-primary"
                     id="kt_account_profile_details_submit">
                     {{__('site.update')}}
                 </button>
@@ -165,10 +165,10 @@
 @section('js')
 
 <script>
-    //update seller (user) in the system
+    //update employee in the system
 
-        function updateseller() {
-            axios.put('/dashboard/user/{{$user->id}}', {
+        function updatemployee() {
+            axios.put('/dashboard/employee/{{$employee->id}}', {
 
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -186,7 +186,7 @@
                 timer: 1500
                 });
                 document.getElementById('kt_account_profile_details_form').reset();
-                window.location.href = "/dashboard/user";
+                window.location.href = "/dashboard/employee";
 
             })
             .catch(function (error) {

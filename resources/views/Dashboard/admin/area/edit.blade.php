@@ -22,7 +22,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="{{route('area.index')}}" class="text-muted text-hover-primary">{{__('site.area')}}</a>
+        <a href="" class="text-muted text-hover-primary">{{__('site.area')}}</a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -112,8 +112,9 @@
             showConfirmButton: false,
             timer: 1500
             });
-            // window.location.href = '/dashboard/area/';
-            window.history.back();
+
+            location.reload();
+            // window.history.back();
         })
         .catch(function (error) {
             console.log(error);

@@ -2,7 +2,7 @@
 
 @section('title',__('site.add'))
 
-@section('page_name',__('site.seller'))
+@section('page_name',__('site.employee'))
 
 
 @section('pages')
@@ -20,7 +20,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
+        <a href="{{route('employee.index')}}" class="text-muted text-hover-primary">{{__('site.employee')}}</a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -50,7 +50,7 @@
         data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
-            <h3 class="fw-bolder m-0">{{__('site.add_seller')}}</h3>
+            <h3 class="fw-bolder m-0">{{__('site.add_employee')}}</h3>
         </div>
         <!--end::Card title-->
     </div>
@@ -125,7 +125,7 @@
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">
-                        <input type="password" name="password_confirmation"
+                        <input type="password" name="password_confirmation" id="password_confirmation"
                             class="form-control form-control-lg form-control-solid">
                     </div>
                     <!--end::Col-->
@@ -137,7 +137,7 @@
 
             <!--begin::Actions-->
             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                <button type="button" onclick="addseller()" class="btn btn-primary"
+                <button type="button" onclick="addemployee()" class="btn btn-primary"
                     id="kt_account_profile_details_submit">
                     {{__('site.add')}}
                 </button>
@@ -154,15 +154,16 @@
 @section('js')
 
 <script>
-    //add seller (user) to the system
+    //add employee  to the system
 
-        function addseller() {
-            axios.post('/dashboard/user', {
+        function addemployee() {
+            axios.post('/dashboard/employee', {
 
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                password_confirmation: document.getElementById('password_confirmation').value,
             })
             .then(function (response) {
                 //2xx
@@ -175,7 +176,7 @@
                 timer: 1500
                 });
                 document.getElementById('kt_account_profile_details_form').reset();
-                window.location.href = "/dashboard/user";
+                window.location.href = "/dashboard/employee";
 
             })
             .catch(function (error) {

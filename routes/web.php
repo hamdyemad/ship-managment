@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PickupController;
 use App\Http\Controllers\ShippmentController;
 use App\Http\Controllers\UserController;
@@ -42,11 +43,14 @@ Route::group(
         Route::prefix('dashboard')->group(function () {
             Route::view('/', 'Dashboard.app')->name('app');
             /* ############################### admin ############################### */
-            Route::get('/sitting', [AdminController::class, 'show'])->name('dashboard.sitting');
+            Route::get('/admin', [AdminController::class, 'show'])->name('dashboard.sitting');
             Route::resource('city', CityController::class);
             Route::resource('area', AreaController::class);
             /* ############################### end admin ############################### */
             Route::resource('driver', DriverController::class);
+            Route::resource('employee', EmployeeController::class);
+            // Route::view('/e', 'dashboard.admin.search');
+            Route::view('/scan', 'dashboard.admin.scanner')->name('open.scan');
             /* ############################### user ############################### */
             Route::resource('user', UserController::class);
 
@@ -59,6 +63,10 @@ Route::group(
             Route::get('users', [Controller::class, 'index'])->name('account.user');
             Route::post('/user/sitting/fetch/', [Controller::class, 'fetch'])->name('dynamicdependent.fetch');
             Route::post('/user/sitting/fetch2/', [Controller::class, 'fetch2'])->name('dynamicdependent.fetch2');
+            Route::get('/admin/all-shipment', [Controller::class, 'getshipment'])->name('getshipment');
+            Route::post('/shipment/scan', [Controller::class, 'getshipmentscan'])->name('scan');
+            Route::get('/driver/shipment/delivery', [Controller::class, 'drivershipment'])->name('driver.shipment');
+
 
 
             /* ############################### end user ############################### */

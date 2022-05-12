@@ -1,8 +1,8 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.employee'))
+@section('title',__('site.seller'))
 
-@section('page_name',__('site.employee'))
+@section('page_name',__('site.seller'))
 
 @section('pages')
 
@@ -19,7 +19,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.employee')}}</a>
+        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
     </li>
     <!--end::Item-->
 
@@ -163,7 +163,7 @@
                 </button> --}}
                 <!--begin::Add shipment-->
 
-                <a href="{{route('employee.create')}}" class="btn btn-primary">
+                <a href="{{route('user.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -172,7 +172,7 @@
                             <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->{{__('site.add_employee')}}
+                    <!--end::Svg Icon-->{{__('site.add_seller')}}
                 </a>
                 <!--end::Add shipment-->
 
@@ -220,7 +220,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($employee as $employee)
+                @foreach ($shipment as $user)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -234,8 +234,8 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$employee->id}}"
-                                data-bs-toggle="modal" role="button">{{$employee->id}}</a>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$user->id}}"
+                                data-bs-toggle="modal" role="button">{{$user->id}}</a>
 
 
                         </div>
@@ -243,16 +243,16 @@
                     </td>
 
 
-                    <td>{{$employee->name}}</td>
+                    <td>{{$user->name}}</td>
 
-                    <td>{{$employee->phone}}</td>
+                    <td>{{$user->phone}}</td>
 
                     <td>
-                        <div class="badge badge-light fw-bolder">{{$employee->email}}</div>
+                        <div class="badge badge-light fw-bolder">{{$user->email}}</div>
                     </td>
 
 
-                    <td>employee</td>
+                    <td>USer</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -277,13 +277,13 @@
                                 <a href="{{route('shipment.show',$user->id)}}" class="menu-link px-3">show</a>
                             </div> --}}
                             <div class="menu-item px-3">
-                                <a href="{{route('employee.edit',$employee->id)}}"
+                                <a href="{{route('user.edit',$user->id)}}"
                                     class="menu-link px-3">{{__('site.edit')}}</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$employee->id}}',this)" class="menu-link px-3"
+                                <a href="#" onclick="confirmDelete('{{$user->id}}',this)" class="menu-link px-3"
                                     data-kt-users-table-filter="delete_row">Delete</a>
                             </div>
                             <!--end::Menu item-->
@@ -335,7 +335,7 @@
     }
     // delete user
     function performDelete(id,reference) {
-        axios.delete('/dashboard/employee/'+id)
+        axios.delete('/dashboard/user/'+id)
         .then(function (response) {
         //2xx
         console.log(response);
