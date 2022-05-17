@@ -20,16 +20,8 @@ class PickupController extends Controller
      */
     public function index()
     {
-        // $pickup = Pickup::where('user_id', auth()->user()->id)->get();
-        // $shipment = Pickup::with('shipment')->get();
+   
         $shipment = Shippment::has('pickup')->get();
-
-
-        // $a = $shipment->find(2);
-        // // // dd($a->pickup);
-        // // // $pickup = Pickup::with('shipment')->get();
-
-        // dd($a->shipment);
 
         return view('Dashboard.user.pickup.index', ['pickup' => $shipment]);
     }

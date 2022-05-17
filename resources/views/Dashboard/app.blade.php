@@ -3586,6 +3586,7 @@ License: For each use you must have a valid license purchased only from above li
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     @yield('js')
     @stack('scripts')
     <!--end::Page Custom Javascript-->

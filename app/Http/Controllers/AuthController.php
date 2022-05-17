@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         $request->merge(["guard" => $request->guard]);
         $validator = Validator($request->all(), [
-            'guard' => 'required|string|in:admin,web'
+            'guard' => 'required|string|in:admin,web,employee,driver'
         ]);
         if (!$validator->fails()) {
             return response()->view('Dashboard.auth.login', ['guard' => $request->input('guard')]);
@@ -29,7 +29,7 @@ class AuthController extends Controller
         $validator = Validator($request->all(), [
             'email' => "required|email",
             'password' => 'required',
-            'guard' => 'required|string|in:admin,web',
+            'guard' => 'required|string|in:admin,web,employee,driver',
         ]);
 
         if (!$validator->fails()) {

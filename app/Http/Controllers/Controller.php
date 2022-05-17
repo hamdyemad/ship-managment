@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Area;
 use App\Models\City;
+use App\Models\Delivery;
+use App\Models\Driver;
 use App\Models\Shippment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -134,6 +137,77 @@ class Controller extends BaseController
                 ],
             );
         }
+    }
+
+    function getdrivers()
+    {
+        $drivers = Driver::all();
+        return view('Dashboard.employee.scan', ['drivers' => $drivers]);
+    }
+
+
+    // get shipment after do scan using employee and add driver
+    function getshipmentscan2(Request $request)
+    {
+
+        $barcodes = array();
+
+        foreach ($request->arr as $key => $value) {
+
+            $barcodes[$key] = $value;
+        }
+
+        // $shippment = DB::table('shippments')->select('id', 'address', 'receiver_name')->whereIn('barcode', $barcodes)->get();
+        $shippment = Shippment::whereIn('barcode', $barcodes)->get();
+
+
+        foreach ($shippment as  $value) {
+
+            $delivery = new Delivery();
+            $delivery->driver_id = $request->driver_id;
+            $delivery->shippment_id = $value->id;
+            $isSaved = $delivery->save();
+        }
+
+
+        return response()->json(
+            [
+                'message' => $isSaved ? 'Shipment assigned successfully' : 'assigned failed!'
+            ],
+            $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
+    }
+
+    // change status
+    function changestatue(Request $request)
+    {
+
+        $shipment = Shippment::where('id', $request->shipment_id)->first();
+        $shipment->status = $request->status;
+        $isSaved = $shipment->save();
+        return response()->json(
+            [
+                'message' => $isSaved ? 'Status was successfully' : 'Create failed!'
+            ],
+            $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
+    }
+
+    // change the status to onhold and give date
+    function changestatue_onhold(Request $request)
+    {
+
+        $shipment = Shippment::where('id', $request->shipment_id)->first();
+        $shipment->status = $request->status;
+        $shipment->updated_at =  $request->date;
+        $shipment->note =  $request->note;
+        $isSaved = $shipment->save();
+        return response()->json(
+            [
+                'message' => $isSaved ? 'Status was successfully' : 'Create failed!'
+            ],
+            $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
     }
 
     function drivershipment()

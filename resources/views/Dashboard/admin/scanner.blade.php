@@ -22,7 +22,7 @@
 
 {{-- message if the barcode shippment does not exist --}}
 @if($errors->any())
-    <h4>{{$errors->first()}}</h4>
+<h4>{{$errors->first()}}</h4>
 @endif
 {{-- ================================================ --}}
 

@@ -19,7 +19,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
+        <a href="" class="text-muted text-hover-primary">{{__('site.driver')}}</a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -29,7 +29,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="{{route('shipment.index')}}" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
+        <a href="" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -49,14 +49,9 @@
 @endsection
 
 @section('css')
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
-    .fa {
-        font-family: 'Lato', 'Font Awesome 5 Free', 'Font Awesome 5 Brands';
-        font-weight: 900;
-        padding: 1rem 2rem;
-        color: #080e0c;
 
-    }
 </style>
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" />
@@ -64,6 +59,42 @@
 @endsection
 
 @section('content')
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">add the date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="ViewPages" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="container">
+                        <div class="row">
+                            <label for="from" class="col-form-label">{{__('site.date')}}</label>
+                            <div class="col-md-12">
+                                <input type="date" class="form-control input-sm" id="date" name="date">
+                            </div>
+                            <label for="from" class="col-form-label">{{__('site.note')}}</label>
+                            <div class="col-md-12">
+                                <textarea class="form-control form-control-lg form-control-solid" name="note" id="note"
+                                    style="height: 100px"></textarea>
+                            </div>
+
+                            <div class="col-md-4">
+                                <button type="button" onclick="updatestatusshipment()" class="btn btn-secondary btn-sm"
+                                    name="">
+                                    add</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <div class="card mb-5 mb-xl-10">
     <!--begin::Card header-->
@@ -79,22 +110,40 @@
 
         {{-- //export link --}}
         <div class="card-toolbar">
+            {{-- status dropdown --}}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{__('site.status')}}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" onclick="addshipment('shipped',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #7bc1f3"></i>Shipped</a>
+                    </li>
+                    <li><a class="dropdown-item" onclick="addshipment('delivered',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #52ec7b"></i>Delivered</a>
+                    </li>
+                    <hr>
+                    <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
+                                class="fa fa-circle" style="color: #b9bc7f"></i>OnHold</a>
+                    </li>
 
+                    <li><a class="dropdown-item" onclick="addshipment('no_answer',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #b9bc7f"></i>No Answer</a>
+                    </li>
+                    <hr>
+                    <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #ee83a5"></i>Rejected</a>
+                    </li>
+                    <li><a class="dropdown-item" onclick="addshipment('rejected_fees _faid',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #ee83a5"></i>Rejected Fees Paid</a>
+                    </li>
 
-            <select name="sample" id="sample" class="fa">
-                <option value="">----</option>
-                <option value="fa fa-address-card" class="fa">&#xf111; address card</option>
-                <option value="fa fa-bell" class="fa">&#xf111; bell</option>
-                <option value="fa fa-bookmark" class="fa">&#xf111; bookmark</option>
-                <option value="fa fa-building" class="fa"><span style="color:rgb(233, 11, 207);">&#xf111;</span>
-                    building</option>
-                <option value="">
-                    <span class="fa" style="color:rgb(233, 11, 207);"> &#xf111;</span> requested
-                </option>
-            </select>
+                </ul>
+            </div>
 
-
-
+            {{-- print --}}
             <a href="{{route('print',$shippment->id)}}" class="btn btn-light-primary me-3">
                 <i class="fa fa-print"></i>
                 {{__('site.print')}}
@@ -275,7 +324,7 @@
                     <!--begin::Col-->
                     <div class="form-floating">
                         <textarea class="form-control form-control-lg form-control-solid" name="package" id="package"
-                            style="height: 100px" aria-valuemax="{{$shippment->package_details}}"></textarea>
+                            style="height: 100px" aria-valuemax="">{{$shippment->package_details}}</textarea>
                         <label for="package">{{__('site.package')}}</label>
 
                     </div>
@@ -300,7 +349,7 @@
                     <!--begin::Col-->
                     <div class="form-floating">
                         <textarea class="form-control form-control-lg form-control-solid" name="note" id="note"
-                            style="height: 100px" aria-valuemax="{{$shippment->note}}"></textarea>
+                            style="height: 100px" aria-valuemax="">{{$shippment->note}}</textarea>
                         <label for="note">{{__('site.note')}}</label>
                     </div>
                     <!--end::Col-->
@@ -330,77 +379,102 @@
 
 <script>
     //show city and his area in select tag
-        $(document).ready(function(){
+        // $(document).ready(function(){
 
-            $('.dynamic').change(function(){
-                if($(this).val() != '')
-                {
-                var select = $(this).attr("id");
-                var value = $(this).val();
-                var dependent = $(this).data('dependent');
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                url:"{{ route('dynamicdependent.fetch') }}",
-                method:"POST",
-                data:{select:select, value:value, _token:_token, dependent:dependent},
-                success:function(result)
-                {
-                $('#'+ dependent).html(result);
-                }
+        //     $('.dynamic').change(function(){
+        //         if($(this).val() != '')
+        //         {
+        //         var select = $(this).attr("id");
+        //         var value = $(this).val();
+        //         var dependent = $(this).data('dependent');
+        //         var _token = $('input[name="_token"]').val();
+        //         $.ajax({
+        //         url:"{{ route('dynamicdependent.fetch') }}",
+        //         method:"POST",
+        //         data:{select:select, value:value, _token:_token, dependent:dependent},
+        //         success:function(result)
+        //         {
+        //         $('#'+ dependent).html(result);
+        //         }
 
-                })
-                }
-            });
+        //         })
+        //         }
+        //     });
 
-                $('#city').change(function(){
-                $('#area').val('');
+        //         $('#city').change(function(){
+        //         $('#area').val('');
 
+        //         });
+
+        // });
+
+        // //update the status shipment details
+        function addshipment(statusofshipment,id) {
+            axios.post('/dashboard/driver/shipment/status', {
+                status: statusofshipment,
+                shipment_id: id,
+            })
+            .then(function (response) {
+                //2xx
+                console.log(response);
+                Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: response.data.message,
+                showConfirmButton: false,
+                timer: 1500
+                });
+                // document.getElementById('kt_account_profile_details_form').reset();
+
+            })
+            .catch(function (error) {
+                //4xx - 5xx
+                console.log(error.response.data.message);
+                Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: error.response.data.message,
+                showConfirmButton: false,
+                timer: 1500
                 });
 
-        });
+            });
+        }
 
-        // //add shipment details
-        // function addshipment() {
-        //     axios.post('/dashboard/shipment', {
-        //         user_id:{{auth()->user()->id}},
-        //         // address_line: document.getElementById('address_line').value,
-        //         area: document.getElementById('area').value,
-        //         city: document.getElementById('city').value,
-        //         shipment_type: document.getElementById('shipment_type').value,
-        //         business: document.getElementById('business').value,
-        //         receiver_name: document.getElementById('receiver_name').value,
-        //         receiver_phone: document.getElementById('receiver_phone').value,
-        //         address: document.getElementById('address').value,
-        //         package:document.getElementById('package').value,
-        //         price:document.getElementById('price').value,
-        //         note:document.getElementById('note').value,
-        //     })
-        //     .then(function (response) {
-        //         //2xx
-        //         console.log(response);
-        //         Swal.fire({
-        //         position: 'top-end',
-        //         icon: 'success',
-        //         title: response.data.message,
-        //         showConfirmButton: false,
-        //         timer: 1500
-        //         });
-        //         document.getElementById('kt_account_profile_details_form').reset();
+        // update status to on hold
+         function updatestatusshipment() {
+            axios.post('/dashboard/driver/shipment/status/onhold', {
+                status: 'onhold',
+                shipment_id: '{{$shippment->id}}',
+                date:document.getElementById('date').value,
+                note:document.getElementById('note').value,
+            })
+            .then(function (response) {
+                //2xx
+                console.log(response);
+                Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: response.data.message,
+                showConfirmButton: false,
+                timer: 1500
+                });
 
-        //     })
-        //     .catch(function (error) {
-        //         //4xx - 5xx
-        //         console.log(error.response.data.message);
-        //         Swal.fire({
-        //         position: 'top-end',
-        //         icon: 'error',
-        //         title: error.response.data.message,
-        //         showConfirmButton: false,
-        //         timer: 1500
-        //         });
 
-        //     });
-        // }
+            })
+            .catch(function (error) {
+                //4xx - 5xx
+                console.log(error.response.data.message);
+                Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: error.response.data.message,
+                showConfirmButton: false,
+                timer: 1500
+                });
+
+            });
+        }
 
 </script>
 

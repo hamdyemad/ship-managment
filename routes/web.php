@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 /* ############################### login ############################### */
 
-Route::middleware('guest:web,admin')->group(function () {
+Route::middleware('guest:web,admin,employee,driver')->group(function () {
     Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('dashboard.login');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 });
@@ -36,7 +36,7 @@ Route::middleware('guest:web,admin')->group(function () {
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth:web,admin']
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth:web,admin,employee,driver']
     ],
     function () {
 
@@ -49,8 +49,9 @@ Route::group(
             /* ############################### end admin ############################### */
             Route::resource('driver', DriverController::class);
             Route::resource('employee', EmployeeController::class);
-            // Route::view('/e', 'dashboard.admin.search');
+
             Route::view('/scan', 'dashboard.admin.scanner')->name('open.scan');
+            Route::get('/scan/shippments', [Controller::class, 'getdrivers'])->name('employee.scan');
             /* ############################### user ############################### */
             Route::resource('user', UserController::class);
 
@@ -66,6 +67,11 @@ Route::group(
             Route::get('/admin/all-shipment', [Controller::class, 'getshipment'])->name('getshipment');
             Route::post('/shipment/scan', [Controller::class, 'getshipmentscan'])->name('scan');
             Route::get('/driver/shipment/delivery', [Controller::class, 'drivershipment'])->name('driver.shipment');
+            // change the status from driver
+            Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
+            Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
+            Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
+            // Route::view('/employee/scan/shipmeht', 'Dashboard.admin.employee.show')->name('scan.shippments');
 
 
 
@@ -75,7 +81,7 @@ Route::group(
 );
 
 /* ############################### logout ############################### */
-Route::middleware('auth:web,admin')->group(function () {
+Route::middleware('auth:web,admin,employee,driver')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('dashboard.logout');
 });
 /* ############################### end logout ############################### */
