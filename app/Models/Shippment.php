@@ -18,6 +18,11 @@ class Shippment extends Model
         return $this->hasOne(Pickup::class);
     }
 
+    public function delivery()
+    {
+        return $this->hasMany(Delivery::class);
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class);

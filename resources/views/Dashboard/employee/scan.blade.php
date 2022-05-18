@@ -130,22 +130,22 @@
                 },
                 success:function(data){
                     console.log('success');
-                        // Swal.fire({
-                        //     position: 'top-end',
-                        //     icon: 'success',
-                        //     title: 'd',
-                        //     showConfirmButton: false,
-                        //     timer: 1500
-                        // });
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Shippment assigned successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                 },error: function (reject) {
                     console.log(reject.error);
-                    // Swal.fire({
-                    //     position: 'top-end',
-                    //     icon: 'error',
-                    //     title: error.data.message,
-                    //     showConfirmButton: false,
-                    //     timer: 1500
-                    // });
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'assigned failed!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 }
             });
 

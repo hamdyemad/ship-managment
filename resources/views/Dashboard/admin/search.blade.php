@@ -1,8 +1,8 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.seller'))
+@section('title',__('site.shipment'))
 
-@section('page_name',__('site.seller'))
+@section('page_name',__('site.shipment'))
 
 @section('pages')
 
@@ -22,26 +22,46 @@
         <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
     </li>
     <!--end::Item-->
-
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
+    </li>
+    <!--end::Item-->
 </ul>
 
 @endsection
 
 @section('css')
+<style>
+    @media screen {
+        #phone_number {
+            display: none;
+        }
+    }
 
+    /* On screens that are 600px wide or less, the background color is olive */
+    @media screen and (max-width: 912px)and (min-width:200px) {
+        #phone_number {
+            display: inherit;
+        }
+    }
+</style>
 @endsection
 
 @section('content')
 
-{{-- ========== export ========== --}}
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">add the date</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body">
                 <form action="ViewPages" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -65,11 +85,9 @@
                 </form>
             </div>
 
-
         </div>
     </div>
-</div> --}}
-{{-- ========== end export ========== --}}
+</div>
 
 <!--begin::Card-->
 <div class="card">
@@ -132,10 +150,47 @@
                                 data-placeholder="Select option" data-allow-clear="true"
                                 data-kt-user-table-filter="status" data-hide-search="true">
                                 <option></option>
-                                <option value="created">created</option>
+                                <option value="picked up">picked up
+                                </option>
+                                <option value="receiver at hub">receiver at hub</option>
+                                <option value="shipped">shipped</option>
+                                <option value="delivered">delivered</option>
+                                <option value="no_answer">no_answer</option>
+                                <option value="rejected">rejected</option>
+                                <option value="rejected_fees_faid">rejected_fees_faid</option>
+                            </select>
+                        </div>
+                        <!--end::Input group-->
+
+                        <div class="mb-10">
+                            <label class="form-label fs-6 fw-bold">{{__('site.type')}}:</label>
+                            <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
+                                data-placeholder="Select option" data-allow-clear="true"
+                                data-kt-user-table-filter="type" data-hide-search="true">
+                                <option></option>
+                                <option value="forward">Forward
+                                </option>
+                                <option value="exchange">exchange</option>
+                                <option value="cash_collection">cash collection</option>
 
                             </select>
                         </div>
+
+                        <div class="mb-10">
+                            <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
+                            <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
+                                data-placeholder="Select option" data-allow-clear="true"
+                                data-kt-user-table-filter="driver" data-hide-search="true">
+                                <option></option>
+                                @foreach ($driver as $driver)
+                                <option value="{{$driver->name}}">
+                                    {{$driver->name}}
+                                </option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
                         <!--end::Input group-->
 
                         <!--begin::Actions-->
@@ -153,17 +208,17 @@
                 <!--end::Menu 1-->
                 <!--end::Filter-->
 
-                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-whatever="@mdo">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
                     </span>
                     <!--end::Svg Icon-->Export
-                </button> --}}
+                </button>
                 <!--begin::Add shipment-->
 
-                <a href="{{route('user.create')}}" class="btn btn-primary">
+                <a href="{{route('shipment.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -172,7 +227,7 @@
                             <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->{{__('site.add_seller')}}
+                    <!--end::Svg Icon-->{{__('site.add_shipment')}}
                 </a>
                 <!--end::Add shipment-->
 
@@ -206,11 +261,14 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.id')}}</th>
-                    <th class="min-w-125px">{{__('site.name')}}</th>
+                    <th class="min-w-125px">{{__('site.user')}}</th>
+                    <th class="min-w-125px">{{__('site.status')}}</th>
+                    <th class="min-w-125px">{{__('site.print')}}</th>
+                    <th class="min-w-125px">{{__('site.type')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
-                    <th class="min-w-125px">{{__('site.email')}}</th>
-                    <th class="min-w-125px">{{__('site.permission')}}</th>
+                    <th class="min-w-125px">{{__('site.address')}}</th>
+                    <th class="min-w-125px">{{__('site.driver')}}</th>
+                    <th class="min-w-125px">{{__('site.price')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -220,7 +278,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($shipment as $user)
+                @foreach ($shipment as $shipment)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -234,25 +292,47 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$user->id}}"
-                                data-bs-toggle="modal" role="button">{{$user->id}}</a>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->shippment->id}}"
+                                data-bs-toggle="modal" role="button">{{$shipment->receiver_name}}</a>
+                            <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
+                                <i class="fa fa-user"></i>
+
+                            </a>
+                            <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
+                                <i class="fa fa-phone"></i>
+                            </a>
+
+
+
 
 
                         </div>
                         <!--begin::User details-->
                     </td>
+                    <!--end::User=-->
 
-
-                    <td>{{$user->name}}</td>
-
-                    <td>{{$user->phone}}</td>
+                    <td>{{$shipment->shippment->status}}</td>
+                    <td>
+                        {{-- <div class="card-toolbar">
+                            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}
+                                <a href="{{route('print',$shipment->shippment->id)}}">
+                                    <i class="fa fa-print"></i>
+                                    {{-- {{__('site.export')}} --}}
+                                </a>
+                                {{--
+                            </div>
+                        </div> --}}
+                    </td>
+                    <td>{{$shipment->shippment->shippment_type}}</td>
+                    <td>{{$shipment->shippment->receiver_phone}}</td>
 
                     <td>
-                        <div class="badge badge-light fw-bolder">{{$user->email}}</div>
+                        <div class="badge badge-light fw-bolder">{{$shipment->shippment->address}}</div>
                     </td>
 
+                    <td>{{$shipment->driver->name}}</td>
 
-                    <td>USer</td>
+                    <td>{{$shipment->shippment->price}}</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -273,18 +353,19 @@
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                             data-kt-menu="true">
                             <!--begin::Menu item-->
-                            {{-- <div class="menu-item px-3">
-                                <a href="{{route('shipment.show',$user->id)}}" class="menu-link px-3">show</a>
-                            </div> --}}
                             <div class="menu-item px-3">
-                                <a href="{{route('user.edit',$user->id)}}"
-                                    class="menu-link px-3">{{__('site.edit')}}</a>
+                                <a href="{{route('shipment.show',$shipment->shippment->id)}}"
+                                    class="menu-link px-3">show</a>
+                            </div>
+                            <div class="menu-item px-3">
+                                <a href="{{route('shipment.edit',$shipment->shippment->id)}}"
+                                    class="menu-link px-3">Edit</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$user->id}}',this)" class="menu-link px-3"
-                                    data-kt-users-table-filter="delete_row">Delete</a>
+                                <a href="#" onclick="confirmDelete('{{$shipment->shippment->id}}',this)"
+                                    class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
                             </div>
                             <!--end::Menu item-->
                         </div>
@@ -298,7 +379,6 @@
                 @endforeach
 
             </tbody>
-
             <!--end::Table body-->
         </table>
         <!--end::Table-->
@@ -333,9 +413,9 @@
             }
         });
     }
-    // delete user
+    // delete shipment
     function performDelete(id,reference) {
-        axios.delete('/dashboard/user/'+id)
+        axios.delete('/dashboard/shipment/'+id)
         .then(function (response) {
         //2xx
         console.log(response);
@@ -361,6 +441,7 @@
             })
         });
     }
+
 </script>
 
 

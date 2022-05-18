@@ -113,14 +113,15 @@ class Controller extends BaseController
         }
     }
 
-    // get all shipment to admin with advanced search
+    // get all shipment with driver to admin with advanced search
     function getshipment()
     {
-        $shipment = Shippment::all();
-        return view('Dashboard.admin.search', ['shipment' => $shipment]);
+        $delivery = Delivery::with('driver', 'shippment')->get();
+        $drivers = Driver::all();
+        return view('Dashboard.admin.search', ['shipment' => $delivery, 'driver' => $drivers]);
     }
 
-    // get shipment after do scan using driver
+    // get one shipment after do scan using driver or emplyee
     function getshipmentscan(Request $request)
     {
 
@@ -138,7 +139,7 @@ class Controller extends BaseController
             );
         }
     }
-
+    // get all drivers and view scan2
     function getdrivers()
     {
         $drivers = Driver::all();
@@ -162,23 +163,33 @@ class Controller extends BaseController
 
 
         foreach ($shippment as  $value) {
-
-            $delivery = new Delivery();
-            $delivery->driver_id = $request->driver_id;
-            $delivery->shippment_id = $value->id;
-            $isSaved = $delivery->save();
+            if ($value->status == 'requested') {
+                $delivery = new Delivery();
+                $delivery->driver_id = $request->driver_id;
+                $delivery->shippment_id = $value->id;
+                $value->status = 'picked up';
+                $update = $value->save();
+                $isSaved = $delivery->save();
+            } else if ($value->status == 'received at hub') {
+                $delivery = new Delivery();
+                $delivery->driver_id = $request->driver_id;
+                $delivery->shippment_id = $value->id;
+                $value->status = 'shipped';
+                $update = $value->save();
+                $isSaved = $delivery->save();
+            }
         }
 
 
         return response()->json(
             [
-                'message' => $isSaved ? 'Shipment assigned successfully' : 'assigned failed!'
+                'message' => $isSaved ? 'Shippment assigned successfully' : 'assigned failed!'
             ],
             $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
         );
     }
 
-    // change status
+    // change status using driver
     function changestatue(Request $request)
     {
 
@@ -187,7 +198,7 @@ class Controller extends BaseController
         $isSaved = $shipment->save();
         return response()->json(
             [
-                'message' => $isSaved ? 'Status was successfully' : 'Create failed!'
+                'message' => $isSaved ? 'Status was successfully' : 'change status failed!'
             ],
             $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
         );
@@ -212,7 +223,7 @@ class Controller extends BaseController
 
     function drivershipment()
     {
-        $shipment = Shippment::all();
+        $shipment = Shippment::where('status', ['picked up', 'received at hub', 'shipped', 'onhold', 'delivered', 'no_answer', 'rejected', 'rejected_fees_faid'])->get();
         // dd($shipment);
         return view('Dashboard.driver.shipment', ['shipment' => $shipment]);
     }

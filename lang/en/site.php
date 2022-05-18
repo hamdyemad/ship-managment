@@ -70,6 +70,8 @@ return [
     'seller' => 'Seller',
     'add_driver' => 'Add Driver',
     'driver' => 'Driver',
+    'type' => 'Type',
+
 
 
 

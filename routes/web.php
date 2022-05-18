@@ -71,7 +71,7 @@ Route::group(
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
-            // Route::view('/employee/scan/shipmeht', 'Dashboard.admin.employee.show')->name('scan.shippments');
+            // Route::view('/all-shippment/driver', [Controller::class, 'index3'])->name('customsearch.index');
 
 
 

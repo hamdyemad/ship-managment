@@ -117,27 +117,31 @@
                     {{__('site.status')}}
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" onclick="addshipment('receiver at hub',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                    </li>
+                    <hr>
                     <li><a class="dropdown-item" onclick="addshipment('shipped',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #7bc1f3"></i>Shipped</a>
+                                class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Shipped</a>
                     </li>
                     <li><a class="dropdown-item" onclick="addshipment('delivered',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #52ec7b"></i>Delivered</a>
+                                class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
                     </li>
                     <hr>
                     <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
                             data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
-                                class="fa fa-circle" style="color: #b9bc7f"></i>OnHold</a>
+                                class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
                     </li>
 
                     <li><a class="dropdown-item" onclick="addshipment('no_answer',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #b9bc7f"></i>No Answer</a>
+                                class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;No Answer</a>
                     </li>
                     <hr>
                     <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #ee83a5"></i>Rejected</a>
+                                class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
                     </li>
-                    <li><a class="dropdown-item" onclick="addshipment('rejected_fees _faid',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #ee83a5"></i>Rejected Fees Paid</a>
+                    <li><a class="dropdown-item" onclick="addshipment('rejected_fees_faid',{{$shippment->id}})"><i
+                                class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
                     </li>
 
                 </ul>

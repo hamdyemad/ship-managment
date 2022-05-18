@@ -9,4 +9,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Driver extends Authenticatable
 {
     use HasFactory;
+
+    protected $fillable = [
+        'id',
+        'name',
+    ];
+
+    public function delivery()
+    {
+        return $this->hasMany(Delivery::class);
+    }
 }

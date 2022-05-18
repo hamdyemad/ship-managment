@@ -67,7 +67,7 @@ class ShippmentController extends Controller
             $shipment->package_details = $request->input('package_details');
             $shipment->address = $request->input('address');
             $shipment->note = $request->input('note');
-            $shipment->status = 'requested';
+            $shipment->status = 'created';
             $shipment->barcode = random_int(100000, 999999);
             $isSaved = $shipment->save();
             return response()->json(

@@ -20,7 +20,7 @@ class PickupController extends Controller
      */
     public function index()
     {
-   
+
         $shipment = Shippment::has('pickup')->get();
 
         return view('Dashboard.user.pickup.index', ['pickup' => $shipment]);
@@ -34,7 +34,7 @@ class PickupController extends Controller
     public function create()
     {
         $address = Address::where('user_id', auth()->user()->id)->get();
-        $shipment = Shippment::where('status', 'requested')->count();
+        $shipment = Shippment::where('status', 'created')->count();
 
         return view('Dashboard.user.pickup.create', ['address' => $address, 'shipment' => $shipment]);
     }
@@ -58,11 +58,12 @@ class PickupController extends Controller
             'date' => 'required',
             'note' => 'max:150',
         ]);
-        $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'requested')->get();
+        $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
         if (!$validator->fails()) {
+            // $isSaved = '';
             foreach ($shipment as $shipment) {
 
-                if ($shipment->status == 'requested') {
+                if ($shipment->status == 'created') {
                     $pickup = new Pickup();
                     $pickup->name = $request->input('name');
                     $pickup->email = $request->input('email');
@@ -74,7 +75,7 @@ class PickupController extends Controller
                     $pickup->shippment_id = $shipment->id;
                     $pickup->note = $request->input('note');
                     $pickup->package = $request->input('package');
-                    $shipment->status = 'picked up';
+                    $shipment->status = 'requested';
                     $updated = $shipment->save();
                     $isSaved = $pickup->save();
                 }

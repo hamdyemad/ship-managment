@@ -69,6 +69,8 @@ return [
     'add_driver' => 'اضافة سائق',
     'driver' => 'سائق',
     'add_employee' => 'اضافة موظف',
+    'type' => 'نوع',
+
 
 
 

@@ -26,7 +26,7 @@ class ShippmentFactory extends Factory
             'barcode' => $this->faker->randomNumber(6),
             'package_details' => 'no detali',
             'note' => 'notlk',
-            'status' => 'requested',
+            'status' => 'created',
             'user_id' => '1',
             'city_id' => '2',
             'area_id' => '1',
