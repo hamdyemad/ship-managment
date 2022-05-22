@@ -23,7 +23,8 @@
             <th>phone</th>
 
         </tr>
-        @foreach ($PDFReport as $PDFReports)
+
+        @foreach ($show as $PDFReports)
         <tr>
             <td>{{ $PDFReports->id }}</td>
             <td>{{ $PDFReports->receiver_name }}</td>

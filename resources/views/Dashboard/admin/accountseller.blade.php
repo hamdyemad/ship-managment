@@ -56,6 +56,7 @@
 @section('content')
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -63,10 +64,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="ViewPages" method="POST" enctype="multipart/form-data">
+                <form action="{{route('accountseller_pdf')}}" method="get" enctype="multipart/form-data">
                     @csrf
                     <div class="container">
                         <div class="row">
+                            <label for="from" class="col-form-label">seller</label>
+                            <div class="col-md-6">
+                                <select id="user_id" name="user_id" class="form-select ">
+                                    <option></option>
+                                    @foreach ($users as $users )
+                                    <option value="{{$users->id}}">{{$users->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <label for="from" class="col-form-label">From</label>
                             <div class="col-md-6">
                                 <input type="date" class="form-control input-sm" id="from" name="from">
@@ -91,6 +102,7 @@
 
 <!--begin::Card-->
 <div class="card">
+
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">
         <!--begin::Card title-->
@@ -162,7 +174,7 @@
                         </div>
                         <!--end::Input group-->
 
-                        <div class="mb-10">
+                        {{-- <div class="mb-10">
                             <label class="form-label fs-6 fw-bold">{{__('site.type')}}:</label>
                             <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                 data-placeholder="Select option" data-allow-clear="true"
@@ -174,22 +186,22 @@
                                 <option value="cash_collection">cash collection</option>
 
                             </select>
-                        </div>
+                        </div> --}}
 
-                        <div class="mb-10">
+                        {{-- <div class="mb-10">
                             <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
                             <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                 data-placeholder="Select option" data-allow-clear="true"
                                 data-kt-user-table-filter="driver" data-hide-search="true">
                                 <option></option>
-                                @foreach ($driver as $driver)
-                                <option value="{{$driver->name}}">
-                                    {{$driver->name}}
+                                @foreach ($shipment as $shipment)
+                                <option value="{{$shipment->id}}">
+                                    {{$shipment->id}}
                                 </option>
                                 @endforeach
 
                             </select>
-                        </div>
+                        </div> --}}
 
                         <!--end::Input group-->
 
@@ -261,15 +273,17 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.user')}}</th>
+                    <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-125px">{{__('site.date')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
-                    <th class="min-w-125px">{{__('site.print')}}</th>
-                    <th class="min-w-125px">{{__('site.type')}}</th>
+                    <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
-                    <th class="min-w-125px">{{__('site.address')}}</th>
-                    <th class="min-w-125px">{{__('site.driver')}}</th>
-                    <th class="min-w-125px">{{__('site.price')}}</th>
-                    <th class="text-end min-w-100px">Actions</th>
+                    <th class="min-w-125px">{{__('site.city')}}</th>
+                    <th class="min-w-125px">{{__('site.area')}}</th>
+                    <th class="min-w-125px">{{__('site.cash')}}</th>
+                    <th class="min-w-125px">{{__('site.area')}}</th>
+                    <th class="min-w-125px">{{__('site.cost')}}</th>
+                    {{-- <th class="text-end min-w-100px">Actions</th> --}}
                 </tr>
                 <!--end::Table row-->
             </thead>
@@ -292,50 +306,52 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->shippment->id}}"
-                                data-bs-toggle="modal" role="button">{{$shipment->receiver_name}}</a>
-                            <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->id}}"
+                                data-bs-toggle="modal" role="button">{{$shipment->id}}</a>
+                            {{-- <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
                                 <i class="fa fa-user"></i>
 
                             </a>
                             <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
                                 <i class="fa fa-phone"></i>
-                            </a>
-
-
-
-
+                            </a> --}}
 
                         </div>
                         <!--begin::User details-->
                     </td>
                     <!--end::User=-->
+                    <td>{{$shipment->created_at}}</td>
+                    <td>{{$shipment->status}}</td>
+                    {{-- <td>
 
-                    <td>{{$shipment->shippment->status}}</td>
-                    <td>
-                        {{-- <div class="card-toolbar">
-                            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}
-                                <a href="{{route('print',$shipment->shippment->id)}}">
-                                    <i class="fa fa-print"></i>
-                                    {{-- {{__('site.export')}} --}}
-                                </a>
-                                {{--
-                            </div>
-                        </div> --}}
-                    </td>
-                    <td>{{$shipment->shippment->shippment_type}}</td>
-                    <td>{{$shipment->shippment->receiver_phone}}</td>
+                        <a href="{{route('print',$shipment->shippment->id)}}">
+                            <i class="fa fa-print"></i>
 
-                    <td>
+                        </a>
+
+                    </td> --}}
+                    <td>{{$shipment->receiver_name}}</td>
+                    <td>{{$shipment->receiver_phone}}</td>
+
+                    {{-- <td>
                         <div class="badge badge-light fw-bolder">{{$shipment->shippment->address}}</div>
-                    </td>
+                    </td> --}}
 
-                    <td>{{$shipment->driver->name}}</td>
+                    <td>{{$shipment->city->city}}</td>
 
-                    <td>{{$shipment->shippment->price}}</td>
+                    <td>{{$shipment->area->area}}</td>
+                    <td>{{$shipment->accountseller->cash}}</td>
+                    @if($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id &&
+                    $shipment->area->id == $shipment->user->area_id)
+
+                    <td>{{$shipment->user->special_price}}</td>
+                    @else
+                    <td>{{$shipment->area->rate}}</td>
+                    @endif
+                    <td>{{$shipment->accountseller->cost}}</td>
 
                     <!--begin::Action=-->
-                    <td class="text-end">
+                    {{-- <td class="text-end">
                         <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click"
                             data-kt-menu-placement="bottom-end">Actions
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -370,7 +386,7 @@
                             <!--end::Menu item-->
                         </div>
                         <!--end::Menu-->
-                    </td>
+                    </td> --}}
                     <!--end::Action=-->
                     <td></td>
 

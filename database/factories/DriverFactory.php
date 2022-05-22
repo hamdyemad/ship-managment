@@ -21,6 +21,8 @@ class DriverFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => '999999999',
+            'special_pickup' => '10',
+
             'password' => Hash::make(12345),
             // 'remember_token' => Str::random(10),
         ];

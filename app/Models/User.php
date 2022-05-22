@@ -12,7 +12,8 @@ class User extends Authenticatable
 {
     public function shipments()
     {
-        return $this->morphToMany(Shippment::class, 'taggable');
+        // return $this->morphToMany(Shippment::class, 'taggable');
+        return $this->hasMany(Shippment::class);
     }
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -22,6 +23,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',

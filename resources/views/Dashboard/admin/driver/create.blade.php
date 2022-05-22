@@ -132,6 +132,24 @@
                 </div>
                 <!--end::Input password_confirmation-->
 
+                <!--begin::price of pickup-->
+                <div class="row">
+
+
+                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+                            <label class="col-lg-4 col-form-label required fw-bold fs-6">pickup price</label>
+                            <input type="number" name="special_pickup" id="special_pickup" placeholder=""
+                                class="form-control form-control-sm form-control-solid">
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--end::price of pickup-->
+
             </div>
             <!--end::Card body-->
 
@@ -164,6 +182,7 @@
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
                 password_confirmation: document.getElementById('password_confirmation').value,
+                special_pickup: document.getElementById('special_pickup').value,
             })
             .then(function (response) {
                 //2xx

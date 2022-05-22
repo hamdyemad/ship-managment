@@ -29,7 +29,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Dashboard.admin.seller.create');
+        $city = City::all();
+        return view('Dashboard.admin.seller.create', ['city' => $city]);
     }
 
     /**
@@ -45,6 +46,8 @@ class UserController extends Controller
             'email' => 'required|email',
             'phone' => 'required |numeric',
             'password' => 'required',
+            'special_price' => 'numeric|min:2',
+
 
         ]);
         if (!$validator->fails()) {
@@ -52,6 +55,10 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
+            $user->special_price = $request->input('special_price');
+            $user->special_pickup = $request->input('special_pickup');
+            $user->city_id = $request->input('city');
+            $user->area_id = $request->input('area');
             $user->password = Hash::make($request->input('password'));
             $isSaved = $user->save();
             return response()->json(

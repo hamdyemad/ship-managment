@@ -132,6 +132,77 @@
                 </div>
                 <!--end::Input password_confirmation-->
 
+                <!--begin::city && area-->
+                <div class="row">
+
+                    <!--begin::city-->
+                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+                            <select data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
+                                data-control="select2" data-placeholder="date_period"
+                                class="form-select form-select-sm form-select-solid dynamic">
+                                <option value="" disabled selected>City
+                                </option>
+                                @foreach ($city as $city)
+                                <option id="cityid" value="{{$city->id}}">
+                                    {{$city->city}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div><br><br>
+                    <!--end::city-->
+
+                    <!--begin::area-->
+                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+                            <select name="area" id="area" aria-label="Select a Timezone" data-control="select2"
+                                data-placeholder="date_period"
+                                class="form-select form-select-sm form-select-solid dynamic">
+                                <option value="" disabled selected>
+                                </option>
+
+                                {{-- @foreach ($area as $area)
+                                <option value="{{$area->id}}">{{$area->area}}</option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                        {{ csrf_field() }}
+                    </div>
+                    <!--end::area-->
+
+                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+
+                            <input type="number" name="special_price" id="special_price" placeholder="special price"
+                                class="form-control form-control-sm form-control-solid">
+                            {{-- <label
+                                class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.price')}}</label> --}}
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--end::city && area-->
+
+                <!--begin::price of pickup-->
+                <div class="row">
+
+
+                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+                            <label class="col-lg-4 col-form-label required fw-bold fs-6">pickup price</label>
+                            <input type="number" name="special_pickup" id="special_pickup" placeholder=""
+                                class="form-control form-control-sm form-control-solid">
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--end::price of pickup-->
+
             </div>
             <!--end::Card body-->
 
@@ -154,8 +225,35 @@
 @section('js')
 
 <script>
-    //add seller (user) to the system
+    //show city and his area in select tag
+        $(document).ready(function(){
+            $('.dynamic').change(function(){
+                if($(this).val() != '')
+                {
+                    var select = $(this).attr("id");
+                    var value = $(this).val();
+                    var dependent = $(this).data('dependent');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{ route('dynamicdependent.fetch') }}",
+                        method:"POST",
+                        data:{select:select, value:value, _token:_token, dependent:dependent},
+                        success:function(result)
+                        {
+                        $('#'+ dependent).html(result);
+                        }
 
+                    })
+                }
+            });
+
+                $('#city').change(function(){
+                $('#area').val('');
+
+            });
+        });
+
+    //add seller (user) to the system
         function addseller() {
             axios.post('/dashboard/user', {
 
@@ -163,6 +261,11 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                city: document.getElementById('city').value,
+                area: document.getElementById('area').value,
+                special_price: document.getElementById('special_price').value,
+                special_pickup: document.getElementById('special_pickup').value,
+
             })
             .then(function (response) {
                 //2xx

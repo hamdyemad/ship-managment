@@ -51,6 +51,7 @@ class DriverController extends Controller
             $driver->name = $request->input('name');
             $driver->email = $request->input('email');
             $driver->phone = $request->input('phone');
+            $driver->special_pickup = $request->input('special_pickup');
             $driver->password = Hash::make($request->input('password'));
             $isSaved = $driver->save();
             return response()->json(

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountSeller;
 use App\Models\Address;
 use App\Models\Area;
 use App\Models\City;
@@ -113,6 +114,53 @@ class Controller extends BaseController
         }
     }
 
+    function accountseller(Request $req)
+    {
+
+        // $method = $req->method();
+        // Carbon::today()->toDateString()
+        $from =  Carbon::parse($req->input('from'));
+
+        $to   = Carbon::parse($req->input('to'));
+
+
+
+        $user_id = $req->input('user_id');
+        // $PDFReport = Shippment::whereBetween('created_at', [$from, $to])->where('user_id', $req->input('user_id'))->get();
+        // $pdf = PDF::loadView('dashboard.user.shipment.printtable', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
+        // return $pdf->download('PDF-report.pdf');
+        // return view('dashboard.user.shipment.printtable', ['ViewsPage' => $PDFReport]);
+        // where('created_at', '>=', date('Y-m-d') . ' 00:00:00');
+        $show = Shippment::where('created_at', '>=', $from)->where('created_at', '<=', $to)->where('user_id', $user_id)->get();
+        $pdf = PDF::loadView('dashboard.user.shipment.printtable', compact('show'));
+        // dd($show);
+        return $pdf->download('printtable.pdf');
+
+        // if ($req->isMethod('post')) {
+        //     $from = $req->input('from');
+        //     $to   = $req->input('to');
+        //     if ($req->has('search')) {
+        //         // select search
+        //         // $search = DB::select("SELECT * FROM shippments WHERE created_at BETWEEN '$from' AND '$to'");
+        //         $search = Shippment::whereBetween('created_at', [$from, $to])->where('user_id', $req->input('user_id'))->get();
+        //         return view('import', ['ViewsPage' => $search]);
+        //     } elseif ($req->has('exportPDF')) {
+        //         // select PDF
+        //         // $PDFReport = DB::select("SELECT * FROM shippments WHERE created_at BETWEEN '$from' AND '$to'");
+        //         $PDFReport = Shippment::whereBetween('created_at', [$from, $to])->where('user_id', $req->input('user_id'))->get();
+        //         $pdf = PDF::loadView('dashboard.user.shipment.printtable', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
+        //         return $pdf->download('PDF-report.pdf');
+        //     }
+        // } else {
+        //     //select all
+        //     // $ViewsPage = DB::select('SELECT * FROM users');
+        //     $ViewsPage = Shippment::all();
+        //     return view('import', ['ViewsPage' => $ViewsPage]);
+        // }
+    }
+
+
+
     // get all shipment with driver to admin with advanced search
     function getshipment()
     {
@@ -193,8 +241,82 @@ class Controller extends BaseController
     function changestatue(Request $request)
     {
 
-        $shipment = Shippment::where('id', $request->shipment_id)->first();
+        $shipment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
         $shipment->status = $request->status;
+        // if ($request->status == 'delivered' || $request->status == 'no_answer' || $request->status == 'rejected' || $request->status == 'rejected_fees_faid') {
+        //     $accounts = new AccountSeller();
+        //     $accounts->shippment_id = $shipment->id;
+        //     $accounts->cash = $shipment->price;
+        //     if ($shipment->user->special_price == 0) {
+        //         $accounts->cost = $shipment->price - $shipment->area->rate;
+        //     } elseif ($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id && $shipment->area->id == $shipment->user->area_id) {
+        //         $accounts->cost = $shipment->price - $shipment->user->special_price;
+        //     } else {
+        //         $accounts->cost = $shipment->price - $shipment->area->rate;
+        //     }
+
+        //     $accounts->save();
+        // }
+
+        if ($request->status == 'delivered') {
+
+            $accounts = new AccountSeller();
+            $accounts->shippment_id = $shipment->id;
+            $accounts->cash = $shipment->price;
+            if ($shipment->user->special_price == 0) {
+                $accounts->cost = $shipment->price - $shipment->area->rate;
+            } elseif ($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id && $shipment->area->id == $shipment->user->area_id) {
+                $accounts->cost = $shipment->price - $shipment->user->special_price;
+            } else {
+                $accounts->cost = $shipment->price - $shipment->area->rate;
+            }
+
+            $accounts->save();
+        } elseif ($request->status == 'delivered' && $shipment->shippment_type == 'exchange') {
+
+            $accounts = new AccountSeller();
+            $accounts->shippment_id = $shipment->id;
+            $accounts->cash = 0;
+            if ($shipment->user->special_price == 0) {
+                $accounts->cost = 0 - $shipment->area->rate;
+            } elseif ($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id && $shipment->area->id == $shipment->user->area_id) {
+                $accounts->cost = 0 - $shipment->user->special_price;
+            } else {
+                $accounts->cost = 0 - $shipment->area->rate;
+            }
+
+            $accounts->save();
+        } elseif ($request->status == 'rejected') {
+
+            $accounts = new AccountSeller();
+            $accounts->shippment_id = $shipment->id;
+            $accounts->cash = 0;
+            if ($shipment->user->special_price == 0) {
+                $accounts->cost = 0 - $shipment->area->rate;
+            } elseif ($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id && $shipment->area->id == $shipment->user->area_id) {
+                $accounts->cost = 0 - $shipment->user->special_price;
+            } else {
+                $accounts->cost = 0 - $shipment->area->rate;
+            }
+
+            $accounts->save();
+        } elseif ($request->status == 'rejected_fees_faid') {
+
+            $accounts = new AccountSeller();
+            $accounts->shippment_id = $shipment->id;
+
+            if ($shipment->user->special_price == 0) {
+                $accounts->cash = $shipment->area->rate;
+                $accounts->cost = $accounts->cash - $shipment->area->rate;
+            } elseif ($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id && $shipment->area->id == $shipment->user->area_id) {
+                $accounts->cash = $shipment->user->special_price;
+                $accounts->cost = $accounts->cash - $shipment->user->special_price;
+            } else {
+                $accounts->cash = $shipment->area->rate;
+                $accounts->cost = $accounts->cash - $shipment->area->rate;
+            }
+        }
+
         $isSaved = $shipment->save();
         return response()->json(
             [

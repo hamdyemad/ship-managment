@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountSellerController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AreaController;
@@ -72,6 +73,11 @@ Route::group(
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
             // Route::view('/all-shippment/driver', [Controller::class, 'index3'])->name('customsearch.index');
+            Route::get('/account', [AccountSellerController::class, 'index']);
+            Route::resource('account', AccountSellerController::class);
+            Route::get('acountseller', [Controller::class, 'accountseller'])->name('accountseller_pdf');
+
+
 
 
 
