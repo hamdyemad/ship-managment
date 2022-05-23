@@ -8,6 +8,7 @@ use App\Models\Area;
 use App\Models\City;
 use App\Models\Delivery;
 use App\Models\Driver;
+use App\Models\ScheduleSeller;
 use App\Models\Shippment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\PDF417;
 use PDF;
 
@@ -116,47 +118,32 @@ class Controller extends BaseController
 
     function accountseller(Request $req)
     {
-
-        // $method = $req->method();
-        // Carbon::today()->toDateString()
+        $totalcost = [];
         $from =  Carbon::parse($req->input('from'));
-
         $to   = Carbon::parse($req->input('to'));
-
-
-
         $user_id = $req->input('user_id');
-        // $PDFReport = Shippment::whereBetween('created_at', [$from, $to])->where('user_id', $req->input('user_id'))->get();
-        // $pdf = PDF::loadView('dashboard.user.shipment.printtable', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
-        // return $pdf->download('PDF-report.pdf');
-        // return view('dashboard.user.shipment.printtable', ['ViewsPage' => $PDFReport]);
-        // where('created_at', '>=', date('Y-m-d') . ' 00:00:00');
-        $show = Shippment::where('created_at', '>=', $from)->where('created_at', '<=', $to)->where('user_id', $user_id)->get();
-        $pdf = PDF::loadView('dashboard.user.shipment.printtable', compact('show'));
+        // $show = Shippment::with('accountseller', 'city', 'area', 'user')->where('created_at', '>=', $from)->where('created_at', '<=', $to)->where('user_id', $user_id)->get();
+        $show = AccountSeller::with('shippment')->where('created_at', '>=', $from)->where('created_at', '<=', $to)->whereRelation('shippment',  'user_id', $user_id)->get();
         // dd($show);
-        return $pdf->download('printtable.pdf');
 
-        // if ($req->isMethod('post')) {
-        //     $from = $req->input('from');
-        //     $to   = $req->input('to');
-        //     if ($req->has('search')) {
-        //         // select search
-        //         // $search = DB::select("SELECT * FROM shippments WHERE created_at BETWEEN '$from' AND '$to'");
-        //         $search = Shippment::whereBetween('created_at', [$from, $to])->where('user_id', $req->input('user_id'))->get();
-        //         return view('import', ['ViewsPage' => $search]);
-        //     } elseif ($req->has('exportPDF')) {
-        //         // select PDF
-        //         // $PDFReport = DB::select("SELECT * FROM shippments WHERE created_at BETWEEN '$from' AND '$to'");
-        //         $PDFReport = Shippment::whereBetween('created_at', [$from, $to])->where('user_id', $req->input('user_id'))->get();
-        //         $pdf = PDF::loadView('dashboard.user.shipment.printtable', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
-        //         return $pdf->download('PDF-report.pdf');
-        //     }
-        // } else {
-        //     //select all
-        //     // $ViewsPage = DB::select('SELECT * FROM users');
-        //     $ViewsPage = Shippment::all();
-        //     return view('import', ['ViewsPage' => $ViewsPage]);
-        // }
+        foreach ($show as $value) {
+            array_push($totalcost, $value->cost);
+            // echo $value->cost, "<br>";
+        }
+        $total = array_sum($totalcost);
+        // dd($total);
+        $pdf = PDF::loadView('dashboard.admin.printtable', compact('show', 'total'));
+        $pdf->setPaper('A4', 'landscape');
+        $image = $pdf->download('printtable.pdf');
+
+        $schedule = new ScheduleSeller();
+        $schedule->user_id = $user_id;
+        $schedule->from = $from;
+        $schedule->to = $to;
+        $schedule->image = $total;
+        $isssaved = $schedule->save();
+
+        return $image;
     }
 
 
