@@ -16,11 +16,9 @@ class AccountSellerController extends Controller
      */
     public function index()
     {
-        $status = ['delivered', 'rejected', 'rejected_fees_faid'];
-        $shipments = Shippment::with('accountseller', 'city', 'area', 'user')->whereIn('status', $status)->get();
+        $shipments = AccountSeller::with('shippment')->get();
         $users = User::all();
         return view('Dashboard.admin.accountseller', ['shipment' => $shipments, 'users' => $users]);
-        // dd($shipments[1]->user->id);
     }
 
     /**

@@ -14,7 +14,9 @@ class ScheduleSellerController extends Controller
      */
     public function index()
     {
-        //
+        $accountsfile = ScheduleSeller::with('user')->get();
+        // dd($accountsfile);
+        return view('Dashboard.admin.accountfile', ['accounts' => $accountsfile]);
     }
 
     /**

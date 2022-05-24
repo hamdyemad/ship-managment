@@ -15,7 +15,7 @@ class Driver extends Authenticatable
         'name',
     ];
 
-    public function delivery()
+    public function deliveries()
     {
         return $this->hasMany(Delivery::class);
     }

@@ -71,6 +71,20 @@ return [
     'add_driver' => 'Add Driver',
     'driver' => 'Driver',
     'type' => 'Type',
+    'cash' => 'Cash',
+    'cost' => 'Cost',
+    'accountseller' => 'Accounts Seller',
+    'accountsfile' => 'Accounts Files',
+    'shippername' => 'Shipper Name',
+    'shipperphone' => 'Shipper Phone',
+    'deliverycommission' => 'Delivery Commission',
+
+
+
+
+
+
+
 
 
 

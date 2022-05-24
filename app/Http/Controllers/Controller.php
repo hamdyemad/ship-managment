@@ -115,7 +115,7 @@ class Controller extends BaseController
             return view('import', ['ViewsPage' => $ViewsPage]);
         }
     }
-
+    // print pdf the shippment from to
     function accountseller(Request $req)
     {
         $totalcost = [];
@@ -145,9 +145,25 @@ class Controller extends BaseController
 
         return $image;
     }
+    // print pdf the shippment from to
+    function accountseller2(Request $req)
+    {
+        $totalcost = [];
+        $from =  Carbon::parse($req->input('from'));
+        $to   = Carbon::parse($req->input('to'));
+        $user_id = $req->input('user_id');
+        $show = AccountSeller::with('shippment')->where('created_at', '>=', $from)->where('created_at', '<=', $to)->whereRelation('shippment',  'user_id', $user_id)->get();
+        foreach ($show as $value) {
+            array_push($totalcost, $value->cost);
+        }
+        $total = array_sum($totalcost);
+        // dd($total);
+        $pdf = PDF::loadView('dashboard.admin.printtablesed', compact('show', 'total'));
+        $pdf->setPaper('A4', 'landscape');
+        $image = $pdf->download('printtable.pdf');
 
-
-
+        return $image;
+    }
     // get all shipment with driver to admin with advanced search
     function getshipment()
     {
@@ -180,7 +196,6 @@ class Controller extends BaseController
         $drivers = Driver::all();
         return view('Dashboard.employee.scan', ['drivers' => $drivers]);
     }
-
 
     // get shipment after do scan using employee and add driver
     function getshipmentscan2(Request $request)
@@ -229,21 +244,9 @@ class Controller extends BaseController
     {
 
         $shipment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
+        $delivery = Delivery::with('driver')->where('shippment_id', $request->shipment_id)->first();
+        // dd($delivery);
         $shipment->status = $request->status;
-        // if ($request->status == 'delivered' || $request->status == 'no_answer' || $request->status == 'rejected' || $request->status == 'rejected_fees_faid') {
-        //     $accounts = new AccountSeller();
-        //     $accounts->shippment_id = $shipment->id;
-        //     $accounts->cash = $shipment->price;
-        //     if ($shipment->user->special_price == 0) {
-        //         $accounts->cost = $shipment->price - $shipment->area->rate;
-        //     } elseif ($shipment->user->special_price != 0 && $shipment->city->id == $shipment->user->city_id && $shipment->area->id == $shipment->user->area_id) {
-        //         $accounts->cost = $shipment->price - $shipment->user->special_price;
-        //     } else {
-        //         $accounts->cost = $shipment->price - $shipment->area->rate;
-        //     }
-
-        //     $accounts->save();
-        // }
 
         if ($request->status == 'delivered') {
 
@@ -257,6 +260,21 @@ class Controller extends BaseController
             } else {
                 $accounts->cost = $shipment->price - $shipment->area->rate;
             }
+            //drivver
+            if ($delivery->driver->special_pickup == 10) {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - 10;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - 10;
+                }
+            } else {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - $delivery->driver->special_pickup;
+                }
+            }
+            // enddrivver
 
             $accounts->save();
         } elseif ($request->status == 'delivered' && $shipment->shippment_type == 'exchange') {
@@ -271,6 +289,19 @@ class Controller extends BaseController
             } else {
                 $accounts->cost = 0 - $shipment->area->rate;
             }
+            if ($delivery->driver->special_pickup == 10) {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - 10;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - 10;
+                }
+            } else {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - $delivery->driver->special_pickup;
+                }
+            }
 
             $accounts->save();
         } elseif ($request->status == 'rejected') {
@@ -284,6 +315,19 @@ class Controller extends BaseController
                 $accounts->cost = 0 - $shipment->user->special_price;
             } else {
                 $accounts->cost = 0 - $shipment->area->rate;
+            }
+            if ($delivery->driver->special_pickup == 10) {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - 10;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - 10;
+                }
+            } else {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - $delivery->driver->special_pickup;
+                }
             }
 
             $accounts->save();
@@ -302,7 +346,23 @@ class Controller extends BaseController
                 $accounts->cash = $shipment->area->rate;
                 $accounts->cost = $accounts->cash - $shipment->area->rate;
             }
+            if ($delivery->driver->special_pickup == 10) {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - 10;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - 10;
+                }
+            } else {
+                if ($shipment->user->special_price == null) {
+                    $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
+                } else {
+                    $accounts->delivery_commission = $shipment->user->special_price - $delivery->driver->special_pickup;
+                }
+            }
+            $accounts->save();
         }
+
+
 
         $isSaved = $shipment->save();
         return response()->json(
@@ -335,5 +395,13 @@ class Controller extends BaseController
         $shipment = Shippment::where('status', ['picked up', 'received at hub', 'shipped', 'onhold', 'delivered', 'no_answer', 'rejected', 'rejected_fees_faid'])->get();
         // dd($shipment);
         return view('Dashboard.driver.shipment', ['shipment' => $shipment]);
+    }
+
+
+    function getaccounts()
+    {
+        $shipments = Delivery::with('shippment', 'driver')->get();
+        $drivers = Driver::all();
+        return view('Dashboard.admin.accountdrivers', ['shipment' => $shipments, 'drivers' => $drivers]);
     }
 }

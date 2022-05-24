@@ -70,6 +70,13 @@ return [
     'driver' => 'سائق',
     'add_employee' => 'اضافة موظف',
     'type' => 'نوع',
+    'cash' => 'المبلغ',
+    'cost' => 'السعر النهائى',
+    'accountseller' => 'حسابات البائعين',
+    'accountsfile' => 'ملفات الحسابات',
+    'shippername' => 'اسم البائع',
+    'shipperphone' => 'هاتف البائع',
+    'deliverycommission' => 'عمولة السائق',
 
 
 

@@ -61,10 +61,10 @@
                         <div class="row">
                             <label for="from" class="col-form-label">seller</label>
                             <div class="col-md-6">
-                                <select id="user_id" name="user_id" class="form-select ">
+                                <select id="driver_id" name="user_id" class="form-select ">
                                     <option></option>
-                                    @foreach ($users as $users )
-                                    <option value="{{$users->id}}">{{$users->name}}</option>
+                                    @foreach ($drivers as $drivers )
+                                    <option value="{{$drivers->id}}">{{$drivers->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -265,8 +265,9 @@
                         </div>
                     </th>
                     <th class="min-w-125px">{{__('site.id')}}</th>
-                    <th class="min-w-125px">{{__('site.date')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
+                    <th class="min-w-125px">{{__('site.shippername')}}</th>
+                    <th class="min-w-125px">{{__('site.shipperphone')}}</th>
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.city')}}</th>
@@ -274,6 +275,7 @@
                     <th class="min-w-125px">{{__('site.cash')}}</th>
                     <th class="min-w-125px">{{__('site.area')}}</th>
                     <th class="min-w-125px">{{__('site.cost')}}</th>
+                    <th class="min-w-125px">{{__('site.deliverycommission')}}</th>
                     {{-- <th class="text-end min-w-100px">Actions</th> --}}
                 </tr>
                 <!--end::Table row-->
@@ -299,39 +301,25 @@
                         <div class="d-flex flex-column">
                             <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->shippment->id}}"
                                 data-bs-toggle="modal" role="button">{{$shipment->shippment->id}}</a>
-                            {{-- <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
-                                <i class="fa fa-user"></i>
 
-                            </a>
-                            <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
-                                <i class="fa fa-phone"></i>
-                            </a> --}}
 
                         </div>
                         <!--begin::User details-->
                     </td>
                     <!--end::User=-->
-                    <td>{{$shipment->shippment->created_at}}</td>
                     <td>{{$shipment->shippment->status}}</td>
-                    {{-- <td>
+                    <td>{{$shipment->shippment->user->name}}</td>
+                    <td>{{$shipment->shippment->user->phone}}</td>
 
-                        <a href="{{route('print',$shipment->shippment->id)}}">
-                            <i class="fa fa-print"></i>
-
-                        </a>
-
-                    </td> --}}
                     <td>{{$shipment->shippment->receiver_name}}</td>
                     <td>{{$shipment->shippment->receiver_phone}}</td>
 
-                    {{-- <td>
-                        <div class="badge badge-light fw-bolder">{{$shipment->shippment->address}}</div>
-                    </td> --}}
 
                     <td>{{$shipment->shippment->city->city}}</td>
 
                     <td>{{$shipment->shippment->area->area}}</td>
-                    <td>{{$shipment->cash}}</td>
+                    <td>{{$shipment->shippment->accountseller->cash}}</td>
+
                     @if($shipment->shippment->user->special_price != 0 && $shipment->shippment->city->id ==
                     $shipment->shippment->user->city_id &&
                     $shipment->shippment->area->id == $shipment->shippment->user->area_id)
@@ -340,7 +328,15 @@
                     @else
                     <td>{{$shipment->shippment->area->rate}}</td>
                     @endif
-                    <td>{{$shipment->cost}}</td>
+
+                    <td>{{$shipment->shippment->accountseller->cost}}</td>
+
+                    @if($shipment->driver->special_pickup != 10 )
+
+                    <td>{{$shipment->driver->special_pickup}}</td>
+                    @else
+                    <td>10</td>
+                    @endif
 
                     <!--begin::Action=-->
                     {{-- <td class="text-end">

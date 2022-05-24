@@ -22,7 +22,7 @@ class Shippment extends Model
         return $this->hasOne(Pickup::class);
     }
 
-    public function delivery()
+    public function deliveries()
     {
         return $this->hasMany(Delivery::class);
     }

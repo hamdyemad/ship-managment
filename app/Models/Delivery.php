@@ -18,6 +18,7 @@ class Delivery extends Model
         return $this->belongsTo(Driver::class);
     }
 
+
     public function shippment()
     {
         return $this->belongsTo(Shippment::class);

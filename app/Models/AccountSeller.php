@@ -13,4 +13,9 @@ class AccountSeller extends Model
     {
         return $this->belongsTo(Shippment::class);
     }
+
+    public function delivery()
+    {
+        return $this->hasone(Delivery::class);
+    }
 }

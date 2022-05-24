@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PickupController;
+use App\Http\Controllers\ScheduleSellerController;
 use App\Http\Controllers\ShippmentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -72,10 +73,15 @@ Route::group(
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
-            // Route::view('/all-shippment/driver', [Controller::class, 'index3'])->name('customsearch.index');
             Route::get('/account', [AccountSellerController::class, 'index']);
             Route::resource('account', AccountSellerController::class);
+            Route::resource('ScheduleSeller', ScheduleSellerController::class);
+            Route::get('accountdriver', [Controller::class, 'getaccounts']);
+
+
             Route::get('acountseller', [Controller::class, 'accountseller'])->name('accountseller_pdf');
+            Route::get('Schedulesellerpdf', [Controller::class, 'accountseller2'])->name('Scheduleseller_pdf');
+
 
 
 
