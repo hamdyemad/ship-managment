@@ -1,8 +1,8 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.accountseller'))
+@section('title',__('site.accountdriver'))
 
-@section('page_name',__('site.accountseller'))
+@section('page_name',__('site.accountdriver'))
 
 @section('pages')
 
@@ -19,7 +19,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.accountseller')}}</a>
+        <a href="{{route('shipments_drivers')}}" class="text-muted text-hover-primary">{{__('site.accountdriver')}}</a>
     </li>
     <!--end::Item-->
 
@@ -46,7 +46,7 @@
 
 @section('content')
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -89,7 +89,7 @@
 
         </div>
     </div>
-</div>
+</div> --}}
 
 <!--begin::Card-->
 <div class="card">
@@ -151,16 +151,11 @@
                             <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
                             <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                 data-placeholder="Select option" data-allow-clear="true"
-                                data-kt-user-table-filter="status" data-hide-search="true">
+                                data-kt-user-table-filter="name" data-hide-search="true">
                                 <option></option>
-                                {{-- <option value="picked up">picked up
-                                </option>
-                                <option value="receiver at hub">receiver at hub</option>
-                                <option value="shipped">shipped</option> --}}
-                                <option value="delivered">delivered</option>
-                                {{-- <option value="no_answer">no_answer</option> --}}
-                                <option value="rejected">rejected</option>
-                                <option value="rejected_fees_faid">rejected_fees_faid</option>
+                                @foreach ($drivers as $drivers)
+                                <option value="{{$drivers->name}}">{{$drivers->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <!--end::Input group-->
@@ -211,27 +206,23 @@
                 <!--end::Menu 1-->
                 <!--end::Filter-->
 
-                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-whatever="@mdo">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
                     </span>
                     <!--end::Svg Icon-->Export
-                </button>
+                </button> --}}
                 <!--begin::Add shipment-->
 
-                <a href="{{route('shipment.create')}}" class="btn btn-primary">
+                {{-- <a href="{{route('shipment.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                            <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                            <path
-                                d="M0 64C0 28.65 28.65 0 64 0H229.5C246.5 0 262.7 6.743 274.7 18.75L365.3 109.3C377.3 121.3 384 137.5 384 154.5V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V64zM336 448V160H256C238.3 160 224 145.7 224 128V48H64C55.16 48 48 55.16 48 64V448C48 456.8 55.16 464 64 464H320C328.8 464 336 456.8 336 448z" />
-                        </svg>
+                        <i class="fa fa-file"></i>
                     </span>
                     <!--end::Svg Icon-->{{__('site.accountsfile')}}
-                </a>
+                </a> --}}
                 <!--end::Add shipment-->
 
             </div>
@@ -265,16 +256,12 @@
                         </div>
                     </th>
                     <th class="min-w-125px">{{__('site.id')}}</th>
-                    <th class="min-w-125px">{{__('site.date')}}</th>
-                    <th class="min-w-125px">{{__('site.status')}}</th>
                     <th class="min-w-125px">{{__('site.name')}}</th>
-                    <th class="min-w-125px">{{__('site.phone')}}</th>
-                    <th class="min-w-125px">{{__('site.city')}}</th>
-                    <th class="min-w-125px">{{__('site.area')}}</th>
-                    <th class="min-w-125px">{{__('site.cash')}}</th>
-                    <th class="min-w-125px">{{__('site.area')}}</th>
+                    <th class="min-w-125px">{{__('site.from')}}</th>
+                    <th class="min-w-125px">{{__('site.to')}}</th>
                     <th class="min-w-125px">{{__('site.cost')}}</th>
-                    {{-- <th class="text-end min-w-100px">Actions</th> --}}
+                    <th class="min-w-125px">{{__('site.comm')}}</th>
+                    <th class="min-w-125px">{{__('site.pdf')}}</th>
                 </tr>
                 <!--end::Table row-->
             </thead>
@@ -283,7 +270,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($shipment as $shipment)
+                @foreach ($accounts as $accounts)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -297,89 +284,36 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->shippment->id}}"
-                                data-bs-toggle="modal" role="button">{{$shipment->shippment->id}}</a>
-                            {{-- <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
-                                <i class="fa fa-user"></i>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
+                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
 
-                            </a>
-                            <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
-                                <i class="fa fa-phone"></i>
-                            </a> --}}
 
                         </div>
                         <!--begin::User details-->
                     </td>
                     <!--end::User=-->
-                    <td>{{$shipment->shippment->created_at}}</td>
-                    <td>{{$shipment->shippment->status}}</td>
-                    {{-- <td>
+                    <td>{{$accounts->driver->name}}</td>
+                    <td>{{$accounts->from}}</td>
 
-                        <a href="{{route('print',$shipment->shippment->id)}}">
-                            <i class="fa fa-print"></i>
+                    <td>{{$accounts->to}}</td>
+                    <td>{{$accounts->total_cost}}</td>
+                    <td>{{$accounts->total_delivery_commission}}</td>
+                    <td>
+                        {{-- <a href="" onclick="addseller()">pdf</a>
+                        --}}
+                        <form action="{{route('accountdriver_pdf')}}" method="get" enctype="multipart/form-data">
+                            @csrf
+                            <div style="display: none">
+                                <input type="text" name="driver_id" value="{{$accounts->driver->id}}">
+                                <input type="date" name="from" value="{{$accounts->from}}">
+                                <input type="date" name="to" value="{{$accounts->to}}">
 
-                        </a>
-
-                    </td> --}}
-                    <td>{{$shipment->shippment->receiver_name}}</td>
-                    <td>{{$shipment->shippment->receiver_phone}}</td>
-
-                    {{-- <td>
-                        <div class="badge badge-light fw-bolder">{{$shipment->shippment->address}}</div>
-                    </td> --}}
-
-                    <td>{{$shipment->shippment->city->city}}</td>
-
-                    <td>{{$shipment->shippment->area->area}}</td>
-                    <td>{{$shipment->cash}}</td>
-                    @if($shipment->shippment->user->special_price != 0 && $shipment->shippment->city->id ==
-                    $shipment->shippment->user->city_id &&
-                    $shipment->shippment->area->id == $shipment->shippment->user->area_id)
-
-                    <td>{{$shipment->shippment->user->special_price}}</td>
-                    @else
-                    <td>{{$shipment->shippment->area->rate}}</td>
-                    @endif
-                    <td>{{$shipment->cost}}</td>
-
-                    <!--begin::Action=-->
-                    {{-- <td class="text-end">
-                        <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click"
-                            data-kt-menu-placement="bottom-end">Actions
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                            <span class="svg-icon svg-icon-5 m-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <path
-                                        d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
-                                        fill="black" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </a>
-                        <!--begin::Menu-->
-                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
-                            data-kt-menu="true">
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="{{route('shipment.show',$shipment->shippment->id)}}"
-                                    class="menu-link px-3">show</a>
                             </div>
-                            <div class="menu-item px-3">
-                                <a href="{{route('shipment.edit',$shipment->shippment->id)}}"
-                                    class="menu-link px-3">Edit</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$shipment->shippment->id}}',this)"
-                                    class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
-                            </div>
-                            <!--end::Menu item-->
-                        </div>
-                        <!--end::Menu-->
-                    </td> --}}
-                    <!--end::Action=-->
+                            <button type="submit" class="btn btn-light-primary me-3"><i class="fa fa-file"></i></button>
+                        </form>
+                    </td>
+
+
                     <td></td>
 
                 </tr>
@@ -398,60 +332,11 @@
 
 @endsection
 
-@push('scripts')
+@section('js')
 
 <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
 
-<script>
-    // message to confirm delete
-    function confirmDelete(id,reference) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-            performDelete(id,reference);
-            }
-        });
-    }
-    // delete shipment
-    function performDelete(id,reference) {
-        axios.delete('/dashboard/shipment/'+id)
-        .then(function (response) {
-        //2xx
-        console.log(response);
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: response.data.message,
-                showConfirmButton: false,
-                timer: 1500
-            });
-            reference.closest('tr').remove();
-            location.reload();
-        })
-        .catch(function (error) {
-        //4xx - 5xx
-        console.log(error.response.data.message);
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: error.response.data.message,
-                showConfirmButton: false,
-                timer: 1500
-            })
-        });
-    }
-
-</script>
-
-
-@endpush
+@endsection

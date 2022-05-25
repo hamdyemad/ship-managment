@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PickupController;
+use App\Http\Controllers\ScheduledriverController;
 use App\Http\Controllers\ScheduleSellerController;
 use App\Http\Controllers\ShippmentController;
 use App\Http\Controllers\UserController;
@@ -73,14 +74,21 @@ Route::group(
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
-            Route::get('/account', [AccountSellerController::class, 'index']);
+            // Route::get('/account', [AccountSellerController::class, 'index']);
             Route::resource('account', AccountSellerController::class);
+
             Route::resource('ScheduleSeller', ScheduleSellerController::class);
-            Route::get('accountdriver', [Controller::class, 'getaccounts']);
+
+            Route::resource('Scheduledriver', ScheduledriverController::class);
+
+            Route::get('accountdriver', [Controller::class, 'getaccounts'])->name('shipments_drivers');
 
 
-            Route::get('acountseller', [Controller::class, 'accountseller'])->name('accountseller_pdf');
+            Route::get('acountseller', [Controller::class, 'accountsellerpdf'])->name('accountseller_pdf');
             Route::get('Schedulesellerpdf', [Controller::class, 'accountseller2'])->name('Scheduleseller_pdf');
+
+            Route::get('acountdriver', [Controller::class, 'accountdriver'])->name('account_driver');
+            Route::get('Scheduledriverpdf', [Controller::class, 'accountdriver2'])->name('accountdriver_pdf');
 
 
 

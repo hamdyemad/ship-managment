@@ -8,6 +8,7 @@ use App\Models\Area;
 use App\Models\City;
 use App\Models\Delivery;
 use App\Models\Driver;
+use App\Models\Scheduledriver;
 use App\Models\ScheduleSeller;
 use App\Models\Shippment;
 use Carbon\Carbon;
@@ -116,34 +117,44 @@ class Controller extends BaseController
         }
     }
     // print pdf the shippment from to
-    function accountseller(Request $req)
+    function accountsellerpdf(Request $req)
     {
-        $totalcost = [];
-        $from =  Carbon::parse($req->input('from'));
-        $to   = Carbon::parse($req->input('to'));
-        $user_id = $req->input('user_id');
-        // $show = Shippment::with('accountseller', 'city', 'area', 'user')->where('created_at', '>=', $from)->where('created_at', '<=', $to)->where('user_id', $user_id)->get();
-        $show = AccountSeller::with('shippment')->where('created_at', '>=', $from)->where('created_at', '<=', $to)->whereRelation('shippment',  'user_id', $user_id)->get();
-        // dd($show);
+        $validator = Validator($req->all(), [
+            'user_id' => 'required ',
+            'from' => 'required',
+            'to' => 'required ',
 
+        ]);
+
+        $fromdate =  Carbon::parse($req->input('from'));
+        $todate  = Carbon::parse($req->input('to'));
+        $user_id_req = $req->input('user_id');
+
+        $show = AccountSeller::with('shippment')->where('created_at', '>=', $fromdate)
+            ->where('created_at', '<=', $todate)->whereRelation('shippment',  'user_id', $user_id_req)->get();
+
+        $totalcost = [];
         foreach ($show as $value) {
             array_push($totalcost, $value->cost);
-            // echo $value->cost, "<br>";
         }
         $total = array_sum($totalcost);
-        // dd($total);
-        $pdf = PDF::loadView('dashboard.admin.printtable', compact('show', 'total'));
+        $schedule = ScheduleSeller::firstOrCreate([
+            'user_id' => $req->user_id,
+            'from' => $req->from,
+            'to' => $req->to,
+            'image' => $total,
+        ]);
+
+        // $schedule = new ScheduleSeller();
+        // $schedule->user_id = $req->user_id;
+        // $schedule->from = $req->from;
+        // $schedule->to = $req->to;
+        // $schedule->image = $total;
+        // $isSaved = $schedule->save();
+
+        $pdf = PDF::loadView('dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
         $pdf->setPaper('A4', 'landscape');
-        $image = $pdf->download('printtable.pdf');
-
-        $schedule = new ScheduleSeller();
-        $schedule->user_id = $user_id;
-        $schedule->from = $from;
-        $schedule->to = $to;
-        $schedule->image = $total;
-        $isssaved = $schedule->save();
-
-        return $image;
+        return $pdf->download('printtable.pdf');
     }
     // print pdf the shippment from to
     function accountseller2(Request $req)
@@ -157,8 +168,7 @@ class Controller extends BaseController
             array_push($totalcost, $value->cost);
         }
         $total = array_sum($totalcost);
-        // dd($total);
-        $pdf = PDF::loadView('dashboard.admin.printtablesed', compact('show', 'total'));
+        $pdf = PDF::loadView('dashboard.admin.accountseller.printtablesed', compact('show', 'total'));
         $pdf->setPaper('A4', 'landscape');
         $image = $pdf->download('printtable.pdf');
 
@@ -397,11 +407,72 @@ class Controller extends BaseController
         return view('Dashboard.driver.shipment', ['shipment' => $shipment]);
     }
 
-
     function getaccounts()
     {
         $shipments = Delivery::with('shippment', 'driver')->get();
         $drivers = Driver::all();
         return view('Dashboard.admin.accountdrivers', ['shipment' => $shipments, 'drivers' => $drivers]);
+    }
+
+    // print pdf the shippment from to
+    function accountdriver(Request $req)
+    {
+        $totalcost = [];
+        $totalcommisson = [];
+        $from =  Carbon::parse($req->input('from'));
+        $to   = Carbon::parse($req->input('to'));
+        $driver_id = $req->input('driver_id');
+        $show = Shippment::with('accountseller', 'city', 'area', 'user', 'deliveries')
+            ->whereRelation('deliveries', 'driver_id', $driver_id)
+            ->whereRelation('accountseller', 'created_at', '>=', $from)
+            ->whereRelation('accountseller', 'created_at', '<=', $to)->get();
+
+        foreach ($show as $value) {
+            array_push($totalcost, $value->accountseller->cost);
+            array_push($totalcommisson, $value->accountseller->delivery_commission);
+        }
+        $total = array_sum($totalcost);
+        $totaldrivercommission = array_sum($totalcommisson);
+
+        $pdf = PDF::loadView('dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
+        $pdf->setPaper('A4', 'landscape');
+        $image = $pdf->download('printtable.pdf');
+
+        $scheduledriver = new Scheduledriver();
+        $scheduledriver->driver_id = $driver_id;
+        $scheduledriver->from = $from;
+        $scheduledriver->to = $to;
+        $scheduledriver->total_cost = $total;
+        $scheduledriver->total_delivery_commission = $totaldrivercommission;
+        $saved = $scheduledriver->save();
+
+        return $image;
+    }
+    // print pdf the shippment from to
+    function accountdriver2(Request $req)
+    {
+        $totalcost = [];
+        $totalcommisson = [];
+        $from =  Carbon::parse($req->input('from'));
+        $to   = Carbon::parse($req->input('to'));
+        $driver_id = $req->input('driver_id');
+
+        $show = Shippment::with('accountseller', 'city', 'area', 'user', 'deliveries')
+            ->whereRelation('deliveries', 'driver_id', $driver_id)
+            ->whereRelation('accountseller', 'created_at', '>=', $from)
+            ->whereRelation('accountseller', 'created_at', '<=', $to)->get();
+
+        foreach ($show as $value) {
+            array_push($totalcost, $value->cost);
+            array_push($totalcommisson, $value->accountseller->delivery_commission);
+        }
+        $total = array_sum($totalcost);
+        $totaldrivercommission = array_sum($totalcommisson);
+        // dd($total);
+        $pdf = PDF::loadView('dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
+        $pdf->setPaper('A4', 'landscape');
+        $image = $pdf->download('printtable.pdf');
+
+        return $image;
     }
 }

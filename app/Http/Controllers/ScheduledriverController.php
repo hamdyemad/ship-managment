@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccountSeller;
-use App\Models\Shippment;
-use App\Models\User;
+use App\Models\Driver;
+use App\Models\Scheduledriver;
 use Illuminate\Http\Request;
 
-class AccountSellerController extends Controller
+class ScheduledriverController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +15,9 @@ class AccountSellerController extends Controller
      */
     public function index()
     {
-        $shipments = AccountSeller::with('shippment')->get();
-        $users = User::all();
-        return view('Dashboard.admin.accountseller.accountsellers', ['shipment' => $shipments, 'users' => $users]);
+        $accountsfile = Scheduledriver::with('driver')->get();
+        $drivers = Driver::all();
+        return view('Dashboard.admin.accountfiledriver', ['accounts' => $accountsfile, 'drivers' => $drivers]);
     }
 
     /**
@@ -45,10 +44,10 @@ class AccountSellerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AccountSeller  $accountSeller
+     * @param  \App\Models\Scheduledriver  $scheduledriver
      * @return \Illuminate\Http\Response
      */
-    public function show(AccountSeller $accountSeller)
+    public function show(Scheduledriver $scheduledriver)
     {
         //
     }
@@ -56,10 +55,10 @@ class AccountSellerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\AccountSeller  $accountSeller
+     * @param  \App\Models\Scheduledriver  $scheduledriver
      * @return \Illuminate\Http\Response
      */
-    public function edit(AccountSeller $accountSeller)
+    public function edit(Scheduledriver $scheduledriver)
     {
         //
     }
@@ -68,10 +67,10 @@ class AccountSellerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AccountSeller  $accountSeller
+     * @param  \App\Models\Scheduledriver  $scheduledriver
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AccountSeller $accountSeller)
+    public function update(Request $request, Scheduledriver $scheduledriver)
     {
         //
     }
@@ -79,10 +78,10 @@ class AccountSellerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\AccountSeller  $accountSeller
+     * @param  \App\Models\Scheduledriver  $scheduledriver
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AccountSeller $accountSeller)
+    public function destroy(Scheduledriver $scheduledriver)
     {
         //
     }

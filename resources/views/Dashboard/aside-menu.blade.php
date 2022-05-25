@@ -109,6 +109,22 @@
                                 </a>
                             </div>
                             <div class="menu-item">
+                                <a class="menu-link" href="{{route('account.index')}}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{__('site.accountseller')}}</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a class="menu-link" href="{{route('shipments_drivers')}}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">{{__('site.accountdriver')}}</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
                                 <a class="menu-link" href="../../demo1/dist/pages/profile/campaigns.html">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>

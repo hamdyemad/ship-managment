@@ -73,7 +73,11 @@ return [
     'type' => 'Type',
     'cash' => 'Cash',
     'cost' => 'Cost',
+    'comm' => 'Delivery Commission',
+    'pdf' => 'pdf',
+
     'accountseller' => 'Accounts Seller',
+    'accountdriver' => 'Accounts Driver',
     'accountsfile' => 'Accounts Files',
     'shippername' => 'Shipper Name',
     'shipperphone' => 'Shipper Phone',

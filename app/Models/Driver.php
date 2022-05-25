@@ -19,4 +19,9 @@ class Driver extends Authenticatable
     {
         return $this->hasMany(Delivery::class);
     }
+
+    public function Scheduledrivers()
+    {
+        return $this->hasMany(Scheduledriver::class);
+    }
 }

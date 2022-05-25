@@ -19,7 +19,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.accountseller')}}</a>
+        <a href="{{route('account.index')}}" class="text-muted text-hover-primary">{{__('site.accountseller')}}</a>
     </li>
     <!--end::Item-->
 
@@ -46,7 +46,7 @@
 
 @section('content')
 
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -55,8 +55,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{route('accountseller_pdf')}}" method="get" enctype="multipart/form-data">
-                    @csrf
+                <form method="get" action="{{route('accountseller_pdf')}}">
                     <div class="container">
                         <div class="row">
                             <label for="from" class="col-form-label">seller</label>
@@ -79,7 +78,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-secondary btn-sm" name="exportPDF">export
+                                <button type="submit" id="button12" class="btn btn-secondary">export
                                     PDF</button>
                             </div>
                         </div>
@@ -89,7 +88,7 @@
 
         </div>
     </div>
-</div> --}}
+</div>
 
 <!--begin::Card-->
 <div class="card">
@@ -211,20 +210,20 @@
                 <!--end::Menu 1-->
                 <!--end::Filter-->
 
-                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-whatever="@mdo">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
                     </span>
                     <!--end::Svg Icon-->Export
-                </button> --}}
+                </button>
                 <!--begin::Add shipment-->
 
-                <a href="{{route('shipment.create')}}" class="btn btn-primary">
+                <a href="{{route('ScheduleSeller.index')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        {{-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                    {{-- <span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
                             <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                             <path
                                 d="M0 64C0 28.65 28.65 0 64 0H229.5C246.5 0 262.7 6.743 274.7 18.75L365.3 109.3C377.3 121.3 384 137.5 384 154.5V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V64zM336 448V160H256C238.3 160 224 145.7 224 128V48H64C55.16 48 48 55.16 48 64V448C48 456.8 55.16 464 64 464H320C328.8 464 336 456.8 336 448z" />
@@ -265,11 +264,16 @@
                         </div>
                     </th>
                     <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-125px">{{__('site.date')}}</th>
+                    <th class="min-w-125px">{{__('site.status')}}</th>
                     <th class="min-w-125px">{{__('site.name')}}</th>
-                    <th class="min-w-125px">{{__('site.from')}}</th>
-                    <th class="min-w-125px">{{__('site.to')}}</th>
+                    <th class="min-w-125px">{{__('site.phone')}}</th>
+                    <th class="min-w-125px">{{__('site.city')}}</th>
+                    <th class="min-w-125px">{{__('site.area')}}</th>
+                    <th class="min-w-125px">{{__('site.cash')}}</th>
+                    <th class="min-w-125px">{{__('site.area')}}</th>
                     <th class="min-w-125px">{{__('site.cost')}}</th>
-                    <th class="min-w-125px">{{__('site.pdf')}}</th>
+                    {{-- <th class="text-end min-w-100px">Actions</th> --}}
                 </tr>
                 <!--end::Table row-->
             </thead>
@@ -278,7 +282,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($accounts as $accounts)
+                @foreach ($shipment as $shipment)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -292,35 +296,89 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
-                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->shippment->id}}"
+                                data-bs-toggle="modal" role="button">{{$shipment->shippment->id}}</a>
+                            {{-- <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
+                                <i class="fa fa-user"></i>
 
+                            </a>
+                            <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
+                                <i class="fa fa-phone"></i>
+                            </a> --}}
 
                         </div>
                         <!--begin::User details-->
                     </td>
                     <!--end::User=-->
-                    <td>{{$accounts->user->name}}</td>
-                    <td>{{$accounts->from}}</td>
+                    <td>{{$shipment->shippment->created_at}}</td>
+                    <td>{{$shipment->shippment->status}}</td>
+                    {{-- <td>
 
-                    <td>{{$accounts->to}}</td>
-                    <td>{{$accounts->image}}</td>
-                    <td>
-                        {{-- <a href="" onclick="addseller()">pdf</a>
-                        --}}
-                        <form action="{{route('Scheduleseller_pdf')}}" method="get" enctype="multipart/form-data">
-                            @csrf
-                            <div style="display: none">
-                                <input type="text" name="user_id" value="{{$accounts->user->id}}">
-                                <input type="date" name="from" value="{{$accounts->from}}">
-                                <input type="date" name="to" value="{{$accounts->to}}">
+                        <a href="{{route('print',$shipment->shippment->id)}}">
+                            <i class="fa fa-print"></i>
 
+                        </a>
+
+                    </td> --}}
+                    <td>{{$shipment->shippment->receiver_name}}</td>
+                    <td>{{$shipment->shippment->receiver_phone}}</td>
+
+                    {{-- <td>
+                        <div class="badge badge-light fw-bolder">{{$shipment->shippment->address}}</div>
+                    </td> --}}
+
+                    <td>{{$shipment->shippment->city->city}}</td>
+
+                    <td>{{$shipment->shippment->area->area}}</td>
+                    <td>{{$shipment->cash}}</td>
+                    @if($shipment->shippment->user->special_price != 0 && $shipment->shippment->city->id ==
+                    $shipment->shippment->user->city_id &&
+                    $shipment->shippment->area->id == $shipment->shippment->user->area_id)
+
+                    <td>{{$shipment->shippment->user->special_price}}</td>
+                    @else
+                    <td>{{$shipment->shippment->area->rate}}</td>
+                    @endif
+                    <td>{{$shipment->cost}}</td>
+
+                    <!--begin::Action=-->
+                    {{-- <td class="text-end">
+                        <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click"
+                            data-kt-menu-placement="bottom-end">Actions
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                            <span class="svg-icon svg-icon-5 m-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <path
+                                        d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </a>
+                        <!--begin::Menu-->
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                            data-kt-menu="true">
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="{{route('shipment.show',$shipment->shippment->id)}}"
+                                    class="menu-link px-3">show</a>
                             </div>
-                            <button type="submit" class="btn btn-light-primary me-3"><i class="fa fa-file"></i></button>
-                        </form>
-                    </td>
-
-
+                            <div class="menu-item px-3">
+                                <a href="{{route('shipment.edit',$shipment->shippment->id)}}"
+                                    class="menu-link px-3">Edit</a>
+                            </div>
+                            <!--end::Menu item-->
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="#" onclick="confirmDelete('{{$shipment->shippment->id}}',this)"
+                                    class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
+                            </div>
+                            <!--end::Menu item-->
+                        </div>
+                        <!--end::Menu-->
+                    </td> --}}
+                    <!--end::Action=-->
                     <td></td>
 
                 </tr>
@@ -340,28 +398,20 @@
 @endsection
 
 @section('js')
-{{--
+
 <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script> --}}
+<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
 
 <script>
-    function addseller() {
-        axios.post('/dashboard/Schedulesellerpdf',{
-            id =1,
-        })
-        .then(function (response) {
-            //2xx
-            console.log(response);
-        })
-        .catch(function (error) {
-            //4xx - 5xx
-            console.log(error.response.data.message);
+    $(document).ready(function(){
+
+
+    // Close modal on button click
+        $("#button12").click(function(){
+        $("#exampleModal").modal('hide');
         });
-    }
-
+    });
 </script>
-
-
 @endsection
