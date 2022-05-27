@@ -30,6 +30,11 @@ class User extends Authenticatable
         return $this->hasMany(ScheduleSeller::class);
     }
 
+    public function specialprices()
+    {
+        return $this->hasMany(Specialprice::class);
+    }
+
 
     protected $fillable = [
         'id',

@@ -132,66 +132,15 @@
                 </div>
                 <!--end::Input password_confirmation-->
 
-                <!--begin::city && area-->
-                <div class="row">
-
-                    <!--begin::city-->
-                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
-                        <div class="mb-5">
-                            <select data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
-                                data-control="select2" data-placeholder="date_period"
-                                class="form-select form-select-sm form-select-solid dynamic">
-                                <option value="" disabled selected>City
-                                </option>
-                                @foreach ($city as $city)
-                                <option id="cityid" value="{{$city->id}}">
-                                    {{$city->city}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div><br><br>
-                    <!--end::city-->
-
-                    <!--begin::area-->
-                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
-                        <div class="mb-5">
-                            <select name="area" id="area" aria-label="Select a Timezone" data-control="select2"
-                                data-placeholder="date_period"
-                                class="form-select form-select-sm form-select-solid dynamic">
-                                <option value="" disabled selected>
-                                </option>
-
-                                {{-- @foreach ($area as $area)
-                                <option value="{{$area->id}}">{{$area->area}}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
-                        {{ csrf_field() }}
-                    </div>
-                    <!--end::area-->
-
-                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
-                        <div class="mb-5">
-
-                            <input type="number" name="special_price" id="special_price" placeholder="special price"
-                                class="form-control form-control-sm form-control-solid">
-                            {{-- <label
-                                class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.price')}}</label> --}}
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <!--end::city && area-->
-
                 <!--begin::price of pickup-->
                 <div class="row">
 
 
-                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                    <div class="col-lg-12 fv-row fv-plugins-icon-container">
                         <div class="mb-5">
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">pickup price</label>
+                            <label class="col-lg-12 col-form-label fw-bold fs-6">{{__('site.pickup_price')}} <p
+                                    style="font-size: 10px;color: rgb(160, 151, 151)">
+                                    ({{__('site.optional')}})</p></label>
                             <input type="number" name="special_pickup" id="special_pickup" placeholder=""
                                 class="form-control form-control-sm form-control-solid">
 

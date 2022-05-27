@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('drivers', function (Blueprint $table) {
-            $table->string('special_pickup');
+        Schema::table('specialprices', function (Blueprint $table) {
+            $table->String('special_price')->after('area_id');
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('drivers', function (Blueprint $table) {
+        Schema::table('specialprices', function (Blueprint $table) {
             //
         });
     }

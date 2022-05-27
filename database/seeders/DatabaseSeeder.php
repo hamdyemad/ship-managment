@@ -23,9 +23,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@app.com',
             'phone' => '999999999',
             'password' => Hash::make(12345),
-            'special_price' => '10',
-            'city_id' => '2',
-            'area_id' => '1',
             'special_pickup' => '10',
 
 

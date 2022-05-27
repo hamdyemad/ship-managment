@@ -13,6 +13,7 @@ class Driver extends Authenticatable
     protected $fillable = [
         'id',
         'name',
+        'email',
     ];
 
     public function deliveries()

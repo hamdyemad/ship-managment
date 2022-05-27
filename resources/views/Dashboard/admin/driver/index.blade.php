@@ -34,26 +34,28 @@
 @section('content')
 
 {{-- ========== export ========== --}}
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">add the date</h5>
+                <h5 class="modal-title" id="exampleModalLabel">select the driver</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <form action="ViewPages" method="POST" enctype="multipart/form-data">
+                <form action="{{route('printdrivershipments')}}" method="GET">
                     @csrf
                     <div class="container">
                         <div class="row">
-                            <label for="from" class="col-form-label">From</label>
                             <div class="col-md-6">
-                                <input type="date" class="form-control input-sm" id="from" name="from">
-                            </div>
-                            <label for="from" class="col-form-label">To</label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control input-sm" id="to" name="to">
+                                <select class="form-select" name="driver_id">
+                                    <option></option>
+                                    @foreach ($driver as $drivers)
+                                    <option value="{{$drivers->id}}">
+                                        {{$drivers->name}}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-4">
@@ -68,7 +70,7 @@
 
         </div>
     </div>
-</div> --}}
+</div>
 {{-- ========== end export ========== --}}
 
 <!--begin::Card-->
@@ -127,13 +129,16 @@
                     <div class="px-7 py-5" data-kt-user-table-filter="form">
                         <!--begin::Input group-->
                         <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
+                            <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
                             <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                 data-placeholder="Select option" data-allow-clear="true"
-                                data-kt-user-table-filter="status" data-hide-search="true">
+                                data-kt-user-table-filter="name" data-hide-search="true">
                                 <option></option>
-                                <option value="created">created</option>
-
+                                @foreach ($driver as $drivers)
+                                <option value="{{$drivers->name}}">
+                                    {{$drivers->name}}
+                                </option>
+                                @endforeach
                             </select>
                         </div>
                         <!--end::Input group-->
@@ -153,14 +158,14 @@
                 <!--end::Menu 1-->
                 <!--end::Filter-->
 
-                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-whatever="@mdo">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
                     </span>
                     <!--end::Svg Icon-->Export
-                </button> --}}
+                </button>
                 <!--begin::Add shipment-->
 
                 <a href="{{route('driver.create')}}" class="btn btn-primary">

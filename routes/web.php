@@ -13,6 +13,7 @@ use App\Http\Controllers\PickupController;
 use App\Http\Controllers\ScheduledriverController;
 use App\Http\Controllers\ScheduleSellerController;
 use App\Http\Controllers\ShippmentController;
+use App\Http\Controllers\SpecialpriceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,7 +45,8 @@ Route::group(
     function () {
 
         Route::prefix('dashboard')->group(function () {
-            Route::view('/', 'Dashboard.app')->name('app');
+
+            Route::get('/', [Controller::class, 'home_page'])->name('app');
             /* ############################### admin ############################### */
             Route::get('/admin', [AdminController::class, 'show'])->name('dashboard.sitting');
             Route::resource('city', CityController::class);
@@ -57,6 +59,12 @@ Route::group(
             Route::get('/scan/shippments', [Controller::class, 'getdrivers'])->name('employee.scan');
             /* ############################### user ############################### */
             Route::resource('user', UserController::class);
+            Route::resource('specialprice', SpecialpriceController::class);
+
+            Route::get('select/city/{id}', [Controller::class, 'specialprice_city'])->name('special.price');
+            // Route::post('select/city', [Controller::class, 'setspecialprice_city'])->name('set.special.price');
+
+
 
             Route::resource('address', AddressController::class);
             Route::resource('shipment', ShippmentController::class);
@@ -83,16 +91,21 @@ Route::group(
 
             Route::get('accountdriver', [Controller::class, 'getaccounts'])->name('shipments_drivers');
 
-
+            /* print accounts for  users */
             Route::get('acountseller', [Controller::class, 'accountsellerpdf'])->name('accountseller_pdf');
             Route::get('Schedulesellerpdf', [Controller::class, 'accountseller2'])->name('Scheduleseller_pdf');
+            /* end print accounts for  users */
 
+            /* print accounts for  driver */
             Route::get('acountdriver', [Controller::class, 'accountdriver'])->name('account_driver');
             Route::get('Scheduledriverpdf', [Controller::class, 'accountdriver2'])->name('accountdriver_pdf');
+            /* end print accounts for  driver */
 
+            /* print all the shipments using admin */
+            Route::get('pdfallshippments', [Controller::class, 'pdf_shippments'])->name('pdfallshippments');
 
-
-
+            /* print the shippments for driver using admin */
+            Route::get('printdrivershipments', [Controller::class, 'print_driver_shipments'])->name('printdrivershipments');
 
 
             /* ############################### end user ############################### */

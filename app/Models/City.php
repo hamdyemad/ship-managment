@@ -13,14 +13,16 @@ class City extends Model
         'rate',
     ];
 
-
-
     //city has many areas
     public function areas()
     {
         return $this->hasMany(Area::class);
     }
 
+    public function specialprices()
+    {
+        return $this->hasMany(Specialprice::class);
+    }
 
     public function addresses()
     {

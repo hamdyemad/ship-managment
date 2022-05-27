@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('shippment_id')->constrained();
             $table->String('cash');
             $table->string('cost');
+            $table->string('delivery_commission');
             $table->timestamps();
         });
     }

@@ -12,7 +12,23 @@
             id="#kt_header_menu" data-kt-menu="true">
             <div class="menu-item me-lg-1">
                 <a class="menu-link active py-3" href="{{route('app')}}">
-                    <span class="menu-title">Dashboard</span>
+                    <span class="menu-title">{{__('site.dashboard')}}</span>
+                </a>
+            </div>
+        </div>
+        <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
+            id="#kt_header_menu" data-kt-menu="true">
+            <div class="menu-item me-lg-1">
+                <a class="menu-link active py-3" href="{{route('open.scan')}}">
+                    <span class="menu-title">{{__('site.scan')}}</span>
+                </a>
+            </div>
+        </div>
+        <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
+            id="#kt_header_menu" data-kt-menu="true">
+            <div class="menu-item me-lg-1">
+                <a class="menu-link active py-3" href="{{route('employee.scan')}}">
+                    <span class="menu-title">{{__('site.designation')}}</span>
                 </a>
             </div>
         </div>

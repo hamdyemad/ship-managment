@@ -33,32 +33,77 @@
 
 @section('content')
 
-{{-- ========== export ========== --}}
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">add the date</h5>
+                <h5 class="modal-title" id="exampleModalLabel">select city and area</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <form action="ViewPages" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="container">
                         <div class="row">
-                            <label for="from" class="col-form-label">From</label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control input-sm" id="from" name="from">
+                            <!--begin::city && area-->
+                            <div class="row">
+
+                                <!--begin::city-->
+                                <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                                    <div class="mb-5">
+                                        <select data-dependent="area" name="city" id="city"
+                                            aria-label="Select a Timezone" data-control="select2"
+                                            data-placeholder="date_period"
+                                            class="form-select form-select-sm form-select-solid dynamic">
+                                            <option value="" disabled selected>City
+                                            </option>
+                                            @foreach ($city as $city)
+                                            <option id="cityid" value="{{$city->id}}">
+                                                {{$city->city}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div><br><br>
+                                <!--end::city-->
+
+                                <!--begin::area-->
+                                <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                                    <div class="mb-5">
+                                        <select name="area" id="area" aria-label="Select a Timezone"
+                                            data-control="select2" data-placeholder="date_period"
+                                            class="form-select form-select-sm form-select-solid dynamic">
+                                            <option value="" disabled selected>
+                                            </option>
+
+                                            {{-- @foreach ($area as $area)
+                                            <option value="{{$area->id}}">{{$area->area}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                    </div>
+                                    {{ csrf_field() }}
+                                </div>
+                                <!--end::area-->
+
+                                <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                                    <div class="mb-5">
+
+                                        <input type="number" name="special_price" id="special_price"
+                                            placeholder="special price"
+                                            class="form-control form-control-sm form-control-solid">
+
+                                    </div>
+
+                                </div>
+
                             </div>
-                            <label for="from" class="col-form-label">To</label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control input-sm" id="to" name="to">
-                            </div>
+                            <!--end::city && area-->
 
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-secondary btn-sm" name="exportPDF">export
-                                    PDF</button>
+                                <button type="button" onclick="addcity_area()" class="btn btn-secondary btn-sm"
+                                    name="exportPDF">add
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -68,8 +113,8 @@
 
         </div>
     </div>
-</div> --}}
-{{-- ========== end export ========== --}}
+</div>
+
 
 <!--begin::Card-->
 <div class="card">
@@ -153,17 +198,17 @@
                 <!--end::Menu 1-->
                 <!--end::Filter-->
 
-                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                     data-bs-whatever="@mdo">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
                     </span>
-                    <!--end::Svg Icon-->Export
-                </button> --}}
+                    <!--end::Svg Icon-->select city
+                </button>
                 <!--begin::Add shipment-->
 
-                <a href="{{route('user.create')}}" class="btn btn-primary">
+                {{-- <a href="{{route('user.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -173,7 +218,7 @@
                         </svg>
                     </span>
                     <!--end::Svg Icon-->{{__('site.add_seller')}}
-                </a>
+                </a> --}}
                 <!--end::Add shipment-->
 
             </div>
@@ -206,11 +251,11 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.id')}}</th>
-                    <th class="min-w-125px">{{__('site.name')}}</th>
-                    <th class="min-w-125px">{{__('site.phone')}}</th>
-                    <th class="min-w-125px">{{__('site.email')}}</th>
-                    <th class="min-w-125px">{{__('site.permission')}}</th>
+                    {{-- <th class="min-w-125px">{{__('site.id')}}</th> --}}
+                    <th class="min-w-125px">{{__('site.city')}}</th>
+                    <th class="min-w-125px">{{__('site.area')}}</th>
+                    <th class="min-w-125px">{{__('site.price')}}</th>
+                    {{-- <th class="min-w-125px">{{__('site.permission')}}</th> --}}
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -220,7 +265,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($user as $user)
+                @foreach ($prices as $prices)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -231,7 +276,7 @@
                     <!--end::Checkbox-->
 
                     <!--begin::User=-->
-                    <td class="d-flex align-items-center">
+                    {{-- <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
                             <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$user->id}}"
@@ -240,19 +285,21 @@
 
                         </div>
                         <!--begin::User details-->
-                    </td>
+                    </td> --}}
 
 
-                    <td>{{$user->name}}</td>
+                    <td>{{$prices->city->city}}</td>
+                    <td>{{$prices->area->area}}</td>
+                    <td>{{$prices->special_price}}</td>
 
-                    <td>{{$user->phone}}</td>
+                    {{-- <td>{{$user->phone}}</td> --}}
 
-                    <td>
+                    {{-- <td>
                         <div class="badge badge-light fw-bolder">{{$user->email}}</div>
                     </td>
 
 
-                    <td>USer</td>
+                    <td>USer</td> --}}
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -273,17 +320,18 @@
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                             data-kt-menu="true">
                             <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="{{route('special.price',$user->id)}}" class="menu-link px-3">select city</a>
-                            </div>
-                            <div class="menu-item px-3">
-                                <a href="{{route('user.edit',$user->id)}}"
+                            {{-- <div class="menu-item px-3">
+                                <a href="{{route('special.price',$prices->user->id)}}" class="menu-link px-3">select
+                                    city</a>
+                            </div> --}}
+                            {{-- <div class="menu-item px-3">
+                                <a href="{{route('user.edit',$prices->id)}}"
                                     class="menu-link px-3">{{__('site.edit')}}</a>
-                            </div>
+                            </div> --}}
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$user->id}}',this)" class="menu-link px-3"
+                                <a href="#" onclick="confirmDelete('{{$prices->id}}',this)" class="menu-link px-3"
                                     data-kt-users-table-filter="delete_row">Delete</a>
                             </div>
                             <!--end::Menu item-->
@@ -297,6 +345,7 @@
 
                 @endforeach
 
+
             </tbody>
 
             <!--end::Table body-->
@@ -309,7 +358,7 @@
 
 @endsection
 
-@push('scripts')
+@section('js')
 
 <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
@@ -318,50 +367,115 @@
 
 <script>
     // message to confirm delete
-    function confirmDelete(id,reference) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-            performDelete(id,reference);
-            }
-        });
-    }
-    // delete user
-    function performDelete(id,reference) {
-        axios.delete('/dashboard/user/'+id)
-        .then(function (response) {
-        //2xx
-        console.log(response);
+        function confirmDelete(id,reference) {
             Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                performDelete(id,reference);
+                }
+            });
+        }
+
+    // delete user
+        function performDelete(id,reference) {
+            axios.delete('/dashboard/specialprice/'+id)
+            .then(function (response) {
+            //2xx
+            console.log(response);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                reference.closest('tr').remove();
+                location.reload();
+            })
+            .catch(function (error) {
+            //4xx - 5xx
+            console.log(error.response.data.message);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            });
+        }
+
+    //show city and his area in select tag
+        $(document).ready(function(){
+            $('.dynamic').change(function(){
+                if($(this).val() != '')
+                {
+                    var select = $(this).attr("id");
+                    var value = $(this).val();
+                    var dependent = $(this).data('dependent');
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                    url:"{{ route('dynamicdependent.fetch') }}",
+                    method:"POST",
+                    data:{select:select, value:value, _token:_token, dependent:dependent},
+                    success:function(result)
+                    {
+                    $('#'+ dependent).html(result);
+                    }
+
+                    })
+                }
+            });
+
+                $('#city').change(function(){
+                $('#area').val('');
+
+            });
+        });
+
+    //add city and area for (user) to the system
+        function addcity_area() {
+            axios.post('/dashboard/specialprice', {
+                user_id: {{$user_id}},
+                city_id: document.getElementById('city').value,
+                area_id: document.getElementById('area').value,
+                special_price: document.getElementById('special_price').value,
+            })
+            .then(function (response) {
+                //2xx
+                console.log(response);
+                Swal.fire({
                 position: 'top-end',
                 icon: 'success',
                 title: response.data.message,
                 showConfirmButton: false,
                 timer: 1500
-            });
-            reference.closest('tr').remove();
-            location.reload();
-        })
-        .catch(function (error) {
-        //4xx - 5xx
-        console.log(error.response.data.message);
-            Swal.fire({
+                });
+                location.reload();
+
+            })
+            .catch(function (error) {
+                //4xx - 5xx
+                console.log(error.response.data.message);
+                Swal.fire({
                 position: 'top-end',
                 icon: 'error',
                 title: error.response.data.message,
                 showConfirmButton: false,
                 timer: 1500
-            })
-        });
-    }
+                });
+
+            });
+        }
+
 </script>
 
 
-@endpush
+@endsection

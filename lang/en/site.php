@@ -82,6 +82,13 @@ return [
     'shippername' => 'Shipper Name',
     'shipperphone' => 'Shipper Phone',
     'deliverycommission' => 'Delivery Commission',
+    'scan' => 'Scan',
+    'designation' => 'Designation',
+    'optional' => 'Optional',
+    'pickup_price' => 'Pickup Price',
+
+
+
 
 
 

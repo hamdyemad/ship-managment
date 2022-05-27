@@ -19,6 +19,11 @@ class Area extends Model
         return $this->hasMany(Address::class);
     }
 
+    public function specialprice()
+    {
+        return $this->hasone(Specialprice::class);
+    }
+
     protected $fillable = [
         'area',
         'rate',

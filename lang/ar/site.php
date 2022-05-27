@@ -80,6 +80,11 @@ return [
     'shippername' => 'اسم البائع',
     'shipperphone' => 'هاتف البائع',
     'deliverycommission' => 'عمولة السائق',
+    'scan' => 'ماسح',
+    'designation' => 'تعيين',
+    'optional' => 'اختيارى',
+    'pickup_price' => 'سعر الاستلام',
+
 
 
 

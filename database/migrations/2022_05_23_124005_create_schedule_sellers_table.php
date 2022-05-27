@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->date('from');
             $table->date('to');
-            $table->String('image');
+            $table->String('costs');
             $table->timestamps();
         });
     }
