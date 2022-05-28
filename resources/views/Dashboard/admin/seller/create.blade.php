@@ -210,9 +210,9 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
-                city: document.getElementById('city').value,
-                area: document.getElementById('area').value,
-                special_price: document.getElementById('special_price').value,
+                // city: document.getElementById('city').value,
+                // area: document.getElementById('area').value,
+                // special_price: document.getElementById('special_price').value,
                 special_pickup: document.getElementById('special_pickup').value,
 
             })

@@ -16,7 +16,7 @@ class AccountSellerController extends Controller
      */
     public function index()
     {
-        $shipments = AccountSeller::with('shippment')->get();
+        $shipments = AccountSeller::with('shippment')->whereRelation('shippment', 'status', '!=', 'picked up')->get();
         $users = User::all();
         return view('Dashboard.admin.accountseller.accountsellers', ['shipment' => $shipments, 'users' => $users]);
     }

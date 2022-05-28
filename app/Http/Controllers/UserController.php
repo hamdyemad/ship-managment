@@ -55,15 +55,12 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
-            // $user->special_price = $request->input('special_price');
             if (!$request->input('special_pickup')) {
                 $user->special_pickup = 10;
             } else {
                 $user->special_pickup = $request->input('special_pickup');
             }
 
-            $user->city_id = $request->input('city');
-            $user->area_id = $request->input('area');
             $user->password = Hash::make($request->input('password'));
             $isSaved = $user->save();
             return response()->json(

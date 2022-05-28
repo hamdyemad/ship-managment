@@ -63,13 +63,19 @@
                 <td>{{ $PDFReports->city->city }}</td>
                 <td>{{ $PDFReports->area->area }}</td>
                 <td>{{ $PDFReports->accountseller->cash }}</td>
-                @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
-                $PDFReports->user->city_id &&
-                $PDFReports->area->id == $PDFReports->user->area_id)
-
-                <td>{{$PDFReports->user->special_price}}</td>
+                @if($PDFReports->status == 'picked up')
+                     <td>0</td>
                 @else
-                <td>{{$PDFReports->area->rate}}</td>
+
+                    @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
+                    $PDFReports->user->city_id &&
+                    $PDFReports->area->id == $PDFReports->user->area_id)
+
+                    <td>{{$PDFReports->user->special_price}}</td>
+                    @else
+                    <td>{{$PDFReports->area->rate}}</td>
+                    @endif
+
                 @endif
                 <td>{{ $PDFReports->accountseller->cost }}</td>
                 <td>{{ $PDFReports->accountseller->delivery_commission }}</td>

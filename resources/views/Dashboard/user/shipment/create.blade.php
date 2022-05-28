@@ -93,6 +93,7 @@
                                     <option value="forward">Forward </option>
                                     <option value="exchange">exchange </option>
                                     <option value="cash_collection">cash collection </option>
+                                    <option value="return_pickup">return pickup </option>
 
                                 </select>
                             </div>

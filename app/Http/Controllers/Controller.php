@@ -133,7 +133,9 @@ class Controller extends BaseController
         $user_id_req = $req->input('user_id');
 
         $show = AccountSeller::with('shippment')->where('created_at', '>=', $fromdate)
-            ->where('created_at', '<=', $todate)->whereRelation('shippment',  'user_id', $user_id_req)->get();
+            ->where('created_at', '<=', $todate)
+            ->whereRelation('shippment',  'user_id', $user_id_req)
+            ->whereRelation('shippment', 'status', '!=', 'picked up')->get();
 
         $totalcost = [];
         foreach ($show as $value) {
@@ -144,7 +146,7 @@ class Controller extends BaseController
             'user_id' => $req->user_id,
             'from' => $req->from,
             'to' => $req->to,
-            'image' => $total,
+            'costs' => $total,
         ]);
 
         $pdf = PDF::loadView('dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
@@ -222,6 +224,21 @@ class Controller extends BaseController
                 $delivery->driver_id = $request->driver_id;
                 $delivery->shippment_id = $value->id;
                 $value->status = 'picked up';
+                // add to accounts
+                $accounts = new AccountSeller();
+                $accounts->shippment_id = $value->id;
+                $accounts->cash = 0;
+                $accounts->cost = 0;
+
+                //drivver
+                if ($delivery->driver->special_pickup == 10) {
+                    $accounts->delivery_commission =  10;
+                } else {
+                    $accounts->delivery_commission = $delivery->driver->special_pickup;
+                }
+                //end
+                $saved = $accounts->save();
+                // end add to accounts
                 $update = $value->save();
                 $isSaved = $delivery->save();
             } else if ($value->status == 'received at hub') {
@@ -457,9 +474,58 @@ class Controller extends BaseController
                 }
             }
             $accounts->save();
+        } elseif ($shipment->shippment_type == 'return_pickup') {
+
+
+            $accounts = new AccountSeller();
+            $accounts->shippment_id = $shipment->id;
+            $accounts->cash = -$shipment->price;
+
+            if (!$price) {
+                $accounts->cost = -$shipment->price - $shipment->area->rate;
+            } else {
+                foreach ($price as $val) {
+                    if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
+                        $accounts->cost = -$shipment->price - $val->special_price;
+                    } else {
+                        $accounts->cost = -$shipment->price - $shipment->area->rate;
+                    }
+                }
+            }
+
+            //drivver
+            if ($delivery->driver->special_pickup == 10) {
+
+                if (!$price) {
+                    $accounts->delivery_commission = $shipment->area->rate - 10;
+                } else {
+                    foreach ($price as $val) {
+                        if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
+
+                            $accounts->delivery_commission = $val->special_price - 10;
+                        } else {
+                            $accounts->delivery_commission = $shipment->area->rate - 10;
+                        }
+                    }
+                }
+            } else {
+
+                if (!$price) {
+                    $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
+                } else {
+                    foreach ($price as $val) {
+                        if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
+                            $accounts->delivery_commission = $val->special_price - $delivery->driver->special_pickup;
+                        } else {
+                            $accounts->delivery_commission = $shipment->area->rate - 10;
+                        }
+                    }
+                }
+            }
+            // enddrivver
+
+            $accounts->save();
         }
-
-
 
         $isSaved = $shipment->save();
         return response()->json(
@@ -537,6 +603,7 @@ class Controller extends BaseController
 
         return $image;
     }
+
     // print pdf the accountshippment for drivers from to with special date
     function accountdriver2(Request $req)
     {
@@ -564,6 +631,7 @@ class Controller extends BaseController
 
         return $image;
     }
+
     // print all delivery shippments expect create and requested status from admin
     function pdf_shippments(Request $req)
     {

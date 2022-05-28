@@ -18,6 +18,6 @@ class ScheduleSeller extends Model
         'user_id',
         'from',
         'to',
-        'image',
+        'costs',
     ];
 }

@@ -13,4 +13,11 @@ class Scheduledriver extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+    protected $fillable = [
+        'driver_id',
+        'from',
+        'to',
+        'total_cost',
+        'total_delivery_commission',
+    ];
 }
