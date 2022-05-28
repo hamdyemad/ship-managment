@@ -276,7 +276,7 @@ class Controller extends BaseController
             $accounts->shippment_id = $shipment->id;
             $accounts->cash = $shipment->price;
 
-            if (!$price) {
+            if ($price->isEmpty()) {
                 $accounts->cost = $shipment->price - $shipment->area->rate;
             } else {
                 foreach ($price as $val) {
@@ -291,7 +291,7 @@ class Controller extends BaseController
             //drivver
             if ($delivery->driver->special_pickup == 10) {
 
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - 10;
                 } else {
                     foreach ($price as $val) {
@@ -305,7 +305,7 @@ class Controller extends BaseController
                 }
             } else {
 
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
                 } else {
                     foreach ($price as $val) {
@@ -325,7 +325,7 @@ class Controller extends BaseController
             $accounts = new AccountSeller();
             $accounts->shippment_id = $shipment->id;
             $accounts->cash = 0;
-            if (!$price) {
+            if ($price->isEmpty()) {
 
                 $accounts->cost = 0 - $shipment->area->rate;
             } else {
@@ -342,7 +342,7 @@ class Controller extends BaseController
 
             if ($delivery->driver->special_pickup == 10) {
 
-                if (!$price) {
+                if ($price->isEmpty()) {
 
                     $accounts->delivery_commission = $shipment->area->rate - 10;
                 } else {
@@ -358,7 +358,7 @@ class Controller extends BaseController
                 }
             } else {
 
-                if (!$price) {
+                if ($price->isEmpty()) {
 
                     $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
                 } else {
@@ -382,7 +382,7 @@ class Controller extends BaseController
             $accounts->shippment_id = $shipment->id;
             $accounts->cash = 0;
 
-            if (!$price) {
+            if ($price->isEmpty()) {
 
                 $accounts->cost = 0 - $shipment->area->rate;
             } else {
@@ -399,7 +399,7 @@ class Controller extends BaseController
 
 
             if ($delivery->driver->special_pickup == 10) {
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - 10;
                 } else {
                     foreach ($price as $val) {
@@ -411,7 +411,7 @@ class Controller extends BaseController
                     }
                 }
             } else {
-                if (!$price) {
+                if ($price->isEmpty()) {
 
                     $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
                 } else {
@@ -432,7 +432,7 @@ class Controller extends BaseController
             $accounts = new AccountSeller();
             $accounts->shippment_id = $shipment->id;
 
-            if (!$price) {
+            if ($price->isEmpty()) {
 
                 $accounts->cash = $shipment->area->rate;
                 $accounts->cost = $accounts->cash - $shipment->area->rate;
@@ -449,7 +449,7 @@ class Controller extends BaseController
             }
 
             if ($delivery->driver->special_pickup == 10) {
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - 10;
                 } else {
                     foreach ($price as $val) {
@@ -461,7 +461,7 @@ class Controller extends BaseController
                     }
                 }
             } else {
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
                 } else {
                     foreach ($price as $val) {
@@ -481,7 +481,7 @@ class Controller extends BaseController
             $accounts->shippment_id = $shipment->id;
             $accounts->cash = -$shipment->price;
 
-            if (!$price) {
+            if ($price->isEmpty()) {
                 $accounts->cost = -$shipment->price - $shipment->area->rate;
             } else {
                 foreach ($price as $val) {
@@ -496,7 +496,7 @@ class Controller extends BaseController
             //drivver
             if ($delivery->driver->special_pickup == 10) {
 
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - 10;
                 } else {
                     foreach ($price as $val) {
@@ -510,7 +510,7 @@ class Controller extends BaseController
                 }
             } else {
 
-                if (!$price) {
+                if ($price->isEmpty()) {
                     $accounts->delivery_commission = $shipment->area->rate - $delivery->driver->special_pickup;
                 } else {
                     foreach ($price as $val) {
