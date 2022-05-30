@@ -331,14 +331,22 @@
 
                     <td>{{$shipment->shippment->area->area}}</td>
                     <td>{{$shipment->cash}}</td>
-                    @if($shipment->shippment->user->special_price != 0 && $shipment->shippment->city->id ==
-                    $shipment->shippment->user->city_id &&
-                    $shipment->shippment->area->id == $shipment->shippment->user->area_id)
+                    {{-- @foreach ($shipment->shippment->user->specialprices as $item)
 
-                    <td>{{$shipment->shippment->user->special_price}}</td>
+                    @if($item->special_price != 0 && $shipment->shippment->area->id == $item->area_id )
+                    <td>{{$item->special_price}}</td>
+                    @break
                     @else
                     <td>{{$shipment->shippment->area->rate}}</td>
                     @endif
+                    @endforeach --}}
+                    @if (!$shipment->shippment->area->specialprice)
+                    <td>{{$shipment->shippment->area->rate}}</td>
+                    @else
+                    <td>{{$shipment->shippment->area->specialprice->special_price}}</td>
+
+                    @endif
+
                     <td>{{$shipment->cost}}</td>
 
                     <!--begin::Action=-->

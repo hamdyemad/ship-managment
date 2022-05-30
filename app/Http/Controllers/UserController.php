@@ -110,6 +110,8 @@ class UserController extends Controller
             'name' => ' max:100',
             'email' => 'email',
             'phone' => 'numeric',
+            'special_pickup' => 'numeric',
+
 
         ]);
 
@@ -120,12 +122,13 @@ class UserController extends Controller
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->password = Hash::make($request->input('password'));
+            $user->special_pickup = $request->input('special_pickup');
             $isSaved = $user->save();
 
 
             return response()->json(
                 [
-                    'message' => $isSaved ? 'user updated successfully' : 'Create failed!'
+                    'message' => $isSaved ? 'user updated successfully' : 'updated failed!'
                 ],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             );

@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Specialprice extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'id',
+        'user_id ',
+        'city_id ',
+        'area_id',
+        'special_price',
+    ];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

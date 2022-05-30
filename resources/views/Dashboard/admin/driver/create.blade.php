@@ -133,12 +133,15 @@
                 <!--end::Input password_confirmation-->
 
                 <!--begin::price of pickup-->
+
                 <div class="row">
 
 
-                    <div class="col-lg-4 fv-row fv-plugins-icon-container">
+                    <div class="col-lg-12 fv-row fv-plugins-icon-container">
                         <div class="mb-5">
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">pickup price</label>
+                            <label class="col-lg-12 col-form-label fw-bold fs-6">{{__('site.pickup_price')}} <p
+                                    style="font-size: 10px;color: rgb(160, 151, 151)">
+                                    ({{__('site.optional')}})</p></label>
                             <input type="number" name="special_pickup" id="special_pickup" placeholder=""
                                 class="form-control form-control-sm form-control-solid">
 
@@ -149,6 +152,7 @@
 
                 </div>
                 <!--end::price of pickup-->
+
 
             </div>
             <!--end::Card body-->
@@ -173,7 +177,6 @@
 
 <script>
     //add driver to the system
-
         function addseller() {
             axios.post('/dashboard/driver', {
 

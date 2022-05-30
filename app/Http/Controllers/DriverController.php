@@ -44,6 +44,9 @@ class DriverController extends Controller
             'phone' => 'required |numeric',
             'password' => 'required',
             'password_confirmation' => 'required',
+            // 'special_pickup' => 'numeric',
+
+
 
         ]);
         if (!$validator->fails()) {
@@ -106,6 +109,8 @@ class DriverController extends Controller
             'name' => ' max:100',
             'email' => 'email',
             'phone' => 'numeric',
+            'special_pickup' => 'numeric',
+
 
         ]);
 
@@ -116,6 +121,7 @@ class DriverController extends Controller
             $driver->email = $request->input('email');
             $driver->phone = $request->input('phone');
             $driver->password = Hash::make($request->input('password'));
+            $driver->special_pickup = $request->input('special_pickup');
             $isSaved = $driver->save();
 
 

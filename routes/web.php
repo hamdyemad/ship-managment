@@ -55,7 +55,7 @@ Route::group(
             Route::resource('driver', DriverController::class);
             Route::resource('employee', EmployeeController::class);
 
-            Route::view('/scan', 'dashboard.admin.scanner')->name('open.scan');
+            Route::view('/scan', 'Dashboard.admin.scanner')->name('open.scan');
             Route::get('/scan/shippments', [Controller::class, 'getdrivers'])->name('employee.scan');
             /* ############################### user ############################### */
             Route::resource('user', UserController::class);

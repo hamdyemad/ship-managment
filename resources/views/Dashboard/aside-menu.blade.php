@@ -39,8 +39,6 @@
             </div>
             {{-- ========================page========================= --}}
 
-            {{-- ========================end page========================= --}}
-
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 <span class="menu-link">
                     <span class="menu-icon">
@@ -127,6 +125,8 @@
                 </div>
             </div>
 
+            {{-- ========================end page========================= --}}
+
             {{-- ======================== HR ========================= --}}
 
             <div class="menu-item">
@@ -161,7 +161,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Seller List</span>
+                            <span class="menu-title">{{__('site.seller_list')}}</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -169,7 +169,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Add Seller</span>
+                            <span class="menu-title">{{__('site.add_seller')}}</span>
                         </a>
                     </div>
 
@@ -202,7 +202,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">driver List</span>
+                            <span class="menu-title">{{__('site.driver_list')}}</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -210,7 +210,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Add driver</span>
+                            <span class="menu-title">{{__('site.add_driver')}}</span>
                         </a>
                     </div>
 
@@ -243,7 +243,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">employee List</span>
+                            <span class="menu-title">{{__('site.employee_list')}}</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -251,7 +251,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Add employee</span>
+                            <span class="menu-title">{{__('site.add_employee')}}</span>
                         </a>
                     </div>
 

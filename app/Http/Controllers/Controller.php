@@ -90,9 +90,10 @@ class Controller extends BaseController
     function download($id)
     {
         $show = Shippment::findOrFail($id);
-        $pdf = PDF::loadView('dashboard.user.shipment.pdf', compact('show'));
-
-        return $pdf->download('disney.pdf');
+        $pdf = PDF::loadView('Dashboard.user.shipment.pdf', compact('show'));
+        $ldate = date('Y-m-d H:i:s');
+        $image = $pdf->download('disney' . $ldate . '.pdf');
+        return $image;
     }
 
     function index1(Request $req)
@@ -109,7 +110,7 @@ class Controller extends BaseController
             } elseif ($req->has('exportPDF')) {
                 // select PDF
                 $PDFReport = DB::select("SELECT * FROM shippments WHERE created_at BETWEEN '$from' AND '$to'");
-                $pdf = PDF::loadView('dashboard.user.shipment.printtable', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
+                $pdf = PDF::loadView('Dashboard.user.shipment.printtable', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
                 return $pdf->download('PDF-report.pdf');
             }
         } else {
@@ -149,7 +150,7 @@ class Controller extends BaseController
             'costs' => $total,
         ]);
 
-        $pdf = PDF::loadView('dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
+        $pdf = PDF::loadView('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
         $pdf->setPaper('A4', 'landscape');
         return $pdf->download('printtable.pdf');
     }
@@ -165,7 +166,7 @@ class Controller extends BaseController
             array_push($totalcost, $value->cost);
         }
         $total = array_sum($totalcost);
-        $pdf = PDF::loadView('dashboard.admin.accountseller.printtablesed', compact('show', 'total'));
+        $pdf = PDF::loadView('Dashboard.admin.accountseller.printtablesed', compact('show', 'total'));
         $pdf->setPaper('A4', 'landscape');
         $image = $pdf->download('printtable.pdf');
 
@@ -589,7 +590,7 @@ class Controller extends BaseController
         $total = array_sum($totalcost);
         $totaldrivercommission = array_sum($totalcommisson);
 
-        $pdf = PDF::loadView('dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
+        $pdf = PDF::loadView('Dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
         $pdf->setPaper('A4', 'landscape');
         $image = $pdf->download('printtable.pdf');
 
@@ -625,7 +626,7 @@ class Controller extends BaseController
         $total = array_sum($totalcost);
         $totaldrivercommission = array_sum($totalcommisson);
         // dd($total);
-        $pdf = PDF::loadView('dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
+        $pdf = PDF::loadView('Dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
         $pdf->setPaper('A4', 'landscape');
         $image = $pdf->download('printtable.pdf');
 
@@ -641,7 +642,7 @@ class Controller extends BaseController
         $delivery = Delivery::with('driver', 'shippment')
             ->whereRelation('shippment', 'created_at', '<=', $to)
             ->whereRelation('shippment', 'created_at', '<=', $to)->get();
-        $pdf = PDF::loadView('dashboard.admin.printshippments', compact('delivery'));
+        $pdf = PDF::loadView('Dashboard.admin.printshippments', compact('delivery'));
         $pdf->setPaper('A4', 'landscape');
         $image = $pdf->download('printshippments.pdf');
 
@@ -655,7 +656,7 @@ class Controller extends BaseController
         $delivery = Delivery::with('driver', 'shippment')
             ->whereRelation('driver', 'id', $driver_id)->get();
         $drivers = Driver::findOrFail($driver_id);
-        $pdf = PDF::loadView('dashboard.admin.printshippments', compact('delivery', 'drivers'));
+        $pdf = PDF::loadView('Dashboard.admin.printshippments', compact('delivery', 'drivers'));
         $pdf->setPaper('A4', 'landscape');
         $image = $pdf->download('printshippments.pdf');
 

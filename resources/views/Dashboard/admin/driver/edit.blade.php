@@ -143,6 +143,27 @@
                 </div>
                 <!--end::Input password_confirmation-->
 
+                <!--begin::price of pickup-->
+
+                <div class="row">
+
+
+                    <div class="col-lg-12 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+                            <label class="col-lg-12 col-form-label fw-bold fs-6">{{__('site.pickup_price')}} <p
+                                    style="font-size: 10px;color: rgb(160, 151, 151)">
+                                    ({{__('site.optional')}})</p></label>
+                            <input type="number" name="special_pickup" id="special_pickup" placeholder=""
+                                class="form-control form-control-sm form-control-solid">
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--end::price of pickup-->
+
             </div>
             <!--end::Card body-->
 
@@ -174,6 +195,7 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                special_pickup: document.getElementById('special_pickup').value,
             })
             .then(function (response) {
                 //2xx

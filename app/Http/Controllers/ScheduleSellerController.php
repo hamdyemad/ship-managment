@@ -15,6 +15,7 @@ class ScheduleSellerController extends Controller
     public function index()
     {
         $accountsfile = ScheduleSeller::with('user')->get();
+        
         return view('Dashboard.admin.accountseller.accountfile', ['accounts' => $accountsfile]);
     }
 

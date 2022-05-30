@@ -85,6 +85,15 @@ return [
     'optional' => 'اختيارى',
     'pickup_price' => 'سعر الاستلام',
 
+    'seller_list' => 'قائمة البائعين',
+    'add_seller' => ' اضافة بائع جديد',
+
+    'driver_list' => 'قائمة السائقين',
+    'add_driver' => 'اضافة سائق جديد',
+
+    'employee_list' => 'قائمة الموظفين',
+    'add_employee' => 'اضافة موظف جديد',
+
 
 
 

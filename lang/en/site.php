@@ -87,6 +87,23 @@ return [
     'optional' => 'Optional',
     'pickup_price' => 'Pickup Price',
 
+    'seller_list' => 'Seller List',
+    'add_seller' => 'Add Seller',
+
+    'driver_list' => 'Driver List',
+    'add_driver' => 'Add Driver',
+
+    'employee_list' => 'Employee List',
+    'add_employee' => 'Add Employee',
+
+
+
+
+
+
+
+
+
 
 
 
