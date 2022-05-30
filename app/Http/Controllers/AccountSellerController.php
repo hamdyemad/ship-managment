@@ -19,15 +19,6 @@ class AccountSellerController extends Controller
     {
         $shipments = AccountSeller::with('shippment')->whereRelation('shippment', 'status', '!=', 'picked up')->get();
         $specialprice = Specialprice::all();
-        // if (!$shipments[0]->shippment->user->specialprices) {
-        //     dd('noo');
-        // } else {
-        //     dd('not empty');
-        // }
-        // foreach ($specialprices as $val) {
-        // }
-        // dd($shipments[1]->shippment->area->specialprice);
-
         $users = User::all();
         return view('Dashboard.admin.accountseller.accountsellers', ['shipment' => $shipments, 'users' => $users, 'specialprice' => $specialprice]);
     }

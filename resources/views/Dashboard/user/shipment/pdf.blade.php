@@ -11,6 +11,10 @@
         GLOBAL
         A very basic CSS reset
         ------------------------------------- */
+        @page {
+            font-family: 'DINNextLTArabic-Medium';
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -300,7 +304,7 @@
 </head>
 
 <body>
-
+    <p>اللغة العربية </p>
     <table class="body-wrap">
         <tbody>
             <tr>

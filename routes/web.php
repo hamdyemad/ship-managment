@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountSellerController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AssignedpickupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\Controller;
@@ -106,6 +107,15 @@ Route::group(
 
             /* print the shippments for driver using admin */
             Route::get('printdrivershipments', [Controller::class, 'print_driver_shipments'])->name('printdrivershipments');
+
+            // Route::get('all-pickup', [Controller::class, 'getpickup'])->name('get_pickup');
+            // Route::get('/assigne', [Controller::class, 'get_pickup_driver'])->name('getpickup.driver');
+            // Route::post('/assigne', [Controller::class, 'assigne_pickup'])->name('assigne.pickup');
+            Route::resource('assignedpickup', AssignedpickupController::class);
+
+
+
+
 
 
             /* ############################### end user ############################### */

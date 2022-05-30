@@ -8,6 +8,7 @@ use App\Models\Area;
 use App\Models\City;
 use App\Models\Delivery;
 use App\Models\Driver;
+use App\Models\Pickup;
 use App\Models\Scheduledriver;
 use App\Models\ScheduleSeller;
 use App\Models\Shippment;
@@ -565,23 +566,57 @@ class Controller extends BaseController
     //show delivery shippments and drivers
     function getaccounts()
     {
+        $accounts = AccountSeller::all();
+        // dd($accounts[1]->shippment);
         $shipments = Delivery::with('shippment', 'driver')->get();
         $drivers = Driver::all();
-        return view('Dashboard.admin.accountdrivers', ['shipment' => $shipments, 'drivers' => $drivers]);
+        return view('Dashboard.admin.accountdrivers', ['accounts' => $accounts, 'drivers' => $drivers]);
     }
 
     // print pdf the accountshippment for drivers with give date from to
     function accountdriver(Request $req)
     {
+
         $totalcost = [];
         $totalcommisson = [];
         $from =  Carbon::parse($req->input('from'));
         $to   = Carbon::parse($req->input('to'));
         $driver_id = $req->input('driver_id');
-        $show = Shippment::with('accountseller', 'city', 'area', 'user', 'deliveries')
-            ->whereRelation('deliveries', 'driver_id', $driver_id)
-            ->whereRelation('accountseller', 'created_at', '>=', $from)
-            ->whereRelation('accountseller', 'created_at', '<=', $to)->get();
+        // $show = AccountSeller::with('shippment', 'pickup')
+        //     ->whereHas('shippment', function ($query) use ($driver_id) {
+        //         $query->whereRelation('deliveries', 'driver_id', $driver_id);
+        //     })->whereHas('pickup', function ($query) use ($driver_id) {
+        //         $query->whereRelation('deliveries', 'driver_id', $driver_id);
+        //     })->get();
+        $pickup = [];
+        $shippment = [];
+        $delivery = Delivery::where('driver_id', 3)->get();
+        foreach ($delivery as $val) {
+            if ($val->shippment_id == null && $val->pickup_id != null) {
+                array_push($pickup, $val->pickup_id);
+            } elseif ($val->pickup_id == null && $val->shippment_id != null) {
+                array_push($shippment, $val->shippment_id);
+            }
+        }
+
+
+        // $comments = DB::table('account_sellers')
+        //     ->join('shippments')->get();
+        // dd($comments);
+        // $data = DB::select('SELECT * FROM account_sellers WHERE (shippment_id IN ($shippment) OR shippment_id IS NULL)');
+        // $show = AccountSeller::whereIn('shippment_id', '=', $shippment)->whereIn('pickup_id', $pickup)->get();
+        $show = AccountSeller::where(function ($query) use ($shippment) {
+            $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
+        })->where(function ($query) use ($pickup) {
+            $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
+        })->where('created_at', '>=', $from)
+            ->where('created_at', '<=', $to)->get();
+
+        // dd($show);
+        // $show = Shippment::with('accountseller', 'city', 'area', 'user', 'deliveries')
+        //     ->whereRelation('deliveries', 'driver_id', $driver_id)
+        //     ->whereRelation('accountseller', 'created_at', '>=', $from)
+        //     ->whereRelation('accountseller', 'created_at', '<=', $to)->get();
 
         foreach ($show as $value) {
             array_push($totalcost, $value->accountseller->cost);
@@ -682,5 +717,11 @@ class Controller extends BaseController
         $driver = Driver::count();
         // dd($shippments);
         return view('Dashboard.admin.homepage', ['user' => $user, 'driver' => $driver]);
+    }
+
+    function getpickup()
+    {
+        $pickup = Pickup::all();
+        return view('Dashboard.admin.pickup.index', ['pickup' => $pickup]);
     }
 }

@@ -21,9 +21,9 @@ class PickupController extends Controller
     public function index()
     {
 
-        $shipment = Shippment::has('pickup')->get();
+        $pickup = Pickup::all();
 
-        return view('Dashboard.user.pickup.index', ['pickup' => $shipment]);
+        return view('Dashboard.user.pickup.index', ['pickup' => $pickup]);
     }
 
     /**
@@ -58,28 +58,30 @@ class PickupController extends Controller
             'date' => 'required',
             'note' => 'max:150',
         ]);
-        $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
+        // $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
         if (!$validator->fails()) {
             // $isSaved = '';
-            foreach ($shipment as $shipment) {
+            // foreach ($shipment as $shipment) {
 
-                if ($shipment->status == 'created') {
-                    $pickup = new Pickup();
-                    $pickup->name = $request->input('name');
-                    $pickup->email = $request->input('email');
-                    $pickup->phone = $request->input('phone');
-                    $pickup->address_id = $request->input('address');
-                    $pickup->time = Carbon::parse($request->input('time'));
-                    $pickup->date = Carbon::parse($request->input('date'));
-                    $pickup->user_id = $request->input('user_id');
-                    $pickup->shippment_id = $shipment->id;
-                    $pickup->note = $request->input('note');
-                    $pickup->package = $request->input('package');
-                    $shipment->status = 'requested';
-                    $updated = $shipment->save();
-                    $isSaved = $pickup->save();
-                }
-            }
+
+            //     if ($shipment->status == 'created') {
+            $pickup = new Pickup();
+            $pickup->name = $request->input('name');
+            $pickup->status = 'requested';
+            $pickup->email = $request->input('email');
+            $pickup->phone = $request->input('phone');
+            $pickup->address_id = $request->input('address');
+            $pickup->time = Carbon::parse($request->input('time'));
+            $pickup->date = Carbon::parse($request->input('date'));
+            $pickup->user_id = $request->input('user_id');
+            // $pickup->shippment_id = $shipment->id;
+            $pickup->note = $request->input('note');
+            $pickup->package = $request->input('package');
+            // $shipment->status = 'requested';
+            // $updated = $shipment->save();
+            $isSaved = $pickup->save();
+            //     }
+            // }
 
 
             return response()->json(
@@ -101,7 +103,10 @@ class PickupController extends Controller
      */
     public function show(Pickup $pickup)
     {
-        //
+
+        $pickups = Pickup::findOrFail($pickup->id);
+        // dd($pickup->address);
+        return view('Dashboard.user.pickup.show', ['pickup' => $pickups]);
     }
 
     /**

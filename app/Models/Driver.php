@@ -13,7 +13,7 @@ class Driver extends Authenticatable
     protected $fillable = [
         'id',
         'name',
-        'email',
+        'email', 'special_pickup',
     ];
 
     public function deliveries()
@@ -24,5 +24,10 @@ class Driver extends Authenticatable
     public function Scheduledrivers()
     {
         return $this->hasMany(Scheduledriver::class);
+    }
+
+    public function assignedpickups()
+    {
+        return $this->hasMany(Assignedpickup::class);
     }
 }

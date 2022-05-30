@@ -13,4 +13,21 @@ class Pickup extends Model
     {
         return $this->belongsTo(Shippment::class);
     }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
+    public function assignedpickups()
+    {
+        return $this->hasMany(Assignedpickup::class);
+    }
+    public function accountsellers()
+    {
+        return $this->hasMany(AccountSeller::class);
+    }
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class);
+    }
 }

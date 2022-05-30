@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Area extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'area',
+        'rate',
+        'city_id',
+    ];
+
+
     // area belong to city
     public function city()
     {
@@ -23,10 +31,4 @@ class Area extends Model
     {
         return $this->hasone(Specialprice::class);
     }
-
-    protected $fillable = [
-        'area',
-        'rate',
-        'city_id',
-    ];
 }

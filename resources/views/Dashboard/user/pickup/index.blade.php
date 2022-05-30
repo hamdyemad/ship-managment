@@ -258,14 +258,14 @@
 
                     <td>{{$pickup->status}}</td>
 
-                    <td>{{$pickup->pickup->date}}</td>
+                    <td>{{$pickup->date}}</td>
 
                     <td>
-                        <div class="badge badge-light fw-bolder">{{$pickup->pickup->name}}</div>
+                        <div class="badge badge-light fw-bolder">{{$pickup->name}}</div>
                     </td>
 
 
-                    <td>{{$pickup->pickup->phone}}</td>
+                    <td>{{$pickup->phone}}</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -287,7 +287,7 @@
                             data-kt-menu="true">
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="{{route('shipment.show',$pickup->id)}}" class="menu-link px-3">show</a>
+                                <a href="{{route('pickup.show',$pickup->id)}}" class="menu-link px-3">show</a>
                             </div>
                             {{-- <div class="menu-item px-3">
                                 <a href="{{route('shipment.edit',$pickup->id)}}" class="menu-link px-3">Edit</a>

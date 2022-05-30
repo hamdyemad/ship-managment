@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     use HasFactory;
-    public function City()
-    {
-        return $this->belongsTo(City::class);
-    }
+
     protected $fillable = [
         'address_line',
         'building',
@@ -21,4 +18,20 @@ class Address extends Model
         'area_id',
         'contact_id',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+    }
+
+
+    public function pickups()
+    {
+        return $this->hasMany(Pickup::class);
+    }
 }

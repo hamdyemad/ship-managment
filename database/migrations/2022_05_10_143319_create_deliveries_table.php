@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('driver_id')->constrained();
-            $table->foreignId('shippment_id')->constrained();
+            // $table->foreignId('shippment_id')->constrained();
+            $table->foreignId('shippment_id')->nullable()->comment('اذا كانت القيمة فارغة الشحنة pickup');
+            $table->foreignId('pickup_id')->nullable()->comment('اذا كانت القيمة فارغة الشحنة shippment');
             $table->timestamps();
         });
     }

@@ -23,4 +23,10 @@ class Delivery extends Model
     {
         return $this->belongsTo(Shippment::class);
     }
+
+
+    public function pickup()
+    {
+        return $this->belongsTo(Pickup::class);
+    }
 }

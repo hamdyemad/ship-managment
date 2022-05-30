@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('account_sellers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shippment_id')->constrained();
-            $table->String('cash');
-            $table->string('cost');
+            // $table->foreignId('shippment_id')->constrained();
+            $table->foreignId('shippment_id')->nullable()->comment('اذا كانت القيمة فارغة الشحنة pickup');
+            $table->foreignId('pickup_id')->nullable()->comment('اذا كانت القيمة فارغة الشحنة pickup');
+            // $table->foreignId('pickup_id')->constrained();
+            $table->String('cash')->nullable();
+            $table->string('cost')->nullable();
             $table->string('delivery_commission');
             $table->timestamps();
         });

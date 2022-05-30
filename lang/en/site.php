@@ -96,6 +96,8 @@ return [
     'employee_list' => 'Employee List',
     'add_employee' => 'Add Employee',
 
+    'show' => 'Show',
+
 
 
 

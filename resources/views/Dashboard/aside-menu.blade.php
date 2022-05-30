@@ -85,6 +85,14 @@
                         </a>
                     </div>
                     <div class="menu-item">
+                        <a class="menu-link" href="{{route('assignedpickup.index')}}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{__('site.pickup')}}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                         <div class="menu-content pt-8 pb-0">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">Export</span>
                         </div>
