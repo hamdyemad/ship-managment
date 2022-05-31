@@ -22,9 +22,9 @@ class Pickup extends Model
     {
         return $this->hasMany(Assignedpickup::class);
     }
-    public function accountsellers()
+    public function accountseller()
     {
-        return $this->hasMany(AccountSeller::class);
+        return $this->hasOne(AccountSeller::class);
     }
     public function deliveries()
     {

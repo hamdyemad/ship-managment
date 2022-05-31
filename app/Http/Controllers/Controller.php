@@ -582,15 +582,9 @@ class Controller extends BaseController
         $from =  Carbon::parse($req->input('from'));
         $to   = Carbon::parse($req->input('to'));
         $driver_id = $req->input('driver_id');
-        // $show = AccountSeller::with('shippment', 'pickup')
-        //     ->whereHas('shippment', function ($query) use ($driver_id) {
-        //         $query->whereRelation('deliveries', 'driver_id', $driver_id);
-        //     })->whereHas('pickup', function ($query) use ($driver_id) {
-        //         $query->whereRelation('deliveries', 'driver_id', $driver_id);
-        //     })->get();
         $pickup = [];
         $shippment = [];
-        $delivery = Delivery::where('driver_id', 3)->get();
+        $delivery = Delivery::where('driver_id', $driver_id)->get();
         foreach ($delivery as $val) {
             if ($val->shippment_id == null && $val->pickup_id != null) {
                 array_push($pickup, $val->pickup_id);
@@ -598,13 +592,6 @@ class Controller extends BaseController
                 array_push($shippment, $val->shippment_id);
             }
         }
-
-
-        // $comments = DB::table('account_sellers')
-        //     ->join('shippments')->get();
-        // dd($comments);
-        // $data = DB::select('SELECT * FROM account_sellers WHERE (shippment_id IN ($shippment) OR shippment_id IS NULL)');
-        // $show = AccountSeller::whereIn('shippment_id', '=', $shippment)->whereIn('pickup_id', $pickup)->get();
         $show = AccountSeller::where(function ($query) use ($shippment) {
             $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
         })->where(function ($query) use ($pickup) {
@@ -612,15 +599,15 @@ class Controller extends BaseController
         })->where('created_at', '>=', $from)
             ->where('created_at', '<=', $to)->get();
 
-        // dd($show);
+        // dd($show[0]->pickup->address->city->city);
         // $show = Shippment::with('accountseller', 'city', 'area', 'user', 'deliveries')
         //     ->whereRelation('deliveries', 'driver_id', $driver_id)
         //     ->whereRelation('accountseller', 'created_at', '>=', $from)
         //     ->whereRelation('accountseller', 'created_at', '<=', $to)->get();
 
         foreach ($show as $value) {
-            array_push($totalcost, $value->accountseller->cost);
-            array_push($totalcommisson, $value->accountseller->delivery_commission);
+            array_push($totalcost, $value->cost);
+            array_push($totalcommisson, $value->delivery_commission);
         }
         $total = array_sum($totalcost);
         $totaldrivercommission = array_sum($totalcommisson);

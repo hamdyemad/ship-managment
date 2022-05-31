@@ -52,6 +52,23 @@
         </thead>
         <tbody>
             @foreach ($show as $PDFReports)
+            @if ($PDFReports->shippment_id==null)
+            <tr>
+                <td>{{ $PDFReports->id }}</td>
+                <td>{{ $PDFReports->status }}</td>
+                <td>{{ $PDFReports->pickup->name }}</td>
+                <td>{{ $PDFReports->pickup->phone}}</td>
+                <td>--</td>
+                <td>--</td>
+                <td>{{ $PDFReports->pickup->address->city->city }}</td>
+                <td>{{ $PDFReports->pickup->address->area->area }}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>{{ $PDFReports->delivery_commission }}</td>
+
+            </tr>
+            @elseif($PDFReports->pickup_id==null)
             <tr>
                 <td>{{ $PDFReports->id }}</td>
                 {{-- <td>{{ $PDFReports->created_at }}</td> --}}
@@ -64,23 +81,25 @@
                 <td>{{ $PDFReports->area->area }}</td>
                 <td>{{ $PDFReports->accountseller->cash }}</td>
                 @if($PDFReports->status == 'picked up')
-                     <td>0</td>
+                <td>0</td>
                 @else
 
-                    @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
-                    $PDFReports->user->city_id &&
-                    $PDFReports->area->id == $PDFReports->user->area_id)
+                @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
+                $PDFReports->user->city_id &&
+                $PDFReports->area->id == $PDFReports->user->area_id)
 
-                    <td>{{$PDFReports->user->special_price}}</td>
-                    @else
-                    <td>{{$PDFReports->area->rate}}</td>
-                    @endif
+                <td>{{$PDFReports->user->special_price}}</td>
+                @else
+                <td>{{$PDFReports->area->rate}}</td>
+                @endif
 
                 @endif
                 <td>{{ $PDFReports->accountseller->cost }}</td>
                 <td>{{ $PDFReports->accountseller->delivery_commission }}</td>
 
             </tr>
+            @endif
+
             @endforeach
         </tbody>
         <tfoot style="background-color: rgb(191, 189, 189)">
