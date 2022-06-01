@@ -3,8 +3,24 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="This ">
+
+    <meta name="author" content="Code With Mark">
+    <meta name="authorUrl" content="http://codewithmark.com">
+
+    <!--[CSS/JS Files - Start]-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+
+    <script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script>
     <title>Document</title>
     <style>
         /* -------------------------------------
@@ -23,10 +39,6 @@
             font-size: 14px;
         }
 
-        img {
-            max-width: 100%;
-        }
-
         body {
             -webkit-font-smoothing: antialiased;
             -webkit-text-size-adjust: none;
@@ -39,6 +51,10 @@
         table td {
             vertical-align: top;
         }
+
+        /* table {
+            width: 100%;
+        } */
 
         /* -------------------------------------
         BODY & CONTAINER
@@ -58,6 +74,12 @@
             margin: 0 auto !important;
             /* makes it centered */
             clear: both !important;
+        }
+
+
+        p {
+            width: 20%;
+            margin: 0 auto !important;
         }
 
         .content {
@@ -89,7 +111,12 @@
             margin-bottom: 20px;
         }
 
-        .footer {
+        th,
+        td {
+            padding: 25px;
+        }
+
+        /* .footer {
             width: 100%;
             clear: both;
             color: #999;
@@ -105,12 +132,12 @@
         .footer unsubscribe,
         .footer td {
             font-size: 12px;
-        }
+        } */
 
         /* -------------------------------------
         TYPOGRAPHY
         ------------------------------------- */
-        h1,
+        /* h1,
         h2,
         h3 {
             font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -150,15 +177,15 @@
         ol li {
             margin-left: 5px;
             list-style-position: inside;
-        }
+        } */
 
         /* -------------------------------------
         LINKS & BUTTONS
         ------------------------------------- */
-        a {
+        /* a {
             color: #1ab394;
             text-decoration: underline;
-        }
+        } */
 
         .btn-primary {
             text-decoration: none;
@@ -262,6 +289,7 @@
             font-weight: 700;
         }
 
+
         /* -------------------------------------
         RESPONSIVE AND MOBILE FRIENDLY STYLES
         ------------------------------------- */
@@ -304,8 +332,10 @@
 </head>
 
 <body>
-    <p>اللغة العربية </p>
-    <table class="body-wrap">
+    <div class="text-center" style="padding:20px;">
+        <input type="button" id="rep" value="Print" class="btn btn-info btn_print">
+    </div>
+    <table class="body-wrap" id="container_content">
         <tbody>
             <tr>
                 <td></td>
@@ -315,69 +345,8 @@
                             <tbody>
                                 <tr>
                                     <td class="content-wrap aligncenter">
-                                        {{-- <table width="100%" cellpadding="0" cellspacing="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="content-block">
-                                                        <h2>Thanks for using our app</h2>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="content-block">
-                                                        <table class="invoice">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>{{$show->recevier_name}}
-
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <table class="invoice-items" cellpadding="0"
-                                                                            cellspacing="0">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td>Service 1</td>
-                                                                                    <td class="alignright">
-                                                                                        {{$show->price}}</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>city</td>
-                                                                                    <td class="alignright">
-                                                                                        {{$show->city->city}}</td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>Service 3</td>
-                                                                                    <td class="alignright">$ 6.00</td>
-                                                                                </tr>
-                                                                                <tr class="total">
-                                                                                    <td class="alignright" width="80%">
-                                                                                        Total
-                                                                                    </td>
-                                                                                    <td class="alignright">$ 36.00</td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="content-block">
-                                                        <a href="#">View in browser</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="content-block">
-                                                        Company Inc. 123 Van Ness, San Francisco 94102
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table> --}}
-
-                                        <table border="1" class="main" width="100%" cellpadding="0" cellspacing="0">
+                                        <table border="1" id="container_content2" class="main" width="100%"
+                                            cellpadding="0" cellspacing="0">
                                             <tbody>
                                                 <tr>
                                                     <th style="background-color: #D6EEEE;">city</th>
@@ -413,14 +382,16 @@
                                                 <tr>
 
                                                     <td colspan="3">{{$show->note}}</td>
-                                                    <td colspan="2" style="text-align: center;">
+                                                    <td colspan="2">
                                                         <br>
-                                                        <div style="margin-left: 10%">
+                                                        <div>
+
                                                             <?php
                                                             $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
                                                             echo $generator->getBarcode($show->barcode, $generator::TYPE_CODE_128);
 
                                                              ?>
+
                                                         </div>
                                                         <br>
                                                     </td>
@@ -431,7 +402,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="footer">
+                        {{-- <div class="footer">
                             <table width="100%">
                                 <tbody>
                                     <tr>
@@ -440,14 +411,43 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div> --}}
                     </div>
                 </td>
                 <td></td>
             </tr>
         </tbody>
     </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function($)
+    	{
 
+    		$(document).on('click', '.btn_print', function(event)
+    		{
+    			event.preventDefault();
+
+    			var element = document.getElementById('container_content2');
+
+    			var opt =
+    			{
+    			  margin:       1,
+    			  filename:     'shippment_'+js.AutoCode()+'.pdf',
+    			  image:        { type: 'jpeg', quality: 0.98 },
+    			  html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true},
+    			  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    			};
+
+    			// New Promise-based usage:
+    			html2pdf().set(opt).from(element).save();
+
+
+    		});
+
+
+
+    	});
+    </script>
 </body>
 
 </html>

@@ -91,10 +91,11 @@ class Controller extends BaseController
     function download($id)
     {
         $show = Shippment::findOrFail($id);
-        $pdf = PDF::loadView('Dashboard.user.shipment.pdf', compact('show'));
-        $ldate = date('Y-m-d H:i:s');
-        $image = $pdf->download('disney' . $ldate . '.pdf');
-        return $image;
+        return view('Dashboard.user.shipment.pdf', compact('show'));
+        // $pdf = PDF::loadView('Dashboard.user.shipment.pdf', compact('show'));
+        // $ldate = date('Y-m-d H:i:s');
+        // $image = $pdf->download('shippment' . $ldate . '.pdf');
+        // return $image;
     }
 
     function index1(Request $req)
@@ -120,7 +121,7 @@ class Controller extends BaseController
             return view('import', ['ViewsPage' => $ViewsPage]);
         }
     }
-    // print pdf the shippment from to
+    // print pdf the shippment from to for special user
     function accountsellerpdf(Request $req)
     {
         $validator = Validator($req->all(), [
@@ -134,11 +135,33 @@ class Controller extends BaseController
         $todate  = Carbon::parse($req->input('to'));
         $user_id_req = $req->input('user_id');
 
-        $show = AccountSeller::with('shippment')->where('created_at', '>=', $fromdate)
-            ->where('created_at', '<=', $todate)
-            ->whereRelation('shippment',  'user_id', $user_id_req)
-            ->whereRelation('shippment', 'status', '!=', 'picked up')->get();
+        $shippment = Shippment::all();
+        $pickup = Pickup::all();
+        $pickup = [];
+        $shippment = [];
+        foreach ($shippment as $val) {
+            if ($val->user_id == $user_id_req) {
+                array_push($shippment, $val->id);
+            }
+        }
 
+        foreach ($pickup as $val) {
+            if ($val->user_id == $user_id_req) {
+                array_push($pickup, $val->id);
+            }
+        }
+
+        // $show = AccountSeller::with('shippment', 'pickup')
+        //     ->where('created_at', '>=', $fromdate)
+        //     ->where('created_at', '<=', $todate)
+        //     ->whereRelation('shippment',  'user_id', $user_id_req)->get();
+
+        $show = AccountSeller::where(function ($query) use ($shippment) {
+            $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
+        })->where(function ($query) use ($pickup) {
+            $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
+        })->where('created_at', '>=', $fromdate)
+            ->where('created_at', '<=', $todate)->get();
         $totalcost = [];
         foreach ($show as $value) {
             array_push($totalcost, $value->cost);
@@ -150,10 +173,12 @@ class Controller extends BaseController
             'to' => $req->to,
             'costs' => $total,
         ]);
+        dd($show);
+        return view('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
 
-        $pdf = PDF::loadView('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
-        $pdf->setPaper('A4', 'landscape');
-        return $pdf->download('printtable.pdf');
+        // $pdf = PDF::loadView('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
+        // $pdf->setPaper('A4', 'landscape');
+        // return $pdf->download('printtable.pdf');
     }
     // print pdf the shippment from to
     function accountseller2(Request $req)
@@ -177,8 +202,9 @@ class Controller extends BaseController
     function getshipment()
     {
         $delivery = Delivery::with('driver', 'shippment')->get();
+        // dd($delivery[1]->shippment->user->name);
         $drivers = Driver::all();
-        return view('Dashboard.admin.search', ['shipment' => $delivery, 'driver' => $drivers]);
+        return view('Dashboard.admin.search', ['delivery' => $delivery, 'driver' => $drivers]);
     }
 
     // get one shipment after do scan using driver or emplyee
@@ -199,6 +225,42 @@ class Controller extends BaseController
             );
         }
     }
+
+    function getshipmentstatus($id)
+    {
+
+        $barcode = $id;
+        $shippment = Shippment::where('barcode', $id)->first();
+
+        if ($shippment != null) {
+            return view('Dashboard.admin.driver.show', ['shippment' => $shippment]);
+        } else {
+
+            return redirect()->back()->withErrors(
+                [
+                    'withErrors' =>  'shippment does not exist'
+                ],
+            );
+        }
+    }
+    function getshipmentstatusid($id)
+    {
+
+        $barcode = $id;
+        $shippment = Shippment::where('id', $id)->first();
+
+        if ($shippment != null) {
+            return view('Dashboard.admin.driver.show', ['shippment' => $shippment]);
+        } else {
+
+            return redirect()->back()->withErrors(
+                [
+                    'withErrors' =>  'shippment does not exist'
+                ],
+            );
+        }
+    }
+
     // get all drivers and view scan2
     function getdrivers()
     {
@@ -558,9 +620,11 @@ class Controller extends BaseController
     //show shippments without created and requested status in driver
     function drivershipment()
     {
-        $shipment = Shippment::where('status', ['picked up', 'received at hub', 'shipped', 'onhold', 'delivered', 'no_answer', 'rejected', 'rejected_fees_faid'])->get();
 
-        return view('Dashboard.driver.shipment', ['shipment' => $shipment]);
+        // $shipment = Shippment::where('status', ['picked up', 'received at hub', 'shipped', 'onhold', 'delivered', 'no_answer', 'rejected', 'rejected_fees_faid'])->get();
+        $deliveries = Delivery::with('shippment', 'pickup')->where('id', auth()->user()->id)->get();
+        // dd($deliveries[0]->pickup);
+        return view('Dashboard.driver.shipment', ['deliveries' => $deliveries]);
     }
 
     //show delivery shippments and drivers
@@ -579,12 +643,15 @@ class Controller extends BaseController
 
         $totalcost = [];
         $totalcommisson = [];
+        $pickup = [];
+        $shippment = [];
         $from =  Carbon::parse($req->input('from'));
         $to   = Carbon::parse($req->input('to'));
         $driver_id = $req->input('driver_id');
-        $pickup = [];
-        $shippment = [];
         $delivery = Delivery::where('driver_id', $driver_id)->get();
+        $driver = driver::where('id', $driver_id)->first();
+
+        // dd($delivery);
         foreach ($delivery as $val) {
             if ($val->shippment_id == null && $val->pickup_id != null) {
                 array_push($pickup, $val->pickup_id);
@@ -612,9 +679,31 @@ class Controller extends BaseController
         $total = array_sum($totalcost);
         $totaldrivercommission = array_sum($totalcommisson);
 
-        $pdf = PDF::loadView('Dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
-        $pdf->setPaper('A4', 'landscape');
-        $image = $pdf->download('printtable.pdf');
+        // $pdf = PDF::loadView('Dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
+        // $pdf->setPaper('A4', 'landscape');
+        // $image = $pdf->download('printtable.pdf');
+
+        // $pdf = PDF::loadView('Dashboard.admin.printdriver', ['show' => $show, 'total' => $total, 'totaldrivercommission' => $totaldrivercommission]);
+        // // $pdf->setPaper('A4', 'landscape');
+        // return $pdf->stream('document.pdf');
+
+        // $data = [
+        //     'show' => $show,
+        //     'total' => $total,
+        //     'totaldrivercommission' => $totaldrivercommission,
+
+        // ];
+        // require_once __DIR__ . '/vendor/autoload.php';
+
+        // $mpdf = new \Mpdf\Mpdf();
+        // $mpdf->WriteHTML('<h1>Hello world!</h1>');
+        // $mpdf->Output();
+        // $pdf = PDF::chunkLoadView('<html-separator/>', 'Dashboard.admin.printdriver', $data);
+        // return $pdf->stream('document.pdf');
+        // $ldate = date('Y-m-d H:i:s');
+
+
+        // $html = $pdf->download($driver->name . $ldate . '.pdf');
 
         $scheduledriver = Scheduledriver::firstOrCreate([
             'driver_id' => $req->driver_id,
@@ -623,8 +712,9 @@ class Controller extends BaseController
             'total_cost' => $total,
             'total_delivery_commission' => $totaldrivercommission,
         ]);
+        return view('Dashboard.admin.printdriver', ['show' => $show, 'total' => $total, 'totaldrivercommission' => $totaldrivercommission, 'driver' => $driver]);
 
-        return $image;
+        // return $html;
     }
 
     // print pdf the accountshippment for drivers from to with special date
@@ -635,7 +725,7 @@ class Controller extends BaseController
         $from =  Carbon::parse($req->input('from'));
         $to   = Carbon::parse($req->input('to'));
         $driver_id = $req->input('driver_id');
-
+        $driver = driver::where('id', $driver_id)->first();
         $show = Shippment::with('accountseller', 'city', 'area', 'user', 'deliveries')
             ->whereRelation('deliveries', 'driver_id', $driver_id)
             ->whereRelation('accountseller', 'created_at', '>=', $from)
@@ -647,12 +737,14 @@ class Controller extends BaseController
         }
         $total = array_sum($totalcost);
         $totaldrivercommission = array_sum($totalcommisson);
-        // dd($total);
-        $pdf = PDF::loadView('Dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission'));
-        $pdf->setPaper('A4', 'landscape');
-        $image = $pdf->download('printtable.pdf');
+        // $ldate = date('Y-m-d H:i:s');
+        // $pdf = PDF::loadView('Dashboard.admin.printdriver', compact('show', 'total', 'totaldrivercommission', 'driver'));
+        // $pdf->setPaper('A4', 'landscape');
+        return view('Dashboard.admin.printdriver', ['show' => $show, 'total' => $total, 'totaldrivercommission' => $totaldrivercommission, 'driver' => $driver]);
 
-        return $image;
+        // $image = $pdf->download($driver->name . $ldate . '.pdf');;
+
+        // return $image;
     }
 
     // print all delivery shippments expect create and requested status from admin
@@ -661,28 +753,44 @@ class Controller extends BaseController
 
         $from =  Carbon::parse($req->input('from'));
         $to   = Carbon::parse($req->input('to'));
-        $delivery = Delivery::with('driver', 'shippment')
-            ->whereRelation('shippment', 'created_at', '<=', $to)
-            ->whereRelation('shippment', 'created_at', '<=', $to)->get();
-        $pdf = PDF::loadView('Dashboard.admin.printshippments', compact('delivery'));
-        $pdf->setPaper('A4', 'landscape');
-        $image = $pdf->download('printshippments.pdf');
 
-        return $image;
+        // $delivery = Delivery::with('driver', 'shippment')
+        //     ->whereRelation('shippment', 'created_at', '>=', $from)
+        //     ->whereRelation('shippment', 'created_at', '<=', $to)->get();
+
+        $show = AccountSeller::with('shippment', 'pickup')
+            ->where('created_at', '>=', $from)
+            ->where('created_at', '<=', $to)->get();
+        // dd($show);
+        // $show = AccountSeller::where(function ($query) use ($shippment) {
+        //     $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
+        // })->where(function ($query) use ($pickup) {
+        //     $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
+        // })->where('created_at', '>=', $from)
+        //     ->where('created_at', '<=', $to)->get();
+
+        return view('Dashboard.admin.printshippments', compact('show'));
+
+        // $pdf = PDF::loadView('Dashboard.admin.printshippments', compact('delivery'));
+        // $pdf->setPaper('A4', 'landscape');
+        // $image = $pdf->download('printshippments.pdf');
+
+        // return $image;
     }
 
     function print_driver_shipments(Request $req)
     {
 
         $driver_id =  $req->input('driver_id');
-        $delivery = Delivery::with('driver', 'shippment')
+        $show = Delivery::with('driver', 'shippment', 'pickup')
             ->whereRelation('driver', 'id', $driver_id)->get();
-        $drivers = Driver::findOrFail($driver_id);
-        $pdf = PDF::loadView('Dashboard.admin.printshippments', compact('delivery', 'drivers'));
-        $pdf->setPaper('A4', 'landscape');
-        $image = $pdf->download('printshippments.pdf');
+        $driver = Driver::findOrFail($driver_id);
+        return view('Dashboard.admin.printshippment_driver', compact('show', 'driver'));
 
-        return $image;
+        // $pdf = PDF::loadView('Dashboard.admin.printshippments', compact('delivery', 'drivers'));
+        // $pdf->setPaper('A4', 'landscape');
+        // $image = $pdf->download('printshippments.pdf');
+        // return $image;
     }
 
     function specialprice_city($id)

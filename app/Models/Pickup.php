@@ -30,4 +30,8 @@ class Pickup extends Model
     {
         return $this->hasMany(Delivery::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

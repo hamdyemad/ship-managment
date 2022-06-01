@@ -37,6 +37,7 @@
         </thead>
         <tbody>
             @foreach ($show as $PDFReports)
+            @if ($PDFReports->pickup_id == null)
             <tr>
                 <td>{{ $PDFReports->id }}</td>
                 <td>{{ $PDFReports->created_at }}</td>
@@ -46,17 +47,40 @@
                 <td>{{ $PDFReports->shippment->city->city }}</td>
                 <td>{{ $PDFReports->shippment->area->area }}</td>
                 <td>{{ $PDFReports->cash }}</td>
-                @if($PDFReports->shippment->user->special_price != 0 && $PDFReports->shippment->city->id ==
+                {{-- @if($PDFReports->shippment->user->special_price != 0 && $PDFReports->shippment->city->id ==
                 $PDFReports->shippment->user->city_id &&
                 $PDFReports->shippment->area->id == $PDFReports->shippment->user->area_id)
 
                 <td>{{$PDFReports->shippment->user->special_price}}</td>
-                @else
+                @else --}}
                 <td>{{$PDFReports->shippment->area->rate}}</td>
-                @endif
+                {{-- @endif --}}
                 <td>{{ $PDFReports->cost }}</td>
 
             </tr>
+            @elseif($PDFReports->shippment_id == null)
+            <tr>
+                <td>{{ $PDFReports->id }}</td>
+                <td>{{ $PDFReports->created_at }}</td>
+                <td>{{ $PDFReports->pickup->status }}</td>
+                <td>--</td>
+                <td>--</td>
+                <td>{{ $PDFReports->pickup->address->city->city }}</td>
+                <td>{{ $PDFReports->pickup->address->area->area }}</td>
+                <td>--</td>
+                {{-- @if($PDFReports->shippment->user->special_price != 0 && $PDFReports->shippment->city->id ==
+                $PDFReports->shippment->user->city_id &&
+                $PDFReports->shippment->area->id == $PDFReports->shippment->user->area_id)
+
+                <td>{{$PDFReports->shippment->user->special_price}}</td>
+                @else --}}
+                <td>--</td>
+                {{-- @endif --}}
+                <td>--</td>
+
+            </tr>
+            @endif
+
             @endforeach
         </tbody>
         <tfoot style="background-color: rgb(191, 189, 189)">

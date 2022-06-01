@@ -85,97 +85,74 @@
         <input type="button" id="rep" value="Print" class="btn btn-info btn_print">
     </div>
     <div id="printpdf">
-        <h3>
-            تسوية السائقين
-        </h3>
 
+        <center>
+            <h3>name : {{$driver->name}}</h3>
+            <table>
+                <thead class="header">
+                    <tr>
+                        <th>id</th>
+                        <th>status</th>
+                        <th>contact name</th>
+                        <th>contact phone</th>
+                        <th>city</th>
+                        <th>area</th>
 
-        <h5> name : {{$driver->name}}</h5>
-        {{-- <h5> id : {{$driver->id}}</h5> --}}
-        <h5> mobile : {{$driver->phone}}</h5>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($show as $show)
+                    @if ($show->pickup_id == null)
+                    <tr>
+                        <td>{{ $show->id }}</td>
+                        {{-- <td>{{ $PDFReports->created_at }}</td> --}}
+                        <td>{{ $show->shippment->status }}</td>
+                        <td>{{ $show->shippment->receiver_name }}</td>
+                        <td>{{ $show->shippment->receiver_phone }}</td>
+                        <td>{{ $show->shippment->city->city }}</td>
+                        <td>{{ $show->shippment->area->area }}</td>
+                        {{-- <td>{{ $PDFReports->accountseller->cash }}</td>
+                        @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
+                        $PDFReports->user->city_id &&
+                        $PDFReports->area->id == $PDFReports->user->area_id)
 
-        <table>
-            <thead class="header">
-                <tr>
-                    <th>id</th>
-                    {{-- <th>date</th> --}}
-                    <th>status</th>
-                    <th>sh.name</th>
-                    <th>sh.phone</th>
-                    <th>C.name</th>
-                    <th>C.phone</th>
-                    <th>city</th>
-                    <th>area</th>
-                    <th>cash</th>
-                    <th>area rate</th>
-                    <th>cost</th>
-                    <th>DE.commission</th>
+                        <td>{{$PDFReports->user->special_price}}</td>
+                        @else
+                        <td>{{$PDFReports->area->rate}}</td>
+                        @endif
+                        <td>{{ $PDFReports->accountseller->cost }}</td>
+                        <td>{{ $PDFReports->accountseller->delivery_commission }}</td> --}}
 
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($show as $PDFReports)
-                @if ($PDFReports->shippment_id==null)
-                <tr>
-                    <td>{{ $PDFReports->id }}</td>
-                    <td>{{ $PDFReports->status }}</td>
-                    <td>{{ $PDFReports->pickup->name }}</td>
-                    <td>{{ $PDFReports->pickup->phone}}</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>{{ $PDFReports->pickup->address->city->city }}</td>
-                    <td>{{ $PDFReports->pickup->address->area->area }}</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>{{ $PDFReports->delivery_commission }}</td>
+                    </tr>
+                    @elseif($show->shippment_id == null)
+                    <tr>
+                        <td>{{ $show->id }}</td>
+                        {{-- <td>{{ $PDFReports->created_at }}</td> --}}
+                        <td>{{ $show->pickup->status }}</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>{{ $show->pickup->address->city->city }}</td>
+                        <td>{{ $show->pickup->address->area->area }}</td>
+                        {{-- <td>{{ $PDFReports->accountseller->cash }}</td>
+                        @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
+                        $PDFReports->user->city_id &&
+                        $PDFReports->area->id == $PDFReports->user->area_id)
 
-                </tr>
-                @elseif($PDFReports->pickup_id==null)
-                <tr>
-                    <td>{{ $PDFReports->id }}</td>
-                    {{-- <td>{{ $PDFReports->created_at }}</td> --}}
-                    <td>{{ $PDFReports->status }}</td>
-                    <td>{{ $PDFReports->user->name }}</td>
-                    <td>{{ $PDFReports->user->phone}}</td>
-                    <td>{{ $PDFReports->receiver_name }}</td>
-                    <td>{{ $PDFReports->receiver_phone }}</td>
-                    <td>{{ $PDFReports->city->city }}</td>
-                    <td>{{ $PDFReports->area->area }}</td>
-                    <td>{{ $PDFReports->accountseller->cash }}</td>
-                    @if($PDFReports->status == 'picked up')
-                    <td>0</td>
-                    @else
+                        <td>{{$PDFReports->user->special_price}}</td>
+                        @else
+                        <td>{{$PDFReports->area->rate}}</td>
+                        @endif
+                        <td>{{ $PDFReports->accountseller->cost }}</td>
+                        <td>{{ $PDFReports->accountseller->delivery_commission }}</td> --}}
 
-                    @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
-                    $PDFReports->user->city_id &&
-                    $PDFReports->area->id == $PDFReports->user->area_id)
-
-                    <td>{{$PDFReports->user->special_price}}</td>
-                    @else
-                    <td>{{$PDFReports->area->rate}}</td>
+                    </tr>
                     @endif
 
-                    @endif
-                    <td>{{ $PDFReports->accountseller->cost }}</td>
-                    <td>{{ $PDFReports->accountseller->delivery_commission }}</td>
+                    @endforeach
+                </tbody>
 
-                </tr>
-                @endif
-
-                @endforeach
-            </tbody>
-            <tfoot class="footer">
-                <tr>
-                    <th colspan="10">
-                        <center>Total</center>
-                    </th>
-                    <th>{{$total}}</th>
-                    <th>{{$totaldrivercommission}}</th>
-                </tr>
-            </tfoot>
-        </table>
-
+            </table>
+        </center>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>

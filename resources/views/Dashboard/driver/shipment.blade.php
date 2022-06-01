@@ -213,7 +213,7 @@
                     </th>
                     <th class="min-w-125px">{{__('site.user')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
-                    <th class="min-w-125px">{{__('site.print')}}</th>
+                    {{-- <th class="min-w-125px">{{__('site.print')}}</th> --}}
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.address')}}</th>
                     <th class="min-w-125px">{{__('site.price')}}</th>
@@ -226,7 +226,8 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($shipment as $shipment)
+                @foreach ($deliveries as $deliveries)
+                @if ($deliveries->shippment_id != null)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -240,9 +241,9 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->id}}"
-                                data-bs-toggle="modal" role="button">{{$shipment->receiver_name}}</a>
-                            <a href="https://wa.me/{{$shipment->receiver_phone}}">
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" data-bs-toggle="modal"
+                                role="button">{{$deliveries->shipment->receiver_name}}</a>
+                            <a href="https://wa.me/{{$deliveries->shipment->receiver_phone}}">
                                 <i class="fa fa-user"></i>
 
                             </a>
@@ -252,27 +253,24 @@
                     </td>
                     <!--end::User=-->
 
-                    <td>{{$shipment->status}}</td>
-                    <td>
-                        {{-- <div class="card-toolbar">
-                            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}
-                                <a href="{{route('print',$shipment->id)}}">
-                                    <i class="fa fa-print"></i>
-                                    {{-- {{__('site.export')}} --}}
-                                </a>
-                                {{--
-                            </div>
-                        </div> --}}
-                    </td>
+                    <td>{{$deliveries->shipment->status}}</td>
+                    {{-- <td>
 
-                    <td>{{$shipment->receiver_phone}}</td>
+                        <a href="{{route('print',$shipment->id)}}">
+                            <i class="fa fa-print"></i>
+
+                        </a>
+
+                    </td> --}}
+
+                    <td>{{$deliveries->shipment->receiver_phone}}</td>
 
                     <td>
-                        <div class="badge badge-light fw-bolder">{{$shipment->address}}</div>
+                        <div class="badge badge-light fw-bolder">{{$deliveries->shipment->address}}</div>
                     </td>
 
 
-                    <td>{{$shipment->price}}</td>
+                    <td>{{$deliveries->shipment->price}}</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -294,18 +292,20 @@
                             data-kt-menu="true">
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="{{route('shipment.show',$shipment->id)}}" class="menu-link px-3">show</a>
+                                <a href="{{route('getshipmentstatusid',$deliveries->shipment->id)}}"
+                                    class="menu-link px-3">show</a>
                             </div>
-                            <div class="menu-item px-3">
-                                <a href="{{route('shipment.edit',$shipment->id)}}" class="menu-link px-3">Edit</a>
+                            {{-- <div class="menu-item px-3">
+                                <a href="{{route('shipment.edit',$deliveries->shipment->id)}}"
+                                    class="menu-link px-3">Edit</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$shipment->id}}',this)" class="menu-link px-3"
-                                    data-kt-users-table-filter="delete_row">Delete</a>
+                                <a href="#" onclick="confirmDelete('{{$deliveries->shipment->id}}',this)"
+                                    class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
                             </div>
-                            <!--end::Menu item-->
+                            <!--end::Menu item--> --}}
                         </div>
                         <!--end::Menu-->
                     </td>
@@ -313,7 +313,93 @@
                     <td></td>
 
                 </tr>
+                @elseif($deliveries->pickup_id != null)
+                <tr>
+                    <!--begin::Checkbox-->
+                    {{-- <td>
+                        <div class="form-check form-check-sm form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="1" />
+                        </div>
+                    </td> --}}
+                    <!--end::Checkbox-->
 
+                    <!--begin::User=-->
+                    <td class="d-flex align-items-center">
+                        <!--begin::User details-->
+                        <div class="d-flex flex-column">
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" data-bs-toggle="modal"
+                                role="button">{{$deliveries->pickup->user->name}}</a>
+                            <a href="https://wa.me/{{$deliveries->pickup->user->phone}}">
+                                <i class="fa fa-user"></i>
+
+                            </a>
+
+                        </div>
+                        <!--begin::User details-->
+                    </td>
+                    <!--end::User=-->
+
+                    <td>{{$deliveries->pickup->status}}</td>
+                    {{-- <td>
+
+                        <a href="{{route('print',$shipment->id)}}">
+                            <i class="fa fa-print"></i>
+
+                        </a>
+
+                    </td> --}}
+
+                    <td>--</td>
+
+                    <td>
+                        <div class="badge badge-light fw-bolder">{{$deliveries->pickup->address->address_line}}</div>
+                    </td>
+
+
+                    <td>--</td>
+
+                    <!--begin::Action=-->
+                    <td class="text-end">
+                        <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click"
+                            data-kt-menu-placement="bottom-end">Actions
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                            <span class="svg-icon svg-icon-5 m-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <path
+                                        d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </a>
+                        <!--begin::Menu-->
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                            data-kt-menu="true">
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="{{route('pickup.show',$deliveries->pickup->id)}}"
+                                    class="menu-link px-3">show</a>
+                            </div>
+                            {{-- <div class="menu-item px-3">
+                                <a href="{{route('shipment.edit',$deliveries->pickup->id)}}"
+                                    class="menu-link px-3">Edit</a>
+                            </div>
+                            <!--end::Menu item-->
+                            <!--begin::Menu item-->
+                            <div class="menu-item px-3">
+                                <a href="#" onclick="confirmDelete('{{$deliveries->pickup->id}}',this)"
+                                    class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
+                            </div>
+                            <!--end::Menu item--> --}}
+                        </div>
+                        <!--end::Menu-->
+                    </td>
+                    <!--end::Action=-->
+                    <td></td>
+
+                </tr>
+                @endif
                 @endforeach
 
             </tbody>

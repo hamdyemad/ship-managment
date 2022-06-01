@@ -278,7 +278,8 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($shipment as $shipment)
+                @foreach ($delivery as $delivery)
+                @if ($delivery->pickup_id == null)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -292,15 +293,15 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->shippment->id}}"
-                                data-bs-toggle="modal" role="button">{{$shipment->receiver_name}}</a>
-                            <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="" data-bs-toggle="modal"
+                                role="button">{{$delivery->shippment->user->name}}</a>
+                            <a href="https://wa.me/{{$delivery->shippment->user->phone}}">
                                 <i class="fa fa-user"></i>
 
                             </a>
-                            <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
+                            {{-- <a id="phone_number" href="tel:+{{$shipment->shippment->receiver_phone}}">
                                 <i class="fa fa-phone"></i>
-                            </a>
+                            </a> --}}
 
 
 
@@ -311,11 +312,11 @@
                     </td>
                     <!--end::User=-->
 
-                    <td>{{$shipment->shippment->status}}</td>
+                    <td>{{$delivery->shippment->status}}</td>
                     <td>
                         {{-- <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}
-                                <a href="{{route('print',$shipment->shippment->id)}}">
+                                <a href="{{route('print',$delivery->shippment->id)}}">
                                     <i class="fa fa-print"></i>
                                     {{-- {{__('site.export')}} --}}
                                 </a>
@@ -323,16 +324,16 @@
                             </div>
                         </div> --}}
                     </td>
-                    <td>{{$shipment->shippment->shippment_type}}</td>
-                    <td>{{$shipment->shippment->receiver_phone}}</td>
+                    <td>{{$delivery->shippment->shippment_type}}</td>
+                    <td>{{$delivery->shippment->receiver_phone}}</td>
 
                     <td>
-                        <div class="badge badge-light fw-bolder">{{$shipment->shippment->address}}</div>
+                        <div class="badge badge-light fw-bolder">{{$delivery->shippment->address}}</div>
                     </td>
 
-                    <td>{{$shipment->driver->name}}</td>
+                    <td>{{$delivery->driver->name}}</td>
 
-                    <td>{{$shipment->shippment->price}}</td>
+                    <td>{{$delivery->shippment->price}}</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -354,19 +355,19 @@
                             data-kt-menu="true">
                             <!--begin::Menu item-->
                             <div class="menu-item px-3">
-                                <a href="{{route('shipment.show',$shipment->shippment->id)}}"
+                                <a href="{{route('getshipmentstatusid',$delivery->shippment->id)}}"
                                     class="menu-link px-3">show</a>
                             </div>
-                            <div class="menu-item px-3">
-                                <a href="{{route('shipment.edit',$shipment->shippment->id)}}"
+                            {{-- <div class="menu-item px-3">
+                                <a href="{{route('shipment.edit',$delivery->shippment->id)}}"
                                     class="menu-link px-3">Edit</a>
-                            </div>
+                            </div> --}}
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$shipment->shippment->id}}',this)"
+                            {{-- <div class="menu-item px-3">
+                                <a href="#" onclick="confirmDelete('{{$delivery->shippment->id}}',this)"
                                     class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
-                            </div>
+                            </div> --}}
                             <!--end::Menu item-->
                         </div>
                         <!--end::Menu-->
@@ -375,6 +376,8 @@
                     <td></td>
 
                 </tr>
+                @endif
+
 
                 @endforeach
                 {{-- {{dd($shipment)}} --}}

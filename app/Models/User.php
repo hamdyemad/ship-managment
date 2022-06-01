@@ -25,6 +25,11 @@ class User extends Authenticatable
         return $this->hasMany(Shippment::class);
     }
 
+    public function pickups()
+    {
+        return $this->hasMany(Pickup::class);
+    }
+
     public function ScheduleSellers()
     {
         return $this->hasMany(ScheduleSeller::class);

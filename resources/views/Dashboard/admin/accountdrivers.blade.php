@@ -300,8 +300,8 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->shippment->id}}"
-                                data-bs-toggle="modal" role="button">{{$accounts->shippment->id}}</a>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
+                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
 
 
                         </div>
@@ -394,9 +394,10 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="" data-bs-toggle="modal"
-                                role="button"></a>
-
+                            {{-- <a class="text-gray-800 text-hover-primary mb-1 view_data" id="" data-bs-toggle="modal"
+                                role="button"></a> --}}
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
+                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
 
                         </div>
                         <!--begin::User details-->

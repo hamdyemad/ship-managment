@@ -63,9 +63,6 @@ Route::group(
             Route::resource('specialprice', SpecialpriceController::class);
 
             Route::get('select/city/{id}', [Controller::class, 'specialprice_city'])->name('special.price');
-            // Route::post('select/city', [Controller::class, 'setspecialprice_city'])->name('set.special.price');
-
-
 
             Route::resource('address', AddressController::class);
             Route::resource('shipment', ShippmentController::class);
@@ -78,12 +75,15 @@ Route::group(
             Route::post('/user/sitting/fetch2/', [Controller::class, 'fetch2'])->name('dynamicdependent.fetch2');
             Route::get('/admin/all-shipment', [Controller::class, 'getshipment'])->name('getshipment');
             Route::post('/shipment/scan', [Controller::class, 'getshipmentscan'])->name('scan');
+            Route::post('/shipment/status/{id}', [Controller::class, 'getshipmentstatus'])->name('getshipmentstatus');
+            Route::get('/shippment/{id}', [Controller::class, 'getshipmentstatusid'])->name('getshipmentstatusid');
+
             Route::get('/driver/shipment/delivery', [Controller::class, 'drivershipment'])->name('driver.shipment');
             // change the status from driver
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
-            // Route::get('/account', [AccountSellerController::class, 'index']);
+
             Route::resource('account', AccountSellerController::class);
 
             Route::resource('ScheduleSeller', ScheduleSellerController::class);
@@ -108,15 +108,7 @@ Route::group(
             /* print the shippments for driver using admin */
             Route::get('printdrivershipments', [Controller::class, 'print_driver_shipments'])->name('printdrivershipments');
 
-            // Route::get('all-pickup', [Controller::class, 'getpickup'])->name('get_pickup');
-            // Route::get('/assigne', [Controller::class, 'get_pickup_driver'])->name('getpickup.driver');
-            // Route::post('/assigne', [Controller::class, 'assigne_pickup'])->name('assigne.pickup');
             Route::resource('assignedpickup', AssignedpickupController::class);
-
-
-
-
-
 
             /* ############################### end user ############################### */
         });
