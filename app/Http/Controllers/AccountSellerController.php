@@ -17,7 +17,9 @@ class AccountSellerController extends Controller
      */
     public function index()
     {
-        $shipments = AccountSeller::with('shippment', 'pickup')->get();
+        $shipments = AccountSeller::with('shippment', 'pickup')
+            ->where('shippment_id', '!=', null)
+            ->where('pickup_id', '==', null)->get();
         $specialprice = Specialprice::all();
         $users = User::all();
         return view('Dashboard.admin.accountseller.accountsellers', ['shipment' => $shipments, 'users' => $users, 'specialprice' => $specialprice]);

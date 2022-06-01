@@ -137,31 +137,31 @@ class Controller extends BaseController
 
         $shippment = Shippment::all();
         $pickup = Pickup::all();
-        $pickup = [];
-        $shippment = [];
-        foreach ($shippment as $val) {
-            if ($val->user_id == $user_id_req) {
-                array_push($shippment, $val->id);
-            }
-        }
+        // $pickup = [];
+        // $shippment = [];
+        // foreach ($shippment as $val) {
+        //     if ($val->user_id == $user_id_req) {
+        //         array_push($shippment, $val->id);
+        //     }
+        // }
 
-        foreach ($pickup as $val) {
-            if ($val->user_id == $user_id_req) {
-                array_push($pickup, $val->id);
-            }
-        }
+        // foreach ($pickup as $val) {
+        //     if ($val->user_id == $user_id_req) {
+        //         array_push($pickup, $val->id);
+        //     }
+        // }
 
-        // $show = AccountSeller::with('shippment', 'pickup')
-        //     ->where('created_at', '>=', $fromdate)
-        //     ->where('created_at', '<=', $todate)
-        //     ->whereRelation('shippment',  'user_id', $user_id_req)->get();
-
-        $show = AccountSeller::where(function ($query) use ($shippment) {
-            $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
-        })->where(function ($query) use ($pickup) {
-            $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
-        })->where('created_at', '>=', $fromdate)
-            ->where('created_at', '<=', $todate)->get();
+        $show = AccountSeller::with('shippment', 'pickup')
+            ->where('pickup_id', '==', null)->where('shippment_id', '!=', null)
+            ->where('created_at', '>=', $fromdate)
+            ->where('created_at', '<=', $todate)
+            ->whereRelation('shippment',  'user_id', $user_id_req)->get();
+        // $show = AccountSeller::where(function ($query) use ($shippment) {
+        //     $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
+        // })->where(function ($query) use ($pickup) {
+        //     $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
+        // })->where('created_at', '>=', $fromdate)
+        //     ->where('created_at', '<=', $todate)->get();
         $totalcost = [];
         foreach ($show as $value) {
             array_push($totalcost, $value->cost);
