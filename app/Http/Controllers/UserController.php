@@ -117,7 +117,6 @@ class UserController extends Controller
 
         if (!$validator->fails()) {
 
-
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');

@@ -51,14 +51,20 @@ class AssignedpickupController extends Controller
 
         ]);
         $driver = Driver::where('id', $request->input('driver_id'))->get();
-
+        $pickup = Pickup::where('id', $request->arr)->get();
         if (!$validator->fails()) {
+
+            foreach ($pickup as $pickup) {
+                if ($pickup->status == 'requested') {
+                    $pickup->status = 'proccessing';
+                    $updated = $pickup->save();
+                }
+            }
 
             foreach ($request->arr as $value) {
                 $assigned = new Delivery();
                 $assigned->driver_id = $request->input('driver_id');
                 $assigned->pickup_id = $value;
-
 
                 $accounts = new AccountSeller();
                 $accounts->pickup_id = $value;

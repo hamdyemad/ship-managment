@@ -1,6 +1,6 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.add'))
+@section('title',__('site.pickup'))
 
 @section('page_name',__('site.pickup'))
 
@@ -292,12 +292,6 @@
 
             });
         }
-
-
-
-
-
-
 </script>
 
 @endsection

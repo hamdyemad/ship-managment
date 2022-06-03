@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('floor');
             $table->string('apartment');
             $table->string('contact_name');
-            $table->string('contact_email');
+            $table->string('contact_email')->nullable();
             $table->string('contact_phone');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('city_id')->constrained();

@@ -41,6 +41,13 @@ class ShippmentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->active);
+        // if ($request->active == true) {
+        //     dd('dddddddddddddddd');
+        // } elseif ($request->active == false) {
+        //     dd('eeeeeeeeeeeeeeeeeee');
+        // }
+
         $validator = Validator($request->all(), [
             'shipment_type' => 'required',
             'city' => 'required',
@@ -63,6 +70,7 @@ class ShippmentController extends Controller
             $shipment->receiver_name = $request->input('receiver_name');
             $shipment->receiver_phone = $request->input('receiver_phone');
             $shipment->user_id = $request->input('user_id');
+            $shipment->allow_open = $request->active;
             $shipment->price = $request->input('price');
             $shipment->package_details = $request->input('package_details');
             $shipment->address = $request->input('address');
@@ -121,9 +129,13 @@ class ShippmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        if ($request->active == 'true') {
+            dd('alloww');
+        } else {
+            dd('notalloww');
+        }
         $validator = Validator($request->all(), [
-            'receiver_phone' => 'numeric',
+            // 'receiver_phone' => 'numeric',
             'package' => 'max:150',
             'price' => 'numeric',
             'note' => 'max:150',
@@ -136,6 +148,7 @@ class ShippmentController extends Controller
             $shipment->business_referance = $request->input('business');
             $shipment->receiver_name = $request->input('receiver_name');
             $shipment->receiver_phone = $request->input('receiver_phone');
+            $shipment->allow_open = $request->active;
             $shipment->user_id = $request->input('user_id');
             $shipment->price = $request->input('price');
             $shipment->package_details = $request->input('package_details');
@@ -162,6 +175,7 @@ class ShippmentController extends Controller
     public function destroy($id)
     {
         $shippment = Shippment::findOrFail($id);
+        // if($shippment->status){}
         $isDeleted = $shippment->delete();
         return response()->json(
             ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],

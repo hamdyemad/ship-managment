@@ -525,7 +525,6 @@
 <script>
     $(document).ready(function(){
 
-
     // Close modal on button click
         $("#button12").click(function(){
         $("#exampleModal").modal('hide');

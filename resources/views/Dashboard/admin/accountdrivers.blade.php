@@ -45,9 +45,16 @@
 @endsection
 
 @section('content')
-
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        {{-- @foreach ($errors->all() as $error) --}}
+        <li>{{ $error }}</li>
+        {{-- @endforeach --}}
+    </ul>
+</div>
+@endif
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -59,7 +66,7 @@
                     @csrf
                     <div class="container">
                         <div class="row">
-                            <label for="from" class="col-form-label">seller</label>
+                            <label for="from" class="col-form-label">driver</label>
                             <div class="col-md-6">
                                 <select id="driver_id" name="driver_id" class="form-select ">
                                     <option></option>
@@ -545,6 +552,8 @@
             })
         });
     }
+
+
 
 </script>
 

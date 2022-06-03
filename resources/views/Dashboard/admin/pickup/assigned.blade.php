@@ -245,7 +245,7 @@
                 showConfirmButton: false,
                 timer: 1500
                 });
-
+            window.location.href = "/dashboard/assignedpickup";
         })
         .catch(function (error) {
             //4xx - 5xx
@@ -260,15 +260,6 @@
 
         });
     }
-// $(document).ready(function() {
-//     $("button").click(function(){
-//     var favorite = [];
-//     $.each($("input[name='address']:checked"), function(){
-//     favorite.push($(this).val());
-//     });
-//     alert("My favourite sports are: " + favorite.join(", "));
-//     });
-//     });
 
 </script>
 

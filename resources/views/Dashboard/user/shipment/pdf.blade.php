@@ -391,6 +391,7 @@
                                                             echo $generator->getBarcode($show->barcode, $generator::TYPE_CODE_128);
 
                                                              ?>
+                                                            {{$show->barcode}}
 
                                                         </div>
                                                         <br>

@@ -213,7 +213,12 @@
 
                 </div>
                 <!--end::city && area-->
-
+                <br>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="togBtn" value="false" name="disableYXLogo">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">{{__('site.allow_open')}}</label>
+                </div>
+                <br>
                 <div class="d-flex flex-stack fs-4 py-3">
                     <div class="fw-bolder rotate collapsible" data-bs-toggle="collapse" href="" role="button"
                         aria-expanded="" aria-controls="kt_user_view_details">
@@ -287,6 +292,7 @@
 
 @section('js')
 
+
 <script>
     //show city and his area in select tag
         $(document).ready(function(){
@@ -320,9 +326,16 @@
 
         //add shipment details
         function addshipment() {
+
+            $("#togBtn").on('change', function() {
+            if ($(this).is(':checked')) {
+            $(this).attr('value', 'true');
+            }
+            else {
+            $(this).attr('value', 'false');
+            }});
             axios.post('/dashboard/shipment', {
                 user_id:{{auth()->user()->id}},
-                // address_line: document.getElementById('address_line').value,
                 area: document.getElementById('area').value,
                 city: document.getElementById('city').value,
                 shipment_type: document.getElementById('shipment_type').value,
@@ -333,6 +346,7 @@
                 package:document.getElementById('package').value,
                 price:document.getElementById('price').value,
                 note:document.getElementById('note').value,
+                active:document.getElementById('togBtn').value,
             })
             .then(function (response) {
                 //2xx

@@ -46,15 +46,36 @@
 
 <div class="card mb-5 mb-xl-10">
     <!--begin::Card header-->
-    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
-        data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
+    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" aria-expanded="true"
+        aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
             <h3 class="fw-bolder m-0">{{__('site.pickup')}}</h3>
         </div>
         <!--end::Card title-->
+        {{-- //export link --}}
+        <div class="card-toolbar">
+            {{-- status dropdown --}}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{__('site.status')}}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <hr>
+                    <li><a class="dropdown-item" onclick="addshipment('pickedup',{{$pickup->id}})"><i
+                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;Picked up</a>
+                    </li>
+                    <hr>
+
+                </ul>
+            </div>
+
+        </div>
     </div>
     <!--begin::Card header-->
+
+
 
     <!--begin::Content-->
     <div id="kt_account_profile_details" class="collapse show">
@@ -202,7 +223,38 @@
 @section('js')
 
 <script>
+    // //update the status shipment details
+    function addshipment(statusofshipment,id) {
+        axios.put('/dashboard/pickup/'+id, {
+            status: statusofshipment,
+            // pickup_id: id,
+        })
+        .then(function (response) {
+            //2xx
+            console.log(response);
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: response.data.message,
+                showConfirmButton: false,
+                timer: 1500
+            });
+            // document.getElementById('kt_account_profile_details_form').reset();
 
+        })
+        .catch(function (error) {
+            //4xx - 5xx
+            console.log(error.response.data.message);
+                Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: error.response.data.message,
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+        });
+    }
 </script>
 
 @endsection

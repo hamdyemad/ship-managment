@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('receiver_name');
             $table->string('receiver_phone');
             $table->string('address');
+            $table->string('allow_open');
             $table->string('price');
             $table->string('package_details')->nullable();
             $table->string('note')->nullable();
@@ -29,9 +30,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('city_id')->constrained();
             $table->foreignId('area_id')->constrained();
-
-
-
+            $table->date('on_hold')->nullable();
             $table->timestamps();
         });
     }

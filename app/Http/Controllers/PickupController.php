@@ -21,8 +21,7 @@ class PickupController extends Controller
     public function index()
     {
 
-        $pickup = Pickup::all();
-
+        $pickup = Pickup::where('user_id', auth()->user()->id)->get();
         return view('Dashboard.user.pickup.index', ['pickup' => $pickup]);
     }
 
@@ -51,20 +50,21 @@ class PickupController extends Controller
 
         $validator = Validator($request->all(), [
             'name' => 'required',
-            'email' => 'required',
+            // 'email' => 'required',
             'phone' => 'required',
             'address' => 'required',
             'time' => 'required',
             'date' => 'required',
             'note' => 'max:150',
         ]);
-        // $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
+        $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
         if (!$validator->fails()) {
-            // $isSaved = '';
-            // foreach ($shipment as $shipment) {
-
-
-            //     if ($shipment->status == 'created') {
+            foreach ($shipment as $shipment) {
+                if ($shipment->status == 'created') {
+                    $shipment->status = 'requested';
+                    $updated = $shipment->save();
+                }
+            }
             $pickup = new Pickup();
             $pickup->name = $request->input('name');
             $pickup->status = 'requested';
@@ -74,15 +74,9 @@ class PickupController extends Controller
             $pickup->time = Carbon::parse($request->input('time'));
             $pickup->date = Carbon::parse($request->input('date'));
             $pickup->user_id = $request->input('user_id');
-            // $pickup->shippment_id = $shipment->id;
             $pickup->note = $request->input('note');
             $pickup->package = $request->input('package');
-            // $shipment->status = 'requested';
-            // $updated = $shipment->save();
             $isSaved = $pickup->save();
-            //     }
-            // }
-
 
             return response()->json(
                 [
@@ -105,7 +99,6 @@ class PickupController extends Controller
     {
 
         $pickups = Pickup::findOrFail($pickup->id);
-        // dd($pickup->address);
         return view('Dashboard.user.pickup.show', ['pickup' => $pickups]);
     }
 
@@ -129,7 +122,15 @@ class PickupController extends Controller
      */
     public function update(Request $request, Pickup $pickup)
     {
-        //
+        $pickup->status = 'pickedup';
+        $isSaved = $pickup->save();
+
+        return response()->json(
+            [
+                'message' => $isSaved ? 'Pick up delivered successfully' : 'delivered failed!'
+            ],
+            $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
     }
 
     /**

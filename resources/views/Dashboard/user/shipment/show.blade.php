@@ -77,6 +77,7 @@
             </div>
         </div>
 
+
     </div>
     <!--begin::Card header-->
 
@@ -87,7 +88,13 @@
             @csrf
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
-
+                @if ($shippment->on_hold != null)
+                <div class="row mb-6">
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{__('site.onhold')}}</label>
+                    <input type="date" class="form-control form-control-lg form-control-solid"
+                        value="{{$shippment->on_hold}}" name="" id="">
+                </div>
+                @endif
 
                 <!--begin::shipment && business-->
                 <div class="row mb-6">

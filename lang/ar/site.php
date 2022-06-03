@@ -93,7 +93,9 @@ return [
 
     'employee_list' => 'قائمة الموظفين',
     'add_employee' => 'اضافة موظف جديد',
-
+    'assign_pickup' => 'تعيين الشحنات',
+    'allow_open' => 'مسموح الفتح',
+    'onhold' => 'انتظار',
 
 
 

@@ -97,6 +97,12 @@ return [
     'add_employee' => 'Add Employee',
 
     'show' => 'Show',
+    'assign_pickup' => 'Assign Pickup',
+    'allow_open' => 'Allow Open',
+    'onhold' => 'On Hold',
+
+
+
 
 
 

@@ -171,7 +171,7 @@
                 </button> --}}
                 <!--begin::Add shipment-->
 
-                <a href="{{route('pickup.create')}}" class="btn btn-primary">
+                <a href="{{route('assignedpickup.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -180,7 +180,7 @@
                             <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->{{__('site.add_pickup')}}
+                    <!--end::Svg Icon-->{{__('site.assign_pickup')}}
                 </a>
                 <!--end::Add shipment-->
 
@@ -240,13 +240,12 @@
                     <!--end::Checkbox-->
 
                     <!--begin::User=-->
+
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$assigned->pickup->id}}"
-                                data-bs-toggle="modal" role="button">{{$assigned->pickup->id}}</a>
-
-
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data"
+                                href="{{route('pickup.show',$assigned->pickup->id)}}">{{$assigned->id}}</a>
                         </div>
                         <!--begin::User details-->
                     </td>
@@ -327,10 +326,10 @@
 
 @push('scripts')
 
-<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+{{-- <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script> --}}
 
 
 @endpush

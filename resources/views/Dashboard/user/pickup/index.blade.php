@@ -240,9 +240,10 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$pickup->id}}"
-                                data-bs-toggle="modal" role="button">{{$pickup->id}}</a>
-
+                            {{-- <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$pickup->id}}"
+                                data-bs-toggle="modal" role="button">{{$pickup->id}}</a> --}}
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data"
+                                href="{{route('pickup.show',$pickup->id)}}">{{$pickup->id}}</a>
 
                         </div>
                         <!--begin::User details-->
@@ -323,10 +324,10 @@
 
 @push('scripts')
 
-<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+{{-- <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script> --}}
 
 <script>
     // message to confirm delete

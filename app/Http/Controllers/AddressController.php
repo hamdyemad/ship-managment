@@ -47,7 +47,7 @@ class AddressController extends Controller
             'apartment' => 'required',
             'contact_name' => 'required',
             'contact_mobile' => 'required',
-            'contact_email' => 'required|email',
+            // 'contact_email' => 'email',
         ]);
 
         if (!$validator->fails()) {
