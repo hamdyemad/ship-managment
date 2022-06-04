@@ -7,7 +7,7 @@ return [
     'employee' => 'Employees',
     'index' => 'All Employee',
     'create' => 'Create',
-    // 'create_employess' => 'Add New Shipment ',
+    // 'create_employess' => 'Add New Shippment ',
     'name' => 'Name',
     'lastn' => 'Last Name',
     'gender' => 'Gender',
@@ -39,20 +39,20 @@ return [
     'all_city' => 'All City',
     'update' => 'Update',
     'user' => 'User',
-    'shipment' => 'Shipment',
+    'shipment' => 'Shippment',
     'business' => 'Business',
-    'shipment_type' => 'Shipment type',
+    'shipment_type' => 'Shippment type',
     'receiver' => 'Receiver Details',
     'package' => 'Package Details',
     'price' => ' Price',
     'note' => 'Note',
     'add' => 'Add',
-    'add_shipment' => 'Add Shipment',
+    'add_shipment' => 'Add Shippment',
     'add_employee' => 'Add Employee',
     'status' => 'Status',
     'address' => 'Address',
     'export' => 'Export',
-    'showshipment' => 'Shipment Details',
+    'showshipment' => 'Shippment Details',
     'edit' => 'Edit',
     'pickup' => 'Pick Up',
     'location' => 'Location',
@@ -100,6 +100,12 @@ return [
     'assign_pickup' => 'Assign Pickup',
     'allow_open' => 'Allow Open',
     'onhold' => 'On Hold',
+    'tracking' => 'Tracking',
+    'all-shippment' => 'All Shippments',
+    'all-pickup' => 'All Pickup',
+
+
+
 
 
 

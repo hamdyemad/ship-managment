@@ -271,7 +271,7 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-115px">{{__('site.id')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
                     <th class="min-w-125px">{{__('site.shippername')}}</th>
                     <th class="min-w-125px">{{__('site.shipperphone')}}</th>
@@ -279,10 +279,10 @@
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.city')}}</th>
                     <th class="min-w-125px">{{__('site.area')}}</th>
-                    <th class="min-w-125px">{{__('site.cash')}}</th>
-                    <th class="min-w-125px">{{__('site.area')}}</th>
-                    <th class="min-w-125px">{{__('site.cost')}}</th>
-                    <th class="min-w-125px">{{__('site.deliverycommission')}}</th>
+                    <th class="min-w-120px">{{__('site.cash')}}</th>
+                    <th class="min-w-120px">{{__('site.area')}}</th>
+                    <th class="min-w-120px">{{__('site.cost')}}</th>
+                    <th class="min-w-120px">{{__('site.deliverycommission')}}</th>
                     {{-- <th class="text-end min-w-100px">Actions</th> --}}
                 </tr>
                 <!--end::Table row-->
@@ -308,7 +308,7 @@
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
                             <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
-                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
+                                href="{{route('shipment.show',$accounts->shippment->id)}}">{{$accounts->id}}</a>
 
 
                         </div>
@@ -404,7 +404,7 @@
                             {{-- <a class="text-gray-800 text-hover-primary mb-1 view_data" id="" data-bs-toggle="modal"
                                 role="button"></a> --}}
                             <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
-                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
+                                href="{{route('pickup.show',$accounts->pickup->id)}}">{{$accounts->id}}</a>
 
                         </div>
                         <!--begin::User details-->
@@ -416,7 +416,6 @@
 
                     <td>--</td>
                     <td>--</td>
-
 
                     <td>{{$accounts->pickup->address->city->city}}</td>
 
@@ -502,10 +501,10 @@
 
 @push('scripts')
 
-<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+{{-- <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script> --}}
 
 <script>
     // message to confirm delete

@@ -13,6 +13,7 @@ use App\Models\Scheduledriver;
 use App\Models\ScheduleSeller;
 use App\Models\Shippment;
 use App\Models\Specialprice;
+use App\Models\Tracking;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -347,30 +348,34 @@ class Controller extends BaseController
     function changestatue(Request $request)
     {
 
-        $shipment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
+        $shippment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
         $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
-        $price = Specialprice::where('user_id', $shipment->user->id)->get();
+        $price = Specialprice::where('user_id', $shippment->user->id)->get();
 
-        $shipment->status = $request->status;
+        $shippment->status = $request->status;
+        $tracking = new Tracking();
+        $tracking->shippment_id = $shippment->id;
+        $tracking->status = $shippment->status;
+
 
         if ($request->status == 'delivered') {
 
             $accounts = new AccountSeller();
             $accounts->shippment_id = $delivery->shippment->id;
             $accounts->cash = $delivery->shippment->price;
-            $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
+            // $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
             //cost
-            // if ($price->isEmpty()) {
-            //     $accounts->cost = $delivery->shipment->price - $delivery->shipment->area->rate;
-            // } else {
-            //     foreach ($price as $val) {
-            //         if ($delivery->shipment->city->id == $val->city_id && $delivery->shipment->area->id == $val->area_id) {
-            //             $accounts->cost = $delivery->shipment->price - $val->special_price;
-            //         } else {
-            //             $accounts->cost = $delivery->shipment->price - $delivery->shipment->area->rate;
-            //         }
-            //     }
-            // }
+            if ($price->isEmpty()) {
+                $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
+            } else {
+                foreach ($price as $val) {
+                    if ($delivery->shippment->city->id == $val->city_id && $delivery->shippment->area->id == $val->area_id) {
+                        $accounts->cost = $delivery->shippment->price - $val->special_price;
+                    } else {
+                        $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
+                    }
+                }
+            }
             //end cost
             $accounts->delivery_commission = $delivery->driver->special_pickup;
             $accounts->save();
@@ -408,19 +413,19 @@ class Controller extends BaseController
         } elseif ($request->status == 'delivered' && $delivery->shippment->shippment_type == 'exchange') {
 
             $accounts = new AccountSeller();
-            $accounts->shippment_id = $shipment->id;
+            $accounts->shippment_id = $shippment->id;
             $accounts->cash = 0;
 
             if ($price->isEmpty()) {
-                $accounts->cost = 0 - $shipment->area->rate;
+                $accounts->cost = 0 - $shippment->area->rate;
             } else {
                 foreach ($price as $val) {
-                    if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
+                    if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
 
                         $accounts->cost = 0 - $val->special_price;
                     } else {
 
-                        $accounts->cost = 0 - $shipment->area->rate;
+                        $accounts->cost = 0 - $shippment->area->rate;
                     }
                 }
             }
@@ -467,19 +472,19 @@ class Controller extends BaseController
         } elseif ($request->status == 'rejected') {
 
             $accounts = new AccountSeller();
-            $accounts->shippment_id = $shipment->id;
+            $accounts->shippment_id = $shippment->id;
             $accounts->cash = 0;
 
             if ($price->isEmpty()) {
-                $accounts->cost = 0 - $shipment->area->rate;
+                $accounts->cost = 0 - $shippment->area->rate;
             } else {
                 foreach ($price as $val) {
-                    if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
+                    if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
 
                         $accounts->cost = 0 - $val->special_price;
                     } else {
 
-                        $accounts->cost = 0 - $shipment->area->rate;
+                        $accounts->cost = 0 - $shippment->area->rate;
                     }
                 }
             }
@@ -563,20 +568,20 @@ class Controller extends BaseController
             //     }
             // }
 
-        } elseif ($shipment->shippment_type == 'return_pickup') {
+        } elseif ($shippment->shippment_type == 'return_pickup') {
 
             $accounts = new AccountSeller();
-            $accounts->shippment_id = $shipment->id;
-            $accounts->cash = -$shipment->price;
+            $accounts->shippment_id = $shippment->id;
+            $accounts->cash = -$shippment->price;
 
             if ($price->isEmpty()) {
-                $accounts->cost = -$shipment->price - $shipment->area->rate;
+                $accounts->cost = -$shippment->price - $shippment->area->rate;
             } else {
                 foreach ($price as $val) {
-                    if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
-                        $accounts->cost = -$shipment->price - $val->special_price;
+                    if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
+                        $accounts->cost = -$shippment->price - $val->special_price;
                     } else {
-                        $accounts->cost = -$shipment->price - $shipment->area->rate;
+                        $accounts->cost = -$shippment->price - $shippment->area->rate;
                     }
                 }
             }
@@ -616,7 +621,8 @@ class Controller extends BaseController
 
 
         }
-        $isSaved = $shipment->save();
+        $Saved = $tracking->save();
+        $isSaved = $shippment->save();
         return response()->json(
             [
                 'message' => $isSaved ? 'Status was successfully' : 'change status failed!'
@@ -872,5 +878,10 @@ class Controller extends BaseController
     {
         $pickup = Pickup::all();
         return view('Dashboard.admin.pickup.index', ['pickup' => $pickup]);
+    }
+
+    function gettracking()
+    {
+        return view('Dashboard.user.shipment.tracking');
     }
 }

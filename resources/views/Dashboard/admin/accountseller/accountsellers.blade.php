@@ -263,16 +263,16 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-115px">{{__('site.id')}}</th>
                     <th class="min-w-125px">{{__('site.date')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.city')}}</th>
-                    <th class="min-w-125px">{{__('site.area')}}</th>
-                    <th class="min-w-125px">{{__('site.cash')}}</th>
-                    <th class="min-w-125px">{{__('site.area')}}</th>
-                    <th class="min-w-125px">{{__('site.cost')}}</th>
+                    <th class="min-w-120px">{{__('site.area')}}</th>
+                    <th class="min-w-120px">{{__('site.cash')}}</th>
+                    <th class="min-w-120px">{{__('site.area')}}</th>
+                    <th class="min-w-120px">{{__('site.cost')}}</th>
                     {{-- <th class="text-end min-w-100px">Actions</th> --}}
                 </tr>
                 <!--end::Table row-->
@@ -298,7 +298,7 @@
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
                             <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$shipment->id}}"
-                                data-bs-toggle="modal" role="button">{{$shipment->id}}</a>
+                                href="{{route('shipment.show',$shipment->shippment->id)}}">{{$shipment->id}}</a>
                             {{-- <a href="https://wa.me/{{$shipment->shippment->receiver_phone}}">
                                 <i class="fa fa-user"></i>
 
@@ -517,10 +517,10 @@
 
 @section('js')
 
-<script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+{{-- <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
+<script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script> --}}
 
 <script>
     $(document).ready(function(){

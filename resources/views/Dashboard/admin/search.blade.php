@@ -268,6 +268,7 @@
                     <th class="min-w-125px">{{__('site.type')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.address')}}</th>
+                    <th class="min-w-125px">Settled</th>
                     <th class="min-w-125px">{{__('site.onhold')}}</th>
                     <th class="min-w-125px">{{__('site.driver')}}</th>
                     <th class="min-w-125px">{{__('site.price')}}</th>
@@ -341,10 +342,14 @@
                     <td>
                         <div class="badge badge-light fw-bolder">{{$delivery->shippment->address}}</div>
                     </td>
-                    @if ($shipment->on_hold == null)
+                    <td>
+                        <div class="badge badge-light fw-bolder"><i class="bi bi-check-circle"
+                                style="color: rgb(68, 204, 68)"></i></div>
+                    </td>
+                    @if ($delivery->shippment->on_hold == null)
                     <td>--</td>
                     @else
-                    <td>{{$shipment->on_hold}}</td>
+                    <td>{{$delivery->shippment->on_hold}}</td>
                     @endif
 
                     <td>{{$delivery->driver->name}}</td>

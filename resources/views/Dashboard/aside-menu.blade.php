@@ -81,7 +81,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">{{__('site.shipment')}}</span>
+                            <span class="menu-title">{{__('site.all-shippment')}}</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -89,7 +89,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">{{__('site.pickup')}}</span>
+                            <span class="menu-title">{{__('site.all-pickup')}}</span>
                         </a>
                     </div>
                     <div class="menu-item">

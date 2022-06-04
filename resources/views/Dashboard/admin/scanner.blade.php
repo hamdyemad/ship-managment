@@ -1,10 +1,10 @@
 @extends('Dashboard.app')
 
-@section('title')
+@section('title','show')
 
 
 
-@section('page_name')
+@section('page_name','Show Shippment')
 
 
 @section('pages')
@@ -13,7 +13,8 @@
 
 @section('css')
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{{--
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
 @endsection
 
 @section('content')

@@ -67,8 +67,16 @@
         </div>
         <!--end::Card title-->
 
+
         {{-- //export link --}}
         <div class="card-toolbar">
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                <a href="{{route('tracking.show',$shippment->id)}}" class="btn btn-light-primary me-3">
+                    <i class="fa fa-truck"></i>
+                    {{__('site.tracking')}}
+                </a>
+            </div>&nbsp;
+            {{-- //print --}}
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                 <a href="{{route('print',$shippment->id)}}" class="btn btn-primary">
                     <i class="fa fa-print"></i>
@@ -76,7 +84,6 @@
                 </a>
             </div>
         </div>
-
 
     </div>
     <!--begin::Card header-->

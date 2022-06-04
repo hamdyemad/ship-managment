@@ -96,6 +96,9 @@ return [
     'assign_pickup' => 'تعيين الشحنات',
     'allow_open' => 'مسموح الفتح',
     'onhold' => 'انتظار',
+    'tracking' => 'تتبع الشحنة',
+    'all-shippment' => 'كل الشحنات',
+    'all-pickup' => 'كل الشحنات',
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Shippment;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Milon\Barcode\DNS1D;
@@ -41,12 +42,6 @@ class ShippmentController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->active);
-        // if ($request->active == true) {
-        //     dd('dddddddddddddddd');
-        // } elseif ($request->active == false) {
-        //     dd('eeeeeeeeeeeeeeeeeee');
-        // }
 
         $validator = Validator($request->all(), [
             'shipment_type' => 'required',
@@ -78,6 +73,10 @@ class ShippmentController extends Controller
             $shipment->status = 'created';
             $shipment->barcode = random_int(100000, 999999);
             $isSaved = $shipment->save();
+            $tracking = new Tracking();
+            $tracking->shippment_id = $shipment->id;
+            $tracking->status = $shipment->status;
+            $Saved = $tracking->save();
             return response()->json(
                 [
                     'message' => $isSaved ? 'Shipment created successfully' : 'Create failed!'

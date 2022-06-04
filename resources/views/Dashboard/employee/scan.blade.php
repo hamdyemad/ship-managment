@@ -1,10 +1,10 @@
 @extends('Dashboard.app')
 
-@section('title')
+@section('title','assign')
 
 
 
-@section('page_name')
+@section('page_name','assign shippments')
 
 
 @section('pages')
@@ -13,7 +13,8 @@
 
 @section('css')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{{--
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
 
 @endsection
 

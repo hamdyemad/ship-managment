@@ -9,6 +9,27 @@ class Shippment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'shippment_type',
+        'business_referance',
+        'receiver_name',
+        'receiver_phone',
+        'address',
+        'price',
+        'package_details',
+        'note',
+        'status',
+        'user_id',
+        'city_id',
+        'area_id',
+        'created_at',
+    ];
+
+    public function trackings()
+    {
+        return $this->hasMany(Tracking::class);
+    }
+
     public function accountseller()
     {
         return $this->hasOne(AccountSeller::class);
@@ -36,20 +57,4 @@ class Shippment extends Model
     {
         return $this->belongsTo(Area::class);
     }
-
-    protected $fillable = [
-        'shippment_type',
-        'business_referance',
-        'receiver_name',
-        'receiver_phone',
-        'address',
-        'price',
-        'package_details',
-        'note',
-        'status',
-        'user_id',
-        'city_id',
-        'area_id',
-        'created_at',
-    ];
 }

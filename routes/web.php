@@ -15,6 +15,7 @@ use App\Http\Controllers\ScheduledriverController;
 use App\Http\Controllers\ScheduleSellerController;
 use App\Http\Controllers\ShippmentController;
 use App\Http\Controllers\SpecialpriceController;
+use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -109,6 +110,7 @@ Route::group(
             Route::get('printdrivershipments', [Controller::class, 'print_driver_shipments'])->name('printdrivershipments');
 
             Route::resource('assignedpickup', AssignedpickupController::class);
+            Route::resource('tracking', TrackingController::class);
 
             /* ############################### end user ############################### */
         });
