@@ -58,6 +58,11 @@ class ShippmentController extends Controller
         $code = random_int(100000, 999999);
         if (!$validator->fails()) {
             $shipment = new Shippment();
+            if ($request->active == 1) {
+                $shipment->allow_open = 'true';
+            } elseif ($request->active == 0) {
+                $shipment->allow_open = 'false';
+            }
             $shipment->shippment_type = $request->input('shipment_type');
             $shipment->city_id = $request->input('city');
             $shipment->area_id = $request->input('area');
@@ -65,7 +70,6 @@ class ShippmentController extends Controller
             $shipment->receiver_name = $request->input('receiver_name');
             $shipment->receiver_phone = $request->input('receiver_phone');
             $shipment->user_id = $request->input('user_id');
-            $shipment->allow_open = $request->active;
             $shipment->price = $request->input('price');
             $shipment->package_details = $request->input('package_details');
             $shipment->address = $request->input('address');
@@ -112,7 +116,7 @@ class ShippmentController extends Controller
     {
         $city = City::all();
         $shipment = Shippment::findOrFail($id);
-        $type = ['forward', 'exchange', 'cash_collection'];
+        $type = ['forward', 'exchange', 'cash_collection', 'return_pickup'];
         return view(
             'Dashboard.user.shipment.edit',
             ['shipment' => $shipment, 'city' => $city, 'type' => $type]
@@ -128,11 +132,7 @@ class ShippmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->active == 'true') {
-            dd('alloww');
-        } else {
-            dd('notalloww');
-        }
+
         $validator = Validator($request->all(), [
             // 'receiver_phone' => 'numeric',
             'package' => 'max:150',
@@ -141,13 +141,18 @@ class ShippmentController extends Controller
         ]);
         if (!$validator->fails()) {
             $shipment = Shippment::findOrFail($id);
+            if ($request->active == 1) {
+                $shipment->allow_open = 'true';
+            } elseif ($request->active == 0) {
+                $shipment->allow_open = 'false';
+            }
             $shipment->shippment_type = $request->input('shipment_type');
             $shipment->city_id = $request->input('city');
             $shipment->area_id = $request->input('area');
             $shipment->business_referance = $request->input('business');
             $shipment->receiver_name = $request->input('receiver_name');
             $shipment->receiver_phone = $request->input('receiver_phone');
-            $shipment->allow_open = $request->active;
+            // $shipment->allow_open = $request->active;
             $shipment->user_id = $request->input('user_id');
             $shipment->price = $request->input('price');
             $shipment->package_details = $request->input('package_details');

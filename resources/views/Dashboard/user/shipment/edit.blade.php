@@ -334,14 +334,6 @@
 
         //add shipment details
         function addshipment() {
-            $("#togBtn").on('change', function() {
-                if ($(this).is(':checked')) {
-                 $(this).attr('value', 'true');
-                }
-                else {
-                 $(this).attr('value', 'false');
-            }});
-
             axios.put('/dashboard/shipment/{{$shipment->id}}', {
                 user_id:{{auth()->user()->id}},
                 area: document.getElementById('area').value,
@@ -354,7 +346,7 @@
                 package:document.getElementById('package').value,
                 price:document.getElementById('price').value,
                 note:document.getElementById('note').value,
-                active:document.getElementById('togBtn').value,
+                active:$("#togBtn").prop('checked') == true ? 1 : 0,
             })
             .then(function (response) {
                 //2xx

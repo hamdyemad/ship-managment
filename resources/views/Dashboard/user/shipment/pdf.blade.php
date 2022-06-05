@@ -167,7 +167,13 @@
                     </th>
 
 
-                    <th colspan="3" style="text-align: center;">Allow to open</th>
+                    <th colspan="3" style="text-align: center;">Allow to open <br>
+                        @if ($show->allow_open =='true')
+                        (yes)
+                        @else
+                        (NO)
+                        @endif
+                    </th>
 
                 </tr>
                 <tr>

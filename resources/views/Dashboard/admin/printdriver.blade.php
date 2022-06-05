@@ -136,29 +136,37 @@
                     <td>{{ $PDFReports->id }}</td>
                     {{-- <td>{{ $PDFReports->created_at }}</td> --}}
                     <td>{{ $PDFReports->status }}</td>
-                    <td>{{ $PDFReports->user->name }}</td>
-                    <td>{{ $PDFReports->user->phone}}</td>
+                    <td>{{ $PDFReports->shippment->user->name }}</td>
+                    <td>{{ $PDFReports->shippment->user->phone}}</td>
                     <td>{{ $PDFReports->receiver_name }}</td>
                     <td>{{ $PDFReports->receiver_phone }}</td>
-                    <td>{{ $PDFReports->city->city }}</td>
-                    <td>{{ $PDFReports->area->area }}</td>
-                    <td>{{ $PDFReports->accountseller->cash }}</td>
-                    @if($PDFReports->status == 'picked up')
+                    <td>{{ $PDFReports->shippment->city->city }}</td>
+                    <td>{{ $PDFReports->shippment->area->area }}</td>
+                    <td>{{ $PDFReports->cash }}</td>
+                    {{-- @if($PDFReports->status == 'picked up')
                     <td>0</td>
+                    @else --}}
+
+                    @if ($PDFReports->shippment->user->specialprices->isEmpty())
+                    <td>{{$PDFReports->shippment->area->rate}}</td>
                     @else
 
-                    @if($PDFReports->user->special_price != 0 && $PDFReports->city->id ==
-                    $PDFReports->user->city_id &&
-                    $PDFReports->area->id == $PDFReports->user->area_id)
+                    @foreach ($PDFReports->shippment->user->specialprices as $item)
 
-                    <td>{{$PDFReports->user->special_price}}</td>
+                    @if($PDFReports->shippment->city_id == $item->city_id &&
+                    $PDFReports->shippment->area->id == $item->area_id)
+
+                    <td>{{$item->special_price}}</td>
                     @else
-                    <td>{{$PDFReports->area->rate}}</td>
+                    <td>{{$PDFReports->shippment->area->rate}}</td>
                     @endif
 
+                    @endforeach
+
                     @endif
-                    <td>{{ $PDFReports->accountseller->cost }}</td>
-                    <td>{{ $PDFReports->accountseller->delivery_commission }}</td>
+
+                    <td>{{ $PDFReports->cost }}</td>
+                    <td>{{ $PDFReports->delivery_commission }}</td>
 
                 </tr>
                 @endif

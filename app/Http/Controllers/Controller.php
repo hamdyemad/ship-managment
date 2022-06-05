@@ -168,7 +168,8 @@ class Controller extends BaseController
             // }
 
             $show = AccountSeller::with('shippment', 'pickup')
-                ->where('pickup_id', '==', null)->where('shippment_id', '!=', null)
+                ->where('pickup_id', '==', null)->orWhereNull('pickup_id')
+                ->where('shippment_id', '!=', null)
                 ->where('created_at', '>=', $fromdate)
                 ->where('created_at', '<=', $todate)
                 ->whereRelation('shippment',  'user_id', $user_id_req)->get();
@@ -189,7 +190,7 @@ class Controller extends BaseController
                 'to' => $req->to,
                 'costs' => $total,
             ]);
-            dd($show);
+            // dd($show);
             return view('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
         } else {
             return redirect()->back()->withErrors(
