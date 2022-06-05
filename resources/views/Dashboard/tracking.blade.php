@@ -25,6 +25,137 @@
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     <link href="{{asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            /* color: #000; */
+            /* overflow-x: hidden; */
+            /* height: 100%; */
+            /* background-color: #8C9EFF; */
+            /* background-repeat: no-repeat; */
+        }
+
+        .card {
+            z-index: 0;
+            background-color: #ECEFF1;
+            /* padding-bottom: 20px;
+            margin-top: 90px;
+            margin-bottom: 90px;
+            border-radius: 10px; */
+        }
+
+        .top {
+            padding-top: 40px;
+            padding-left: 13% !important;
+            padding-right: 13% !important;
+        }
+
+        /*Icon progressbar*/
+        #progressbar {
+            margin-bottom: 30px;
+            overflow: hidden;
+            color: #455A64;
+            padding-left: 0px;
+            margin-top: 30px;
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 13px;
+            width: 25%;
+            float: left;
+            position: relative;
+            font-weight: 400;
+        }
+
+        #progressbar .step0:before {
+            font-family: FontAwesome;
+            content: "\f10c";
+            color: #fff;
+        }
+
+        #progressbar li:before {
+            width: 40px;
+            height: 40px;
+            line-height: 45px;
+            display: block;
+            font-size: 20px;
+            background: #C5CAE9;
+            border-radius: 50%;
+            margin: auto;
+            padding: 0px;
+        }
+
+        /*ProgressBar connectors*/
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 12px;
+            background: #C5CAE9;
+            position: absolute;
+            left: 0;
+            top: 16px;
+            z-index: -1;
+        }
+
+        #progressbar li:last-child:after {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            position: absolute;
+            left: -50%;
+        }
+
+        #progressbar li:nth-child(2):after,
+        #progressbar li:nth-child(3):after {
+            left: -50%;
+        }
+
+        #progressbar li:first-child:after {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            position: absolute;
+            left: 50%;
+        }
+
+        #progressbar li:last-child:after {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        #progressbar li:first-child:after {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        /*Color number of the step and the connector before it*/
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: #956af3;
+        }
+
+        #progressbar li.active:before {
+            font-family: FontAwesome;
+            content: "\f00c";
+        }
+
+        .icon {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .icon-content {
+            padding-bottom: 20px;
+        }
+
+        @media screen and (max-width: 992px) {
+            .icon-content {
+                width: 50%;
+            }
+        }
+    </style>
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
@@ -208,16 +339,17 @@
                 <div class="text-center mb-17">
                     <!--begin::Title-->
                     <h3 class="fs-2hx text-dark mb-5" id="how-it-works" data-kt-scroll-offset="{default: 100, lg: 150}">
-                        Add Your Tracking Number</h3>
+                        Your Tracking Number</h3>
+                    {{-- <h5>{{$data->shippment->barcode}}</h5> --}}
                     <!--end::Title-->
                     <!--begin::Text-->
                     <div class="fs-5 text-muted fw-bold">
-                        <form id="change_password_form" method="post" action="{{route('gettrackingnumber')}}">
+                        {{-- <form id="change_password_form">
                             @csrf
-                            <input type="text" id="tracking_number" name="tracking_number"
-                                class="form-control form-control-lg form-control-solid"><br>
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </form>
+                            <input type="text" id="tracking_number"
+                                class="form-control form-control-lg form-control-solid">
+                            <button type="button" onclick="addshipment()">add</button>
+                        </form> --}}
                     </div>
                     <!--end::Text-->
                 </div>
@@ -241,12 +373,10 @@
                             </div> --}}
 
 
-                            {{-- <div id="number1"></div> --}}
+
                             <div class="progress-track">
                                 <ul id="progressbar" id="ajax-modal">
 
-
-                                    @isset($data)
                                     @if (!$data->isEmpty())
                                     @foreach ($data as $tracking)
                                     <li class="active step0  text-center " id="step1">{{$tracking->status}} <br>
@@ -258,7 +388,6 @@
                                     <li class=" step0 text-center" id="step1">Shipped</li>
                                     <li class=" step0 text-center" id="step1">Delivered</li>
                                     @endif
-                                    @endisset
 
                                 </ul>
                             </div>
@@ -341,7 +470,7 @@
     </script>
     <!--begin::Javascript-->
     <!--begin::Global Javascript Bundle(used by all pages)-->
-    <script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"></script>
+    {{-- <script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"></script>
     <script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Page Vendors Javascript(used by this page)-->
@@ -350,29 +479,12 @@
     <!--end::Page Vendors Javascript-->
     <!--begin::Page Custom Javascript(used by this page)-->
     <script src="{{asset('assets/js/custom/landing.js')}}"></script>
-    <script src="{{asset('assets/js/custom/pages/company/pricing.js')}}"></script>
+    <script src="{{asset('assets/js/custom/pages/company/pricing.js')}}"></script> --}}
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-        function addshipment() {
-            axios.post('/dashboard/landing/tracking', {
-                tracking_number: document.getElementById('tracking_number').value,
-            })
-            .then(function (response) {
-                console.log(response);
-                $('#ajax-modal').modal('show');
-                $('#step1').val(data.status);
-                $('#step2').val(data.created_id);
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        }
-
-    </script>
 </body>
 <!--end::Body-->
 

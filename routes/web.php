@@ -32,6 +32,9 @@ use Illuminate\Support\Facades\Route;
 
 /* ############################### login ############################### */
 
+Route::view('/dashboard/landing', 'Dashboard.landing')->name('open.scan');
+Route::post('dashboard/landing/tracking', [Controller::class, 'gettrackingnumber'])->name('gettrackingnumber');
+
 Route::middleware('guest:web,admin,employee,driver')->group(function () {
     Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('dashboard.login');
     Route::post('login', [AuthController::class, 'login'])->name('login');
@@ -111,8 +114,6 @@ Route::group(
 
             Route::resource('assignedpickup', AssignedpickupController::class);
             Route::resource('tracking', TrackingController::class);
-
-            Route::view('/landing', 'Dashboard.landing')->name('open.scan');
 
             /* ############################### end user ############################### */
         });

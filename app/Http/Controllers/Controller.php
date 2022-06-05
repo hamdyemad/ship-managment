@@ -884,4 +884,11 @@ class Controller extends BaseController
     {
         return view('Dashboard.user.shipment.tracking');
     }
+
+    function gettrackingnumber(Request $request)
+    {
+        $data = Tracking::with('shippment')->whereRelation('shippment', 'barcode', $request->tracking_number)->get();
+        // dd($request->tracking_number);
+        return view('Dashboard.tracking', ['data' => $data]);
+    }
 }
