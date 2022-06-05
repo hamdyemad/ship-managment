@@ -112,6 +112,8 @@ Route::group(
             Route::resource('assignedpickup', AssignedpickupController::class);
             Route::resource('tracking', TrackingController::class);
 
+            Route::view('/landing', 'Dashboard.landing')->name('open.scan');
+
             /* ############################### end user ############################### */
         });
     }

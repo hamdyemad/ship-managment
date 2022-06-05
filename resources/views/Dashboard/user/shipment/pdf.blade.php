@@ -94,8 +94,13 @@
         ------------------------------------- */
         .main {
             background: #fff;
-            border: 1px solid #e9e9e9;
+            border: 3px solid #e9e9e9;
             border-radius: 3px;
+        }
+
+        #container_content2 {
+            border: 3px solid #e9e9e9;
+            /* width: 100%; */
         }
 
         .content-wrap {
@@ -114,206 +119,27 @@
         th,
         td {
             padding: 25px;
+            border: 1px solid;
         }
 
-        /* .footer {
-            width: 100%;
-            clear: both;
-            color: #999;
-            padding: 20px;
-        }
 
-        .footer a {
-            color: #999;
-        }
-
-        .footer p,
-        .footer a,
-        .footer unsubscribe,
-        .footer td {
-            font-size: 12px;
-        } */
-
-        /* -------------------------------------
-        TYPOGRAPHY
-        ------------------------------------- */
-        /* h1,
-        h2,
-        h3 {
-            font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-            color: #000;
-            margin: 40px 0 0;
-            line-height: 1.2;
-            font-weight: 400;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 500;
-        }
-
-        h2 {
-            font-size: 24px;
-        }
-
-        h3 {
-            font-size: 18px;
-        }
-
-        h4 {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        p,
-        ul,
-        ol {
-            margin-bottom: 10px;
-            font-weight: normal;
-        }
-
-        p li,
-        ul li,
-        ol li {
-            margin-left: 5px;
-            list-style-position: inside;
-        } */
-
-        /* -------------------------------------
-        LINKS & BUTTONS
-        ------------------------------------- */
-        /* a {
-            color: #1ab394;
-            text-decoration: underline;
-        } */
-
-        .btn-primary {
-            text-decoration: none;
-            color: #FFF;
-            background-color: #1ab394;
-            border: solid #1ab394;
-            border-width: 5px 10px;
-            line-height: 2;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            display: inline-block;
-            border-radius: 5px;
-            text-transform: capitalize;
-        }
-
-        /* -------------------------------------
-        OTHER STYLES THAT MIGHT BE USEFUL
-        ------------------------------------- */
-        .last {
-            margin-bottom: 0;
-        }
-
-        .first {
-            margin-top: 0;
-        }
 
         .aligncenter {
             text-align: center;
         }
 
-        .alignright {
-            text-align: right;
-        }
-
-        .alignleft {
-            text-align: left;
-        }
 
         .clear {
             clear: both;
         }
 
-        /* -------------------------------------
-        ALERTS
-        Change the class depending on warning email, good email or bad email
-        ------------------------------------- */
-        .alert {
-            font-size: 16px;
-            color: #fff;
-            font-weight: 500;
-            padding: 20px;
-            text-align: center;
-            border-radius: 3px 3px 0 0;
-        }
-
-        .alert a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-        }
-
-        .alert.alert-warning {
-            background: #f8ac59;
-        }
-
-        .alert.alert-bad {
-            background: #ed5565;
-        }
-
-        .alert.alert-good {
-            background: #1ab394;
-        }
-
-        /* -------------------------------------
-        INVOICE
-        Styles for the billing table
-        ------------------------------------- */
-        .invoice {
-            margin: 40px auto;
-            text-align: left;
-            width: 80%;
-        }
-
-        .invoice td {
-            padding: 5px 0;
-        }
-
-        .invoice .invoice-items {
-            width: 100%;
-        }
-
-        .invoice .invoice-items td {
-            border-top: #eee 1px solid;
-        }
-
-        .invoice .invoice-items .total td {
-            border-top: 2px solid #333;
-            border-bottom: 2px solid #333;
-            font-weight: 700;
-        }
+        /* table {
+            transform: rotate(-0.25turn);
+        } */
 
 
-        /* -------------------------------------
-        RESPONSIVE AND MOBILE FRIENDLY STYLES
-        ------------------------------------- */
         @media only screen and (max-width: 640px) {
 
-            h1,
-            h2,
-            h3,
-            h4 {
-                font-weight: 600 !important;
-                margin: 20px 0 5px !important;
-            }
-
-            h1 {
-                font-size: 22px !important;
-            }
-
-            h2 {
-                font-size: 18px !important;
-            }
-
-            h3 {
-                font-size: 16px !important;
-            }
 
             .container {
                 width: 100% !important;
@@ -324,9 +150,6 @@
                 padding: 10px !important;
             }
 
-            .invoice {
-                width: 100% !important;
-            }
         }
     </style>
 </head>
@@ -335,90 +158,74 @@
     <div class="text-center" style="padding:20px;">
         <input type="button" id="rep" value="Print" class="btn btn-info btn_print">
     </div>
-    <table class="body-wrap" id="container_content">
-        <tbody>
-            <tr>
-                <td></td>
-                <td class="container" width="600">
-                    <div class="content">
-                        <table class="main" width="100%" cellpadding="0" cellspacing="0">
-                            <tbody>
-                                <tr>
-                                    <td class="content-wrap aligncenter">
-                                        <table border="1" id="container_content2" class="main" width="100%"
-                                            cellpadding="0" cellspacing="0">
-                                            <tbody>
-                                                <tr>
-                                                    <th style="background-color: #D6EEEE;">city</th>
-                                                    <td style="width: 20%;text-align: center;">{{$show->city->city}}
-                                                    </td>
-                                                    <th colspan="3" style="background-color: #D6EEEE;">address</th>
+    <center>
+        <table id="container_content2" class="main" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <th colspan="2" style="text-align: center;"><img width="130px" src="{{asset('shippment-logo.png')}}"
+                            alt="">
+                    </th>
+
+
+                    <th colspan="3" style="text-align: center;">Allow to open</th>
+
+                </tr>
+                <tr>
+                    <th style="background-color: #D6EEEE;font-size: 19px;">city</th>
+                    <td style="width: 20%;text-align: center;font-size: 19px;">{{$show->city->city}}
+                    </td>
+                    <th colspan="3" style="background-color: #D6EEEE;font-size: 19px;text-align: center;">address</th>
 
 
 
-                                                </tr>
-                                                <tr>
-                                                    <th style="background-color: #D6EEEE;">area</th>
-                                                    <td style="text-align: center;">{{$show->area->area}}</td>
-                                                    <td colspan="3" style="text-align: center;">{{$show->address}}
-                                                    </td>
+                </tr>
+                <tr>
+                    <th style="background-color: #D6EEEE;font-size: 19px;">area</th>
+                    <td style="text-align: center;font-size: 19px;">{{$show->area->area}}</td>
+                    <td colspan="3" style="text-align: center;font-size: 19px;">{{$show->address}}
+                    </td>
 
-                                                </tr>
-                                                <tr>
-                                                    <th style="background-color: #D6EEEE;">name</th>
-                                                    <td colspan="2" style="text-align: center;">{{$show->receiver_name}}
-                                                    </td>
-                                                    <th style="background-color: #D6EEEE;text-align: center;">phone</th>
-                                                    <td style="text-align: center;">{{$show->receiver_phone}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th style="background-color: #D6EEEE;">shipper</th>
-                                                    <td style="text-align: center;">{{auth()->user()->name}}</td>
-                                                    <th style="background-color: #D6EEEE;">price</th>
-                                                    <td style="text-align: center;">{{$show->price}}</td>
-                                                    <th style="background-color: #D6EEEE;">cash</th>
+                </tr>
+                <tr>
+                    <th style="background-color: #D6EEEE;font-size: 19px;">name</th>
+                    <td colspan="2" style="text-align: center;font-size: 19px;">{{$show->receiver_name}}
+                    </td>
+                    <th style="background-color: #D6EEEE;text-align: center;font-size: 19px;">phone</th>
+                    <td style="text-align: center;font-size: 19px;">{{$show->receiver_phone}}</td>
+                </tr>
+                <tr>
+                    <th style="background-color: #D6EEEE;font-size: 19px;">shipper</th>
+                    <td style="text-align: center;font-size: 19px;">{{auth()->user()->name}}</td>
+                    <th style="background-color: #D6EEEE;font-size: 19px;">price</th>
+                    <td style="text-align: center;font-size: 19px;">{{$show->price}}</td>
+                    <th style="background-color: #D6EEEE;font-size: 19px;">{{$show->shippment_type}}</th>
 
-                                                </tr>
-                                                <tr>
+                </tr>
+                <tr>
 
-                                                    <td colspan="3">{{$show->note}}</td>
-                                                    <td colspan="2">
-                                                        <br>
-                                                        <div>
+                    <td colspan="3">{{$show->note}}</td>
+                    <td colspan="2">
+                        <br>
+                        <div style="margin-left:55px!important;">
 
-                                                            <?php
-                                                            $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-                                                            echo $generator->getBarcode($show->barcode, $generator::TYPE_CODE_128);
+                            <?php
+                                                                $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+                                                                echo $generator->getBarcode($show->barcode, $generator::TYPE_CODE_128);
 
-                                                             ?>
-                                                            {{$show->barcode}}
+                                                                 ?>
 
-                                                        </div>
-                                                        <br>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {{-- <div class="footer">
-                            <table width="100%">
-                                <tbody>
-                                    <tr>
-                                        <td class="aligncenter content-block">Questions? Email <a
-                                                href="mailto:">support@company.inc</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> --}}
-                    </div>
-                </td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+                            <p style="margin-left:48px!important;">{{$show->barcode}}</p>
+
+                        </div>
+                        <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </center>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function($)
@@ -427,7 +234,7 @@
     		$(document).on('click', '.btn_print', function(event)
     		{
     			event.preventDefault();
-
+                // $('#container_content2').css( {'transform': 'rotate(-0.25turn)'});
     			var element = document.getElementById('container_content2');
 
     			var opt =

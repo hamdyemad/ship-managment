@@ -56,7 +56,8 @@
                     <span class="menu-title">Scan</span>
                     <span class="menu-arrow d-lg-none"></span>
                 </span>
-                <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
+                <div id="navmenu"
+                    class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
                     <div class="menu-item">
                         <a class="menu-link py-3" href="{{route('open.scan')}}" title="using scan to show shippment"
                             data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
@@ -112,7 +113,8 @@
                     <span class="menu-title">ADD</span>
                     <span class="menu-arrow d-lg-none"></span>
                 </span>
-                <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
+                <div id="navmenu2"
+                    class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
                     <div class="menu-item">
                         <a class="menu-link py-3" href="{{route('shipment.create')}}" title="Add new shippment"
                             data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"

@@ -54,6 +54,16 @@ License: For each use you must have a valid license purchased only from above li
             margin-right: 26.3ch;
         }
 
+        #navmenu {
+            position: absolute !important;
+            margin-left: -166px !important;
+        }
+
+        #navmenu2 {
+            position: absolute !important;
+            margin-left: -171px !important;
+        }
+
         #example_paginate {
             margin-right: 33ch;
         }
