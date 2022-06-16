@@ -45,6 +45,7 @@ class ShippmentController extends Controller
 
         $validator = Validator($request->all(), [
             'shipment_type' => 'required',
+            'shipper' => 'required',
             'city' => 'required',
             'area' => 'required',
             'business' => 'required',
@@ -64,6 +65,7 @@ class ShippmentController extends Controller
                 $shipment->allow_open = 'false';
             }
             $shipment->shippment_type = $request->input('shipment_type');
+            $shipment->shipper = $request->input('shipper');
             $shipment->city_id = $request->input('city');
             $shipment->area_id = $request->input('area');
             $shipment->business_referance = $request->input('business');
@@ -147,6 +149,7 @@ class ShippmentController extends Controller
                 $shipment->allow_open = 'false';
             }
             $shipment->shippment_type = $request->input('shipment_type');
+            $shipment->shipper = $request->input('shipper');
             $shipment->city_id = $request->input('city');
             $shipment->area_id = $request->input('area');
             $shipment->business_referance = $request->input('business');
@@ -180,10 +183,17 @@ class ShippmentController extends Controller
     {
         $shippment = Shippment::findOrFail($id);
         // if($shippment->status){}
-        $isDeleted = $shippment->delete();
-        return response()->json(
-            ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
-            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
-        );
+        if ($shippment->status == "created") {
+            $isDeleted = $shippment->delete();
+            return response()->json(
+                ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],
+                $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json(
+                ['message' => 'Delete failed!'],
+                // $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 }

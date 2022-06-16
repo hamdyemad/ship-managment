@@ -11,8 +11,8 @@ class Specialprice extends Model
 
     protected $fillable = [
         'id',
-        'user_id ',
-        'city_id ',
+        'user_id',
+        'city_id',
         'area_id',
         'special_price',
     ];

@@ -39,7 +39,7 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'address_line' => 'required|string|min:3|max:150',
+            'address_line' => 'required|min:3|max:150',
             'city' => 'required',
             'area' => 'required',
             'building' => 'required',
@@ -47,26 +47,24 @@ class AddressController extends Controller
             'apartment' => 'required',
             'contact_name' => 'required',
             'contact_mobile' => 'required',
-            // 'contact_email' => 'email',
         ]);
 
         if (!$validator->fails()) {
             $address = new Address();
             $address->address_line = $request->input('address_line');
             $address->city_id = $request->input('city');
-            // $address->password = Hash::make(12345);
             $address->area_id = $request->input('area');
+            $address->user_id = $request->input('user_id');
             $address->building = $request->input('building');
             $address->floor = $request->input('floor');
             $address->apartment = $request->input('apartment');
-            $address->user_id = $request->input('user_id');
             $address->contact_name = $request->input('contact_name');
             $address->contact_phone = $request->input('contact_mobile');
             $address->contact_email = $request->input('contact_email');
             $isSaved = $address->save();
             return response()->json(
                 [
-                    'message' => $isSaved ? 'User created successfully' : 'Create failed!'
+                    'message' => $isSaved ? 'address created successfully' : 'Create failed!'
                 ],
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             );

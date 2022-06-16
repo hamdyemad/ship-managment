@@ -15,6 +15,7 @@ class ScheduleSeller extends Model
     }
 
     protected $fillable = [
+        'id',
         'user_id',
         'from',
         'to',

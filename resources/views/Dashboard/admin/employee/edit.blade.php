@@ -95,7 +95,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.email')}}</label>
-                                <input type="email" id="email" name="email" value="{{$employee->email}}"
+                                <input type="text" id="email" name="email" value="{{$employee->email}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
                             <!--end::email-->

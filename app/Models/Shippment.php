@@ -10,6 +10,7 @@ class Shippment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'shippment_type',
         'business_referance',
         'receiver_name',
@@ -23,6 +24,11 @@ class Shippment extends Model
         'city_id',
         'area_id',
         'created_at',
+        'allow_open',
+        'barcode',
+        'on_hold',
+
+
     ];
 
     public function trackings()

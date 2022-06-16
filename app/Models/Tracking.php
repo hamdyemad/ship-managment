@@ -10,6 +10,7 @@ class Tracking extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'shippment_id',
         'status',
         'created_at',

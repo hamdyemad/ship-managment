@@ -43,17 +43,15 @@ class UserController extends Controller
     {
         $validator = Validator($request->all(), [
 
-            'name' => 'required | max:100',
-            'email' => 'required|email',
-            'phone' => 'required |numeric',
+            'name' => 'required | max:50',
+            'email' => 'string |required| min:2 |max:20',
+            'phone' => 'required |numeric|digits:11',
             'password' => 'required',
-            // 'special_price' => 'numeric|min:2',
-
         ]);
         if (!$validator->fails()) {
             $user = new User();
             $user->name = $request->input('name');
-            $user->email = $request->input('email');
+            $user->email = $request->input('email') . '@shipexeg.com';
             $user->phone = $request->input('phone');
             if (!$request->input('special_pickup')) {
                 $user->special_pickup = 10;
@@ -107,9 +105,9 @@ class UserController extends Controller
     {
 
         $validator = Validator($request->all(), [
-            'name' => ' max:100',
-            'email' => 'email',
-            'phone' => 'numeric',
+            'name' => ' max:50',
+            'email' => 'string | min:2 |max:20',
+            'phone' => 'numeric |digits:11',
             'special_pickup' => 'numeric',
 
 
@@ -118,7 +116,7 @@ class UserController extends Controller
         if (!$validator->fails()) {
 
             $user->name = $request->input('name');
-            $user->email = $request->input('email');
+            $user->email = $request->input('email') . '@shipexeg.com';
             $user->phone = $request->input('phone');
             $user->password = Hash::make($request->input('password'));
             $user->special_pickup = $request->input('special_pickup');

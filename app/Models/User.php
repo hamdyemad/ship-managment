@@ -19,28 +19,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-    public function shipments()
-    {
-        // return $this->morphToMany(Shippment::class, 'taggable');
-        return $this->hasMany(Shippment::class);
-    }
-
-    public function pickups()
-    {
-        return $this->hasMany(Pickup::class);
-    }
-
-    public function ScheduleSellers()
-    {
-        return $this->hasMany(ScheduleSeller::class);
-    }
-
-    public function specialprices()
-    {
-        return $this->hasMany(Specialprice::class);
-    }
-
-
     protected $fillable = [
         'id',
         'name',
@@ -66,4 +44,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function shipments()
+    {
+        return $this->hasMany(Shippment::class);
+    }
+
+    public function pickups()
+    {
+        return $this->hasMany(Pickup::class);
+    }
+
+    public function ScheduleSellers()
+    {
+        return $this->hasMany(ScheduleSeller::class);
+    }
+
+    public function specialprices()
+    {
+        return $this->hasMany(Specialprice::class);
+    }
 }

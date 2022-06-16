@@ -99,6 +99,10 @@ return [
     'tracking' => 'تتبع الشحنة',
     'all-shippment' => 'كل الشحنات',
     'all-pickup' => 'كل الشحنات',
+    'shipper-name' => 'اسم البائع',
+    'traching' => 'رقم تتبع',
+
+
 
 
 

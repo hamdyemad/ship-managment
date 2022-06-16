@@ -39,20 +39,17 @@ class DriverController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'name' => 'required | max:100',
-            'email' => 'required|email',
-            'phone' => 'required |numeric',
+            'name' => 'required | max:50',
+            'email' => 'required|string | min:2 |max:20',
+            'phone' => 'required |numeric|digits:11',
             'password' => 'required',
             'password_confirmation' => 'required',
-            // 'special_pickup' => 'numeric',
-
-
 
         ]);
         if (!$validator->fails()) {
             $driver = new Driver();
             $driver->name = $request->input('name');
-            $driver->email = $request->input('email');
+            $driver->email = $request->input('email') . '@shipexeg.com';
             $driver->phone = $request->input('phone');
             if (!$request->input('special_pickup')) {
                 $driver->special_pickup = 10;
@@ -106,9 +103,9 @@ class DriverController extends Controller
     public function update(Request $request, Driver $driver)
     {
         $validator = Validator($request->all(), [
-            'name' => ' max:100',
-            'email' => 'email',
-            'phone' => 'numeric',
+            'name' => ' max:50',
+            'email' => 'string',
+            'phone' => 'numeric|digits:11',
             'special_pickup' => 'numeric',
 
 
@@ -118,7 +115,7 @@ class DriverController extends Controller
 
 
             $driver->name = $request->input('name');
-            $driver->email = $request->input('email');
+            $driver->email = $request->input('email') . '@shipexeg.com';
             $driver->phone = $request->input('phone');
             $driver->password = Hash::make($request->input('password'));
             $driver->special_pickup = $request->input('special_pickup');

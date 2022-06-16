@@ -66,11 +66,16 @@ Route::group(
             Route::resource('user', UserController::class);
             Route::resource('specialprice', SpecialpriceController::class);
 
-            Route::get('select/city/{id}', [Controller::class, 'specialprice_city'])->name('special.price');
-
             Route::resource('address', AddressController::class);
             Route::resource('shipment', ShippmentController::class);
             Route::resource('pickup', PickupController::class);
+            Route::resource('account', AccountSellerController::class);
+            Route::resource('ScheduleSeller', ScheduleSellerController::class);
+            Route::resource('assignedpickup', AssignedpickupController::class);
+            Route::resource('tracking', TrackingController::class);
+            Route::resource('Scheduledriver', ScheduledriverController::class);
+
+            Route::get('select/city/{id}', [Controller::class, 'specialprice_city'])->name('special.price');
             //print shipment pdf
             Route::get('/downloadPDF/{id}', [Controller::class, 'download'])->name('print');
             Route::post('ViewPages', [Controller::class, 'index1'])->name('pdf');
@@ -87,12 +92,6 @@ Route::group(
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
-
-            Route::resource('account', AccountSellerController::class);
-
-            Route::resource('ScheduleSeller', ScheduleSellerController::class);
-
-            Route::resource('Scheduledriver', ScheduledriverController::class);
 
             Route::get('accountdriver', [Controller::class, 'getaccounts'])->name('shipments_drivers');
 
@@ -112,8 +111,7 @@ Route::group(
             /* print the shippments for driver using admin */
             Route::get('printdrivershipments', [Controller::class, 'print_driver_shipments'])->name('printdrivershipments');
 
-            Route::resource('assignedpickup', AssignedpickupController::class);
-            Route::resource('tracking', TrackingController::class);
+
 
             /* ############################### end user ############################### */
         });

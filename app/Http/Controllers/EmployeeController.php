@@ -40,9 +40,9 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator($request->all(), [
-            'name' => 'required | max:100',
-            'email' => 'required|email',
-            'phone' => 'required |numeric',
+            'name' => 'required | max:50',
+            'email' => 'required|string | min:2 |max:20',
+            'phone' => 'required |numeric|digits:11',
             'password' => 'required',
             'password_confirmation' => 'required',
 
@@ -50,7 +50,7 @@ class EmployeeController extends Controller
         if (!$validator->fails()) {
             $employee = new Employee();
             $employee->name = $request->input('name');
-            $employee->email = $request->input('email');
+            $employee->email = $request->input('email') . '@shipexeg.com';
             $employee->phone = $request->input('phone');
             $employee->password = Hash::make($request->input('password'));
             $isSaved = $employee->save();
@@ -98,9 +98,9 @@ class EmployeeController extends Controller
     public function update(Request $request, Employee $employee)
     {
         $validator = Validator($request->all(), [
-            'name' => ' max:100',
-            'email' => 'email',
-            'phone' => 'numeric',
+            'name' => ' max:50',
+            'email' => 'string',
+            'phone' => 'numeric|digits:11',
 
         ]);
 
@@ -108,7 +108,7 @@ class EmployeeController extends Controller
 
 
             $employee->name = $request->input('name');
-            $employee->email = $request->input('email');
+            $employee->email = $request->input('email') . '@shipexeg.com';
             $employee->phone = $request->input('phone');
             $employee->password = Hash::make($request->input('password'));
             $isSaved = $employee->save();

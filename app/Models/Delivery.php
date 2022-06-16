@@ -10,7 +10,8 @@ class Delivery extends Model
     use HasFactory;
 
     protected $fillable = [
-        'driver_id', 'shippment_id'
+        'id',
+        'driver_id', 'shippment_id',
     ];
 
     public function driver()

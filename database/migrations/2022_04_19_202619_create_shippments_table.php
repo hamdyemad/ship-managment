@@ -18,6 +18,7 @@ return new class extends Migration
             // $table->string('address_line');
             $table->string('shippment_type');
             $table->string('business_referance');
+            $table->string('shipper');
             $table->string('receiver_name');
             $table->string('receiver_phone');
             $table->string('address');

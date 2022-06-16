@@ -103,6 +103,10 @@ return [
     'tracking' => 'Tracking',
     'all-shippment' => 'All Shippments',
     'all-pickup' => 'All Pickup',
+    'shipper-name' => 'Shipper Name',
+    'traching' => 'Traching number',
+
+
 
 
 

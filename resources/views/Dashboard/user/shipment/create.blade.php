@@ -74,6 +74,19 @@
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
 
+                <!--begin::shipper-->
+                <div class="row mb-12">
+                    <!--begin::Col-->
+                    <div class="col-lg-12 fv-row">
+                        <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipper-name')}}</label>
+
+                        <input type="text" id="shipper" name="shipper"
+                            class="form-control form-control-lg form-control-solid">
+
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::shipper-->
 
                 <!--begin::shipment && business-->
                 <div class="row mb-6">
@@ -215,7 +228,8 @@
                 <!--end::city && area-->
                 <br>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="togBtn" value="false" name="disableYXLogo">
+                    <input class="form-check-input" type="checkbox" id="togBtn" value="false" name="disableYXLogo"
+                        checked>
                     <label class="form-check-label" for="flexSwitchCheckDefault">{{__('site.allow_open')}}</label>
                 </div>
                 <br>
@@ -324,27 +338,15 @@
 
         });
 
-        // $("#togBtn").on('change', function() {
-        //     if ($(this).is(':checked')) {
-        //         $(this).attr('value', 'true');
-        //     }
-        //     else {
-        //      $(this).attr('value', 'false');
-        //     }
-        // });
 
         //add shipment details
         function addshipment() {
-            var status='';
-            // $("#togBtn").on('change', function() {
-                var status = $("#togBtn").prop('checked') == true ? 1 : 0;
-
-            // });
             axios.post('/dashboard/shipment', {
                 user_id:{{auth()->user()->id}},
                 area: document.getElementById('area').value,
                 city: document.getElementById('city').value,
                 shipment_type: document.getElementById('shipment_type').value,
+                shipper: document.getElementById('shipper').value,
                 business: document.getElementById('business').value,
                 receiver_name: document.getElementById('receiver_name').value,
                 receiver_phone: document.getElementById('receiver_phone').value,

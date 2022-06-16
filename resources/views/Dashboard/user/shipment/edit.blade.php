@@ -75,6 +75,20 @@
             <div class="card-body border-top p-9">
 
 
+                <!--begin::shipper-->
+                <div class="row mb-12">
+                    <!--begin::Col-->
+                    <div class="col-lg-12 fv-row">
+                        <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipper-name')}}</label>
+
+                        <input type="text" id="shipper" name="shipper" value="{{ $shipment->shipper}}"
+                            class="form-control form-control-lg form-control-solid">
+
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::shipper-->
+
                 <!--begin::shipment && business-->
                 <div class="row mb-6">
 
@@ -339,6 +353,7 @@
                 area: document.getElementById('area').value,
                 city: document.getElementById('city').value,
                 shipment_type: document.getElementById('shipment_type').value,
+                shipper: document.getElementById('shipper').value,
                 business: document.getElementById('business').value,
                 receiver_name: document.getElementById('receiver_name').value,
                 receiver_phone: document.getElementById('receiver_phone').value,
