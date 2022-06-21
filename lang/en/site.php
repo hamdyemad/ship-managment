@@ -105,6 +105,8 @@ return [
     'all-pickup' => 'All Pickup',
     'shipper-name' => 'Shipper Name',
     'traching' => 'Traching number',
+    'add_address' => 'Add Address',
+
 
 
 

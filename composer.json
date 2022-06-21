@@ -12,9 +12,11 @@
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "maatwebsite/excel": "^3.1",
         "mcamara/laravel-localization": "^1.7",
         "milon/barcode": "^9.0",
-        "picqer/php-barcode-generator": "^2.2"
+        "picqer/php-barcode-generator": "^2.2",
+        "psr/simple-cache": "1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

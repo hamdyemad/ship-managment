@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\City;
 use App\Models\Pickup;
 use App\Models\Shippment;
 use Illuminate\Http\Request;
@@ -34,8 +35,9 @@ class PickupController extends Controller
     {
         $address = Address::where('user_id', auth()->user()->id)->get();
         $shipment = Shippment::where('status', 'created')->count();
+        $city = City::all();
 
-        return view('Dashboard.user.pickup.create', ['address' => $address, 'shipment' => $shipment]);
+        return view('Dashboard.user.pickup.create', ['address' => $address, 'shipment' => $shipment, 'city' => $city]);
     }
 
     /**

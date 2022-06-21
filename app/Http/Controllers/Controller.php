@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ShippmentsExport;
 use App\Models\AccountSeller;
 use App\Models\Address;
 use App\Models\Area;
@@ -24,6 +25,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Milon\Barcode\PDF417;
 use PDF;
 
@@ -34,7 +36,6 @@ class Controller extends BaseController
 
     function index()
     {
-
         $city = City::all();
         return view('Dashboard.user.settings', ['city' => $city]);
     }
@@ -105,6 +106,8 @@ class Controller extends BaseController
         $from = $req->input('from');
         $to   = $req->input('to');
         $pickup = [];
+        // array_push($pickup, $from);
+        // array_push($pickup, $to);
         $shippment = [];
         $validator = Validator($req->all(), [
             'from' => 'required',
@@ -113,23 +116,27 @@ class Controller extends BaseController
 
         if (!$validator->fails()) {
 
-            $driver = driver::where('id', auth()->user()->id)->first();
-            $delivery = Delivery::where('driver_id', $driver->id)->get();
-            foreach ($delivery as $val) {
-                if ($val->shippment_id == null && $val->pickup_id != null) {
-                    array_push($pickup, $val->pickup_id);
-                } elseif ($val->pickup_id == null && $val->shippment_id != null) {
-                    array_push($shippment, $val->shippment_id);
-                }
-            }
-            $show = AccountSeller::where(function ($query) use ($shippment) {
-                $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
-            })->where(function ($query) use ($pickup) {
-                $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
-            })->where('created_at', '>=', $from)
+            // $driver = driver::where('id', auth()->user()->id)->first();
+            // $delivery = Delivery::where('driver_id', $driver->id)->get();
+            // foreach ($delivery as $val) {
+            //     if ($val->shippment_id == null && $val->pickup_id != null) {
+            //         array_push($pickup, $val->pickup_id);
+            //     } elseif ($val->pickup_id == null && $val->shippment_id != null) {
+            //         array_push($shippment, $val->shippment_id);
+            //     }
+            // }
+            // $show = AccountSeller::where(function ($query) use ($shippment) {
+            //     $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
+            // })->where(function ($query) use ($pickup) {
+            //     $query->whereIn('pickup_id', $pickup)->orWhereNull('pickup_id');
+            // })->where('created_at', '>=', $from)
+            //     ->where('created_at', '<=', $to)->get();
+            $show = Shippment::where('id', auth()->user()->id)
+                ->where('created_at', '>=', $from)
                 ->where('created_at', '<=', $to)->get();
 
-            return view('Dashboard.user.shipment.printtable', ['show' => $show]);
+
+            return view('Dashboard.user.shipment.execlshippment', ['show' => $show, 'from' => $from, 'to' => $to]);
         } else {
             return redirect()->back()->withErrors(
                 ['withErrors' => 'error in form'],
@@ -288,6 +295,12 @@ class Controller extends BaseController
         return view('Dashboard.employee.scan', ['drivers' => $drivers]);
     }
 
+    // show page to scan shippment and change status
+    function changeShippmentStatus()
+    {
+        return view('Dashboard.employee.changeshippment');
+    }
+
     // get shipment after do scan using employee and add driver
     function getshipmentscan2(Request $request)
     {
@@ -342,6 +355,31 @@ class Controller extends BaseController
                 'message' => $isSaved ? 'Shippment assigned successfully' : 'assigned failed!'
             ],
             $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
+    }
+
+    // get shipment after do scan using employee and change status
+    function getshipmentscan3(Request $request)
+    {
+        $barcodes = array();
+
+        foreach ($request->arr as $key => $value) {
+
+            $barcodes[$key] = $value;
+        }
+
+        $shippment = Shippment::whereIn('barcode', $barcodes)->get();
+
+        foreach ($shippment as  $value) {
+            $value->status = $request->status;
+            $update = $value->save();
+        }
+
+        return response()->json(
+            [
+                'message' => $update ? 'Shippment changes successfully' : 'change failed!'
+            ],
+            $update ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
         );
     }
 
@@ -891,5 +929,36 @@ class Controller extends BaseController
         $data = Tracking::with('shippment')->whereRelation('shippment', 'barcode', $request->tracking_number)->get();
         // dd($request->tracking_number);
         return view('Dashboard.tracking', ['data' => $data]);
+    }
+
+    function getCity()
+    {
+        $city = City::all();
+        return view('Dashboard.user.address', ['city' => $city]);
+    }
+
+    function exportShippment(Request $request)
+    {
+
+        $startDate = $request->from;
+        $endDate = $request->to;
+        // dd($request->to);
+        // $show = Shippment::where('id', auth()->user()->id)
+        //     ->where('created_at', '>=', $request->from)
+        //     ->where('created_at', '<=', $request->to)->get();
+        // dd($show);
+        // $city = City::all();
+        // return view('Dashboard.user.address', ['city' => $city]);
+        // $export = new ShippmentsExport();
+        // $export->setQuery($show);
+        // $export = new ShippmentsExport();
+        // $export->setQuery($show);
+        $date = date('Y-m-d H:i:s');
+        return Excel::download(new ShippmentsExport($startDate, $endDate), 'shippment_' . $date . '.xlsx');
+    }
+
+    function actions()
+    {
+        dd(auth()->user()->actions);
     }
 }

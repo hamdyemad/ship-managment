@@ -108,7 +108,7 @@
 
 
 
-        {{-- //export link --}}
+        {{-- //status --}}
         <div class="card-toolbar">
             {{-- status dropdown --}}
             <div class="dropdown">

@@ -101,6 +101,8 @@ return [
     'all-pickup' => 'كل الشحنات',
     'shipper-name' => 'اسم البائع',
     'traching' => 'رقم تتبع',
+    'add_address' => 'اضافة عنوان',
+
 
 
 

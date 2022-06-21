@@ -62,6 +62,9 @@ Route::group(
 
             Route::view('/scan', 'Dashboard.admin.scanner')->name('open.scan');
             Route::get('/scan/shippments', [Controller::class, 'getdrivers'])->name('employee.scan');
+            Route::get('/scan/shippments/status', [Controller::class, 'changeShippmentStatus'])->name('employee.shippment');
+            Route::get('/actions', [Controller::class, 'actions'])->name('actions');
+
             /* ############################### user ############################### */
             Route::resource('user', UserController::class);
             Route::resource('specialprice', SpecialpriceController::class);
@@ -92,6 +95,8 @@ Route::group(
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
+            Route::post('/employee/scan/shippments', [Controller::class, 'getshipmentscan3'])->name('scan3');
+
 
             Route::get('accountdriver', [Controller::class, 'getaccounts'])->name('shipments_drivers');
 
@@ -110,6 +115,10 @@ Route::group(
 
             /* print the shippments for driver using admin */
             Route::get('printdrivershipments', [Controller::class, 'print_driver_shipments'])->name('printdrivershipments');
+
+            Route::get('address', [Controller::class, 'getCity'])->name('getCity');
+            Route::get('export', [Controller::class, 'exportShippment'])->name('export_shippment');
+
 
 
 

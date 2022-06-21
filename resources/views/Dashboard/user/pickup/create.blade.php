@@ -54,14 +54,26 @@
 
 @section('content')
 
+
+
 <div class="card mb-5 mb-xl-10">
     <!--begin::Card header-->
-    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
-        data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
+    <div class="card-header border-0 cursor-pointer" role="button" data-bs-target="#kt_account_profile_details"
+        aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
             <h3 class="fw-bolder m-0">{{__('site.pickup')}}</h3>
         </div>
+
+        <div class="card-title m-0">
+            <a href="{{route('getCity')}}" class="btn btn-light-primary me-3" target="_blank">
+                <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+                <span class="svg-icon svg-icon-2">
+                </span>
+                <!--end::Svg Icon-->Add Address
+            </a>
+        </div>
+
         <!--end::Card title-->
     </div>
     <!--begin::Card header-->
@@ -252,7 +264,7 @@
 
         });
 
-        //add shipment details
+    //add shipment details
         function addshipment() {
             axios.post('/dashboard/pickup', {
                 user_id:{{auth()->user()->id}},
@@ -292,6 +304,8 @@
 
             });
         }
+
+
 </script>
 
 @endsection

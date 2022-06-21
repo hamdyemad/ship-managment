@@ -2,8 +2,6 @@
 
 @section('title','assign')
 
-
-
 @section('page_name','assign shippments')
 
 
