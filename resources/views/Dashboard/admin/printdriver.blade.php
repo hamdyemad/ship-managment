@@ -1,104 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('Dashboard.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+@section('title',__('site.accountdriver'))
 
+@section('page_name',__('site.accountdriver'))
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+@section('pages')
+
+@endsection
+
+@section('css')
 
 
-    <script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script>
-    <title>Document</title>
-    <style>
-        /* -------------------------------------
-        GLOBAL
-        A very basic CSS reset
-        ------------------------------------- */
-        @page {
-            font-family: 'DINNextLTArabic-Medium';
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
 
-        * {
-            font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-        }
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bulma.min.css">
 
-        body {
-            -webkit-font-smoothing: antialiased;
-            -webkit-text-size-adjust: none;
-            width: 100% !important;
-            height: 100%;
-            line-height: 1.6;
-        }
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bulma.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-        table,
-        td,
-        th {
-            border: 0px solid #ddd;
-            text-align: left;
-        }
+<style>
+    div.dataTables_wrapper {
+        /* width: 800px; */
+        margin: 0 auto;
+    }
+</style>
+@endsection
 
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
+@section('content')
 
-        body {
-            background-color: #f6f6f6;
-        }
+<div class="card">
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        h5 {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        h3 {
-            font-size: 22px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .header {
-            background-color: #cdcdcd
-        }
-
-        .footer {
-            background-color: #cdcdcd
-        }
-    </style>
-</head>
-
-<body>
-    <div class="text-center" style="padding:20px;">
-        <input type="button" id="rep" value="Print" class="btn btn-info btn_print">
-    </div>
-    <div id="printpdf">
-        <h3>
-            تسوية السائقين
-        </h3>
-
-
-        <h5> name : {{$driver->name}}</h5>
-        {{-- <h5> id : {{$driver->id}}</h5> --}}
-        <h5> mobile : {{$driver->phone}}</h5>
-
-        <table>
-            <thead class="header">
+    <div class="card-body pt-0">
+        <br>
+        <!--begin::Table-->
+        <table id="example" class="table is-striped" style="width:100%">
+            <thead>
                 <tr>
                     <th>id</th>
-                    {{-- <th>date</th> --}}
                     <th>status</th>
                     <th>sh.name</th>
                     <th>sh.phone</th>
@@ -110,10 +49,9 @@
                     <th>area rate</th>
                     <th>cost</th>
                     <th>DE.commission</th>
-
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-gray-600 fw-bold">
                 @foreach ($show as $PDFReports)
                 @if ($PDFReports->shippment_id==null)
                 <tr>
@@ -157,8 +95,8 @@
                     $PDFReports->shippment->area->id == $item->area_id)
 
                     <td>{{$item->special_price}}</td>
-                    @else
-                    <td>{{$PDFReports->shippment->area->rate}}</td>
+                    {{-- @else
+                    <td>{{$PDFReports->shippment->area->rate}}</td> --}}
                     @endif
 
                     @endforeach
@@ -182,51 +120,45 @@
                     <th>{{$totaldrivercommission}}</th>
                 </tr>
             </tfoot>
-        </table>
 
+
+        </table>
+        <!--end::Table-->
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+</div>
 
-    <script type="text/javascript">
-        $(document).ready(function($)
-    	{
+@endsection
 
-    		$(document).on('click', '.btn_print', function(event)
-    		{
-    			event.preventDefault();
-
-    			//credit : https://ekoopmans.github.io/html2pdf.js
-
-    			var element = document.getElementById('printpdf');
-
-    			//easy
-    			//html2pdf().from(element).save();
-
-    			//custom file name
-    			//html2pdf().set({filename: 'code_with_mark_'+js.AutoCode()+'.pdf'}).from(element).save();
-
-
-    			//more custom settings
-    			var opt =
-    			{
-    			  margin:      0.1,
-    			  filename:     'pageContent_'+js.AutoCode()+'.pdf',
-    			  image:        { type: 'jpeg', quality: 0.98 },
-    			  html2canvas:  { scale: 2 },
-    			  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    			};
-
-    			// New Promise-based usage:
-    			html2pdf().set(opt).from(element).save();
-
-
-    		});
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bulma.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bulma.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
 
 
-    	});
-    </script>
-</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+            var table = $('#example').DataTable( {
+            lengthChange: false,
+            scrollX: true,
+            buttons: [  'excel', 'pdf', 'print' ]
+        } );
 
-</html>
+        // Insert at the top left of the table
+        table.buttons().container()
+        .appendTo( $('div.column.is-half', table.table().container()).eq(0) );
+    } );
+
+
+</script>
+
+@endpush

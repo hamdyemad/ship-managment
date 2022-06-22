@@ -852,9 +852,9 @@ class Controller extends BaseController
             //     ->whereRelation('shippment', 'created_at', '>=', $from)
             //     ->whereRelation('shippment', 'created_at', '<=', $to)->get();
 
-            $show = AccountSeller::with('shippment', 'pickup')
-                ->where('created_at', '>=', $from)
-                ->where('created_at', '<=', $to)->get();
+            // $show = AccountSeller::with('shippment', 'pickup')
+            //     ->where('created_at', '>=', $from)
+            //     ->where('created_at', '<=', $to)->get();
             // dd($show);
             // $show = AccountSeller::where(function ($query) use ($shippment) {
             //     $query->whereIn('shippment_id', $shippment)->orWhereNull('shippment_id');
@@ -863,7 +863,12 @@ class Controller extends BaseController
             // })->where('created_at', '>=', $from)
             //     ->where('created_at', '<=', $to)->get();
 
-            return view('Dashboard.admin.printshippments', compact('show'));
+            // return view('Dashboard.admin.printshippments', compact('show'));
+
+            $show = Shippment::with('city', 'area', 'user')
+                ->where('created_at', '>=', $from)
+                ->where('created_at', '<=', $to)->get();
+            return view('Dashboard.user.shipment.execlshippment', ['show' => $show]);
         } else {
             return redirect()->back()->withErrors(
                 ['withErrors' => 'error in form'],
@@ -894,7 +899,7 @@ class Controller extends BaseController
 
     function specialprice_city($id)
     {
-        $prices = Specialprice::with('user', 'city', 'area')->get();
+        $prices = Specialprice::with('user', 'city', 'area')->where('user_id', $id)->get();
         // dd($prices);
         $user_id = $id;
         $city = City::all();

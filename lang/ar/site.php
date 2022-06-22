@@ -102,6 +102,8 @@ return [
     'shipper-name' => 'اسم البائع',
     'traching' => 'رقم تتبع',
     'add_address' => 'اضافة عنوان',
+    'created_at' => 'تاريخ الانشاء',
+
 
 
 

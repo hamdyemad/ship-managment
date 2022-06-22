@@ -1,8 +1,8 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.seller'))
+@section('title',__('site.shipment'))
 
-@section('page_name',__('site.seller'))
+@section('page_name',__('site.shipment'))
 
 @section('pages')
 
@@ -19,9 +19,10 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
+        <a href="" class="text-muted text-hover-primary">{{__('site.seller')}}</a>
     </li>
     <!--end::Item-->
+
 
 </ul>
 
@@ -32,7 +33,6 @@
 @endsection
 
 @section('content')
-
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -115,7 +115,6 @@
     </div>
 </div>
 
-
 <!--begin::Card-->
 <div class="card">
     <!--begin::Card header-->
@@ -146,7 +145,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                 <!--begin::Filter-->
-                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -157,9 +156,9 @@
                         </svg>
                     </span>
                     <!--end::Svg Icon-->Filter
-                </button>
+                </button> --}}
                 <!--begin::Menu 1-->
-                <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+                {{-- <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
                     <!--begin::Header-->
                     <div class="px-7 py-5">
                         <div class="fs-5 text-dark fw-bolder">Filter Options</div>
@@ -178,6 +177,13 @@
                                 data-kt-user-table-filter="status" data-hide-search="true">
                                 <option></option>
                                 <option value="created">created</option>
+                                <option value="receiver at hub">receiver at hub</option>
+                                <option value="shipped">shipped</option>
+                                <option value="delivered">delivered</option>
+                                <option value="onhold">on hold</option>
+                                <option value="no_answer">no_answer</option>
+                                <option value="rejected">rejected</option>
+                                <option value="rejected_fees_faid">rejected fees faid</option>
 
                             </select>
                         </div>
@@ -194,9 +200,19 @@
 
                     </div>
                     <!--end::Content-->
-                </div>
+                </div> --}}
                 <!--end::Menu 1-->
                 <!--end::Filter-->
+
+                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                    data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    data-bs-whatever="@mdo">
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+                    <span class="svg-icon svg-icon-2">
+                    </span>
+                    <!--end::Svg Icon-->Export
+                </button> --}}
+                <!--begin::Add shipment-->
 
                 <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
@@ -206,9 +222,8 @@
                     </span>
                     <!--end::Svg Icon-->select city
                 </button>
-                <!--begin::Add shipment-->
 
-                {{-- <a href="{{route('user.create')}}" class="btn btn-primary">
+                {{-- <a href="{{route('shipment.create')}}" class="btn btn-primary">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -217,7 +232,7 @@
                             <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
                         </svg>
                     </span>
-                    <!--end::Svg Icon-->{{__('site.add_seller')}}
+                    <!--end::Svg Icon-->{{__('site.add_shipment')}}
                 </a> --}}
                 <!--end::Add shipment-->
 
@@ -251,11 +266,11 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    {{-- <th class="min-w-125px">{{__('site.id')}}</th> --}}
+                    <th class="min-w-125px">{{__('site.id')}}</th>
                     <th class="min-w-125px">{{__('site.city')}}</th>
                     <th class="min-w-125px">{{__('site.area')}}</th>
                     <th class="min-w-125px">{{__('site.price')}}</th>
-                    {{-- <th class="min-w-125px">{{__('site.permission')}}</th> --}}
+                    <th class="min-w-125px">{{__('site.created_at')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -276,30 +291,31 @@
                     <!--end::Checkbox-->
 
                     <!--begin::User=-->
-                    {{-- <td class="d-flex align-items-center">
+                    {{-- <td><a href="{{route('shipment.show',$shipment->id)}}"
+                            class="menu-link px-3">{{$shipment->id}}</a>
+                    </td> --}}
+                    <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$user->id}}"
-                                data-bs-toggle="modal" role="button">{{$user->id}}</a>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$prices->id}}"
+                                data-bs-toggle="modal" role="button">{{$prices->id}}</a>
 
 
                         </div>
                         <!--begin::User details-->
-                    </td> --}}
-
+                    </td>
+                    <!--end::User=-->
 
                     <td>{{$prices->city->city}}</td>
                     <td>{{$prices->area->area}}</td>
+
+
                     <td>{{$prices->special_price}}</td>
-
-                    {{-- <td>{{$user->phone}}</td> --}}
-
-                    {{-- <td>
-                        <div class="badge badge-light fw-bolder">{{$user->email}}</div>
-                    </td>
+                    <td>{{$prices->created_at}}</td>
 
 
-                    <td>USer</td> --}}
+
+
 
                     <!--begin::Action=-->
                     <td class="text-end">
@@ -321,12 +337,10 @@
                             data-kt-menu="true">
                             <!--begin::Menu item-->
                             {{-- <div class="menu-item px-3">
-                                <a href="{{route('special.price',$prices->user->id)}}" class="menu-link px-3">select
-                                    city</a>
-                            </div> --}}
-                            {{-- <div class="menu-item px-3">
-                                <a href="{{route('user.edit',$prices->id)}}"
-                                    class="menu-link px-3">{{__('site.edit')}}</a>
+                                <a href="{{route('shipment.show',$prices->id)}}" class="menu-link px-3">show</a>
+                            </div>
+                            <div class="menu-item px-3">
+                                <a href="{{route('shipment.edit',$prices->id)}}" class="menu-link px-3">Edit</a>
                             </div> --}}
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
@@ -345,9 +359,7 @@
 
                 @endforeach
 
-
             </tbody>
-
             <!--end::Table body-->
         </table>
         <!--end::Table-->
@@ -358,7 +370,7 @@
 
 @endsection
 
-@section('js')
+@push('scripts')
 
 {{-- <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
@@ -477,5 +489,4 @@
 
 </script>
 
-
-@endsection
+@endpush

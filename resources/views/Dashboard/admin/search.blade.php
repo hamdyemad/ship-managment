@@ -216,12 +216,7 @@
                     </span>
                     <!--end::Svg Icon-->Export
                 </button>
-                <a href="{{route('export_shippment')}}" class="btn btn-light-primary me-3">
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                    <span class="svg-icon svg-icon-2">
-                    </span>
-                    <!--end::Svg Icon-->Export2
-                </a>
+
                 <!--begin::Add shipment-->
 
                 <a href="{{route('shipment.create')}}" class="btn btn-primary">

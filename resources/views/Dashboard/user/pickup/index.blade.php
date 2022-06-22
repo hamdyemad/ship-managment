@@ -106,7 +106,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                 <!--begin::Filter-->
-                {{-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -117,7 +117,7 @@
                         </svg>
                     </span>
                     <!--end::Svg Icon-->Filter
-                </button> --}}
+                </button>
                 <!--begin::Menu 1-->
                 <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
                     <!--begin::Header-->
@@ -137,7 +137,9 @@
                                 data-placeholder="Select option" data-allow-clear="true"
                                 data-kt-user-table-filter="status" data-hide-search="true">
                                 <option></option>
-                                <option value="created">created</option>
+                                <option value="requested">requested</option>
+                                <option value="processing">processing</option>
+                                <option value="pickedup">pickuped up</option>
 
                             </select>
                         </div>
