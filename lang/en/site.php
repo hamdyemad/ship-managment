@@ -108,6 +108,8 @@ return [
     'add_address' => 'Add Address',
     'created_at' => 'Created_At',
     'addfileshippment' => 'Add File Shippment',
+    'file_shipment' => 'File Shippment',
+
 
 
 

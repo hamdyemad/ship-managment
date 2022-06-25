@@ -79,31 +79,67 @@
             })
 </script>
 @endif
-<!--begin::Card-->
-<div class="card">
-    <!--begin::Card body-->
-    <div class="card-body pt-0">
-        <form action="{{route('import.Shippment')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div class="row mb-6">
-                <div class="col-lg-12">
-                    <label for="formFileDisabled"
-                        class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.addfileshippment')}}</label>
-                    <input class="form-control form-control-lg form-control-solid" type="file" name="file"
-                        id="formFileDisabled" />
+<div class="card mb-5 mb-xl-10">
+    <!--begin::Card header-->
+    <div class="card-header border-0 cursor-pointer" role="button" data-bs-target="#kt_account_profile_details"
+        aria-expanded="true" aria-controls="kt_account_profile_details">
+        <!--begin::Card title-->
+        <div class="card-title m-0">
+            <h3 class="fw-bolder m-0">{{__('site.shipment')}}</h3>
+        </div>
+        <!--end::Card title-->
+        <div class="card-toolbar">
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                <a href="{{asset('assets/Shippments.xlsx')}}" class="btn btn-primary" download>
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                    <span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
+                                transform="rotate(-90 11.364 20.364)" fill="black" />
+                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->{{__('site.file_shipment')}}
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--begin::Card header-->
 
+    <!--begin::Content-->
+    <div id="kt_account_profile_details" class="collapse show">
+        <!--begin::Form-->
+
+        <form id="kt_account_profile_details_form" class="form" action="{{route('import.Shippment')}}" method="post"
+            enctype="multipart/form-data">
+            @csrf
+            <!--begin::Card body-->
+            <div class="card-body border-top p-9">
+                <div class="row mb-6">
+                    <div class="col-lg-12">
+                        <label for="formFileDisabled"
+                            class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.addfileshippment')}}</label>
+                        <input class="form-control form-control-lg form-control-solid" type="file" name="file"
+                            id="formFileDisabled" />
+
+                    </div>
                 </div>
             </div>
+
+            <!--end::Card body-->
+
+            <!--begin::Actions-->
             <div class="card-footer d-flex justify-content-end py-6 px-9">
                 <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">
                     {{__('site.add')}}
                 </button>
             </div>
+            <!--end::Actions-->
         </form>
+        <!--end::Form-->
     </div>
-    <!--end::Card body-->
+    <!--end::Content-->
 </div>
-<!--end::Card-->
 
 @endsection
 

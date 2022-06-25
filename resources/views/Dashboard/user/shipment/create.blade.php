@@ -56,13 +56,28 @@
 
 <div class="card mb-5 mb-xl-10">
     <!--begin::Card header-->
-    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
-        data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
+    <div class="card-header border-0 cursor-pointer" role="button" data-bs-target="#kt_account_profile_details"
+        aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
             <h3 class="fw-bolder m-0">{{__('site.shipment')}}</h3>
         </div>
         <!--end::Card title-->
+        <div class="card-toolbar">
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                <a href="{{route('view.import')}}" class="btn btn-primary">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                    <span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
+                                transform="rotate(-90 11.364 20.364)" fill="black" />
+                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->{{__('site.add_shipment')}}
+                </a>
+            </div>
+        </div>
     </div>
     <!--begin::Card header-->
 

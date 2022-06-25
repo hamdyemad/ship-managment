@@ -104,6 +104,8 @@ return [
     'add_address' => 'اضافة عنوان',
     'created_at' => 'تاريخ الانشاء',
     'addfileshippment' => 'اضافة ملف الشحنات',
+    'file_shipment' => 'ملف الشحنات',
+
 
 
 
