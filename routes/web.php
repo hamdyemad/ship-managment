@@ -119,6 +119,10 @@ Route::group(
             Route::get('address', [Controller::class, 'getCity'])->name('getCity');
             Route::get('export', [Controller::class, 'exportShippment'])->name('export_shippment');
 
+            // import shippment
+            Route::get('import', [Controller::class, 'viewimport'])->name('view.import');
+            Route::post('import', [Controller::class, 'importShippment'])->name('import.Shippment');
+
 
 
 

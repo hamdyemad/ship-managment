@@ -167,6 +167,8 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
 
+
+
         /*
          * Package Service Providers...
          */
@@ -180,7 +182,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         // Barryvdh\DomPDF\ServiceProvider::class,
-        Meneses\LaravelMpdf\LaravelMpdfServiceProvider::class
+        Meneses\LaravelMpdf\LaravelMpdfServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
 
     ],

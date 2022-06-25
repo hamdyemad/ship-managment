@@ -107,6 +107,8 @@ return [
     'traching' => 'Traching number',
     'add_address' => 'Add Address',
     'created_at' => 'Created_At',
+    'addfileshippment' => 'Add File Shippment',
+
 
 
 

@@ -9,9 +9,7 @@ class City extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
-        'city',
-        'rate',
+        'id', 'city', 'rate',
     ];
 
     //city has many areas

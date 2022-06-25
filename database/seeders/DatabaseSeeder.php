@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             'phone' => '999999999',
             'password' => Hash::make(12345),
             'special_pickup' => '10',
+            
+
 
 
         ]);

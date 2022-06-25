@@ -134,7 +134,7 @@
                     </li>
 
                     <li><a class="dropdown-item" onclick="addshipment('no_answer',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;No Answer</a>
+                                class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
                     </li>
                     <hr>
                     <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i

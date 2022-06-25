@@ -19,7 +19,7 @@ class ShippmentController extends Controller
      */
     public function index()
     {
-        $shipment = Shippment::where('user_id', auth()->user()->id)->get();
+        $shipment = Shippment::where('user_id', auth()->user()->id)->paginate(100);
         return view('Dashboard.user.shipment.index1', ['shipment' => $shipment]);
     }
 

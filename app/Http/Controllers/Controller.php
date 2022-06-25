@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ShippmentsExport;
+use App\Imports\ShippmentImport;
 use App\Models\AccountSeller;
 use App\Models\Address;
 use App\Models\Area;
@@ -947,23 +948,36 @@ class Controller extends BaseController
 
         $startDate = $request->from;
         $endDate = $request->to;
-        // dd($request->to);
-        // $show = Shippment::where('id', auth()->user()->id)
-        //     ->where('created_at', '>=', $request->from)
-        //     ->where('created_at', '<=', $request->to)->get();
-        // dd($show);
-        // $city = City::all();
-        // return view('Dashboard.user.address', ['city' => $city]);
-        // $export = new ShippmentsExport();
-        // $export->setQuery($show);
-        // $export = new ShippmentsExport();
-        // $export->setQuery($show);
+
         $date = date('Y-m-d H:i:s');
         return Excel::download(new ShippmentsExport($startDate, $endDate), 'shippment_' . $date . '.xlsx');
     }
 
-    function actions()
+    //import data
+    function viewimport()
     {
-        dd(auth()->user()->actions);
+        return view('Dashboard.admin.importpage');
+    }
+
+    function importShippment(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file')->path();
+        $import = new ShippmentImport;
+        $import->import($file);
+
+        // Excel::import(new ShippmentImport, $path);
+
+        return redirect()->back();
+
+
+        // return redirect()->back()->withErrors(
+        //     [
+        //         'withErrors' =>  'Error ! Check The File'
+        //     ],
+        // );
     }
 }

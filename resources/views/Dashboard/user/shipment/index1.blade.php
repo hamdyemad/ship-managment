@@ -137,7 +137,7 @@
                                 data-placeholder="Select option" data-allow-clear="true"
                                 data-kt-user-table-filter="status" data-hide-search="true">
                                 <option></option>
-                                <option value="created">created</option>
+                                <option value="created"> created</option>
                                 <option value="receiver at hub">receiver at hub</option>
                                 <option value="shipped">shipped</option>
                                 <option value="delivered">delivered</option>
@@ -218,10 +218,10 @@
                                 data-kt-check-target="#kt_table_users .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-125px">{{__('site.traching')}}</th>
                     <th class="min-w-125px">{{__('site.user')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
-                    <th class="min-w-125px">{{__('site.traching')}}</th>
+                    {{-- <th class="min-w-125px">{{__('site.traching')}}</th> --}}
                     <th class="min-w-125px">{{__('site.print')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.address')}}</th>
@@ -247,7 +247,8 @@
                     <!--end::Checkbox-->
 
                     <!--begin::User=-->
-                    <td><a href="{{route('shipment.show',$shipment->id)}}" class="menu-link px-3">{{$shipment->id}}</a>
+                    <td><a href="{{route('shipment.show',$shipment->id)}}"
+                            class="menu-link px-3">{{$shipment->barcode}}</a>
                     </td>
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
@@ -267,8 +268,50 @@
                     </td>
                     <!--end::User=-->
 
-                    <td>{{$shipment->status}}</td>
-                    <td>{{$shipment->barcode}}</td>
+
+                    @if ($shipment->status == 'receiver at hub')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #94c1e2;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'shipped')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #7bc1f3;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'delivered')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #52ec7b;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'OnHold')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #b9bc7f;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'no_answer')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #bec35f;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'rejected')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #ee83a5;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'rejected_fees_faid')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #f16060;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @elseif($shipment->status == 'created')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #b2cd94;width: 80%;text-align: center">
+                            {{$shipment->status}}</div>
+                    </td>
+                    @endif
+
+                    {{-- <td>{{$shipment->barcode}}</td> --}}
                     <td>
                         {{-- <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}

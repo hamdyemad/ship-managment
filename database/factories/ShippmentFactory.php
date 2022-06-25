@@ -18,6 +18,8 @@ class ShippmentFactory extends Factory
     {
         return [
             'shippment_type' => 'forward',
+            'shipper' => 'ali',
+            'allow_open' => 'true',
             'business_referance' => $this->faker->name(),
             'receiver_name' => $this->faker->name(),
             'receiver_phone' => $this->faker->phoneNumber(),
@@ -30,6 +32,8 @@ class ShippmentFactory extends Factory
             'user_id' => '1',
             'city_id' => '2',
             'area_id' => '1',
+
+
         ];
     }
 }

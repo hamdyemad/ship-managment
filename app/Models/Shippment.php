@@ -10,9 +10,7 @@ class Shippment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
-        'shippment_type',
-        'business_referance',
+        'id', 'shippment_type', 'business_referance', 'shipper',
         'receiver_name',
         'receiver_phone',
         'address',
@@ -40,10 +38,12 @@ class Shippment extends Model
     {
         return $this->hasOne(AccountSeller::class);
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function pickup()
     {
         return $this->hasOne(Pickup::class);
