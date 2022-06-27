@@ -210,7 +210,7 @@
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.email')}}</th>
-                    <th class="min-w-125px">{{__('site.permission')}}</th>
+                    <th class="min-w-125px">{{__('site.role')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -251,8 +251,7 @@
                         <div class="badge badge-light fw-bolder">{{$user->email}}</div>
                     </td>
 
-
-                    <td>USer</td>
+                    <td>{{$user->roles[0]->name}}</td>
 
                     <!--begin::Action=-->
                     <td class="text-end">

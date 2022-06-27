@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -30,7 +31,8 @@ class UserController extends Controller
     public function create()
     {
         $city = City::all();
-        return view('Dashboard.admin.seller.create', ['city' => $city]);
+        $roles = Role::where('guard_name', '=', 'web')->get();
+        return view('Dashboard.admin.seller.create', ['city' => $city, 'roles' => $roles]);
     }
 
     /**
@@ -47,6 +49,7 @@ class UserController extends Controller
             'email' => 'string |required| min:2 |max:20',
             'phone' => 'required |numeric|digits:11',
             'password' => 'required',
+            'role_id' => 'required|numeric|exists:roles,id',
         ]);
         if (!$validator->fails()) {
             $user = new User();
@@ -61,6 +64,9 @@ class UserController extends Controller
 
             $user->password = Hash::make($request->input('password'));
             $isSaved = $user->save();
+            if ($isSaved) {
+                $user->syncRoles(Role::findById($request->input('role_id'), 'web'));
+            }
             return response()->json(
                 [
                     'message' => $isSaved ? 'User created successfully' : 'Create failed!'
@@ -91,7 +97,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('Dashboard.admin.seller.edit', ['user' => $user]);
+        $roles = Role::where('guard_name', '=', 'web')->get();
+        return view('Dashboard.admin.seller.edit', ['user' => $user, 'roles' => $roles]);
     }
 
     /**
@@ -109,6 +116,7 @@ class UserController extends Controller
             'email' => 'string | min:2 |max:20',
             'phone' => 'numeric |digits:11',
             'special_pickup' => 'numeric',
+            'role_id' => 'required|numeric|exists:roles,id',
 
 
         ]);
@@ -121,6 +129,9 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('password'));
             $user->special_pickup = $request->input('special_pickup');
             $isSaved = $user->save();
+            if ($isSaved) {
+                $user->syncRoles(Role::findById($request->input('role_id'), 'web'));
+            }
 
 
             return response()->json(

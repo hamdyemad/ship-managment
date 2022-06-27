@@ -314,16 +314,53 @@
                                 <i class="fa fa-phone"></i>
                             </a> --}}
 
-
-
-
-
                         </div>
                         <!--begin::User details-->
                     </td>
                     <!--end::User=-->
 
-                    <td>{{$delivery->shippment->status}}</td>
+                    {{-- <td>{{$delivery->shippment->status}}</td> --}}
+                    @if ($delivery->shippment->status == 'receiver at hub')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #94c1e2;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'shipped')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #7bc1f3;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'delivered')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #52ec7b;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'OnHold')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #b9bc7f;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'no_answer')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #bec35f;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'rejected')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #ee83a5;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'rejected_fees_faid')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #f16060;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @elseif($delivery->shippment->status == 'created')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #b2cd94;width: 80%;text-align: center">
+                            {{$delivery->shippment->status}}</div>
+                    </td>
+                    @endif
                     <td>
                         {{-- <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base"> --}}

@@ -210,7 +210,7 @@
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.email')}}</th>
-                    <th class="min-w-125px">{{__('site.permission')}}</th>
+                    <th class="min-w-125px">{{__('site.role')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -252,7 +252,10 @@
                     </td>
 
 
-                    <td>employee</td>
+
+                    <td>{{$employee->roles[0]->name}}</td>
+
+
 
                     <!--begin::Action=-->
                     <td class="text-end">

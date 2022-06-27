@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class DriverController extends Controller
@@ -27,7 +28,8 @@ class DriverController extends Controller
      */
     public function create()
     {
-        return view('Dashboard.admin.driver.create');
+        $roles = Role::where('guard_name', '=', 'driver')->get();
+        return view('Dashboard.admin.driver.create', ['roles' => $roles]);
     }
 
     /**
@@ -44,6 +46,7 @@ class DriverController extends Controller
             'phone' => 'required |numeric|digits:11',
             'password' => 'required',
             'password_confirmation' => 'required',
+            'role_id' => 'required|numeric|exists:roles,id',
 
         ]);
         if (!$validator->fails()) {
@@ -59,6 +62,9 @@ class DriverController extends Controller
 
             $driver->password = Hash::make($request->input('password'));
             $isSaved = $driver->save();
+            if ($isSaved) {
+                $driver->syncRoles(Role::findById($request->input('role_id'), 'driver'));
+            }
             return response()->json(
                 [
                     'message' => $isSaved ? 'driver created successfully' : 'Create failed!'
@@ -90,7 +96,8 @@ class DriverController extends Controller
     public function edit(Driver $driver)
     {
         // $driver = Driver::findOrFail($id);
-        return view('Dashboard.admin.driver.edit', ['driver' => $driver]);
+        $roles = Role::where('guard_name', '=', 'driver')->get();
+        return view('Dashboard.admin.driver.edit', ['driver' => $driver, 'roles' => $roles]);
     }
 
     /**
@@ -107,7 +114,7 @@ class DriverController extends Controller
             'email' => 'string',
             'phone' => 'numeric|digits:11',
             'special_pickup' => 'numeric',
-
+            'role_id' => 'required|numeric|exists:roles,id',
 
         ]);
 
@@ -120,7 +127,9 @@ class DriverController extends Controller
             $driver->password = Hash::make($request->input('password'));
             $driver->special_pickup = $request->input('special_pickup');
             $isSaved = $driver->save();
-
+            if ($isSaved) {
+                $driver->syncRoles(Role::findById($request->input('role_id'), 'driver'));
+            }
 
             return response()->json(
                 [

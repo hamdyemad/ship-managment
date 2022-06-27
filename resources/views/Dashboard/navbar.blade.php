@@ -102,6 +102,7 @@
                             <span class="menu-title">assign shippment</span>
                         </a>
                     </div>
+                    
                     <div class="menu-item">
                         <a class="menu-link py-3" href="{{route('employee.shippment')}}"
                             title="scan to change status to shippment" data-bs-toggle="tooltip" data-bs-trigger="hover"

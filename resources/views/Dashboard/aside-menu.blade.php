@@ -32,12 +32,14 @@
                 </a>
             </div>
 
+            @canany(['Create-User'])
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-2">
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">Crafted</span>
                 </div>
             </div>
             {{-- ========================page========================= --}}
+
 
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 <span class="menu-link">
@@ -93,6 +95,14 @@
                         </a>
                     </div>
                     <div class="menu-item">
+                        <a class="menu-link" href="{{route('roles.index')}}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">{{__('site.role')}}</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                         <div class="menu-content pt-8 pb-0">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">Export</span>
                         </div>
@@ -113,29 +123,15 @@
                             <span class="menu-title">{{__('site.accountdriver')}}</span>
                         </a>
                     </div>
-                    {{-- <div class="menu-item">
-                        <a class="menu-link" href="../../demo1/dist/pages/profile/campaigns.html">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{__('site.export-shippment')}}</span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
-                        <a class="menu-link" href="../../demo1/dist/pages/profile/documents.html">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">{{__('site.export-drivers')}}</span>
-                        </a>
-                    </div> --}}
 
                 </div>
             </div>
-
+            @endcanany
             {{-- ========================end page========================= --}}
 
             {{-- ======================== HR ========================= --}}
+
+            @can(['Create-Driver','Create-Employee'])
 
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-0">
@@ -266,10 +262,12 @@
                 </div>
             </div>
 
+            @endcan
             {{-- ======================== end HR ========================= --}}
 
             {{-- ======================== seller ========================= --}}
 
+            @hasrole('Super-User')
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-0">
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">{{__('site.seller')}}</span>
@@ -322,12 +320,13 @@
                     </div>
                 </div>
             </div>
+            @endhasrole
 
             {{-- ======================== *end seller* ========================= --}}
 
 
             {{-- ======================== driver ========================= --}}
-
+            @hasrole('Super-Driver')
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-0">
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">{{__('site.driver')}}</span>
@@ -396,6 +395,7 @@
                     </div> --}}
                 </div>
             </div>
+            @endhasrole
 
             {{-- ======================== *end driver*========================= --}}
 

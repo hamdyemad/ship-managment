@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeController extends Controller
@@ -28,7 +29,8 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('Dashboard.admin.employee.create');
+        $roles = Role::where('guard_name', '=', 'employee')->get();
+        return view('Dashboard.admin.employee.create', ['roles' => $roles]);
     }
 
     /**
@@ -45,6 +47,8 @@ class EmployeeController extends Controller
             'phone' => 'required |numeric|digits:11',
             'password' => 'required',
             'password_confirmation' => 'required',
+            'role_id' => 'required|numeric|exists:roles,id',
+
 
         ]);
         if (!$validator->fails()) {
@@ -54,6 +58,9 @@ class EmployeeController extends Controller
             $employee->phone = $request->input('phone');
             $employee->password = Hash::make($request->input('password'));
             $isSaved = $employee->save();
+            if ($isSaved) {
+                $employee->syncRoles(Role::findById($request->input('role_id'), 'employee'));
+            }
             return response()->json(
                 [
                     'message' => $isSaved ? 'employee created successfully' : 'Create failed!'
@@ -85,7 +92,8 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        return view('Dashboard.admin.employee.edit', ['employee' => $employee]);
+        $roles = Role::where('guard_name', '=', 'employee')->get();
+        return view('Dashboard.admin.employee.edit', ['employee' => $employee, 'roles' => $roles]);
     }
 
     /**
@@ -101,6 +109,8 @@ class EmployeeController extends Controller
             'name' => ' max:50',
             'email' => 'string',
             'phone' => 'numeric|digits:11',
+            'role_id' => 'required|numeric|exists:roles,id',
+
 
         ]);
 
@@ -112,7 +122,9 @@ class EmployeeController extends Controller
             $employee->phone = $request->input('phone');
             $employee->password = Hash::make($request->input('password'));
             $isSaved = $employee->save();
-
+            if ($isSaved) {
+                $employee->syncRoles(Role::findById($request->input('role_id'), 'employee'));
+            }
 
             return response()->json(
                 [

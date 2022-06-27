@@ -105,6 +105,11 @@ return [
     'created_at' => 'تاريخ الانشاء',
     'addfileshippment' => 'اضافة ملف الشحنات',
     'file_shipment' => 'ملف الشحنات',
+    'guard' => 'المسجل',
+    'assigned' => 'تعيين ',
+    "permissions" => "الصلاحيات",
+    "role" => "الصلاحية",
+
 
 
 

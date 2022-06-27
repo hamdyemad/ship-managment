@@ -10,7 +10,9 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PickupController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScheduledriverController;
 use App\Http\Controllers\ScheduleSellerController;
 use App\Http\Controllers\ShippmentController;
@@ -124,6 +126,9 @@ Route::group(
             Route::post('import', [Controller::class, 'importShippment'])->name('import.Shippment');
 
 
+            Route::resource('roles', RoleController::class);
+            Route::resource('permissions', PermissionController::class);
+            Route::post('role/update-permission', [RoleController::class, 'updateRolePermission']);
 
 
             /* ############################### end user ############################### */

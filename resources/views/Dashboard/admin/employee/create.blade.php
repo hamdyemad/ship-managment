@@ -64,6 +64,19 @@
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
 
+                <!--begin::role-->
+                <div class="row mb-12">
+                    <!--begin::Col-->
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.role')}}</label>
+                    <select class="form-control form-control-lg form-control-solid" id="role_id">
+                        @foreach ($roles as $role)
+                        <option value="{{$role->id}}">{{$role->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <!--end::role-->
+
+
                 <!--begin::name-->
                 <div class="row mb-12">
                     <!--begin::Col-->
@@ -84,8 +97,12 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.email')}}</label>
-                                <input type="text" id="email" name="email"
-                                    class="form-control form-control-lg form-control-solid">
+                                <div class="input-group mb-3">
+                                    <input type="text" id="email" name="email"
+                                        class="form-control form-control-lg form-control-solid"
+                                        aria-describedby="basic-addon2">
+                                    <span class="input-group-text" id="basic-addon2">@shipexeg.com</span>
+                                </div>
                             </div>
                             <!--end::email-->
 
@@ -163,6 +180,7 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                role_id: document.getElementById('role_id').value,
                 password_confirmation: document.getElementById('password_confirmation').value,
             })
             .then(function (response) {

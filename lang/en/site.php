@@ -109,6 +109,13 @@ return [
     'created_at' => 'Created_At',
     'addfileshippment' => 'Add File Shippment',
     'file_shipment' => 'File Shippment',
+    'guard' => 'Guard',
+    'assigned' => 'Assigned',
+    "permissions" => "Permissions",
+    "role" => "Role",
+
+
+
 
 
 

@@ -562,20 +562,20 @@ class Controller extends BaseController
         } elseif ($request->status == 'rejected_fees_faid') {
 
             $accounts = new AccountSeller();
-            $accounts->shippment_id = $shipment->id;
+            $accounts->shippment_id = $shippment->id;
 
             if ($price->isEmpty()) {
 
-                $accounts->cash = $shipment->area->rate;
-                $accounts->cost = $accounts->cash - $shipment->area->rate;
+                $accounts->cash = $shippment->area->rate;
+                $accounts->cost = $accounts->cash - $shippment->area->rate;
             } else {
                 foreach ($price as $val) {
-                    if ($shipment->city->id == $val->city_id && $shipment->area->id == $val->area_id) {
+                    if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
                         $accounts->cash = $val->special_price;
                         $accounts->cost = $accounts->cash - $val->special_price;
                     } else {
-                        $accounts->cash = $shipment->area->rate;
-                        $accounts->cost = $accounts->cash - $shipment->area->rate;
+                        $accounts->cash = $shippment->area->rate;
+                        $accounts->cost = $accounts->cash - $shippment->area->rate;
                     }
                 }
             }
@@ -608,6 +608,9 @@ class Controller extends BaseController
             //     }
             // }
 
+
+        } elseif ($request->status == 'no_answer') {
+            $isDeleted = $delivery->delete();
         } elseif ($shippment->shippment_type == 'return_pickup') {
 
             $accounts = new AccountSeller();
@@ -676,10 +679,12 @@ class Controller extends BaseController
     {
 
         $shipment = Shippment::where('id', $request->shipment_id)->first();
+        $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
         $shipment->status = $request->status;
         $shipment->on_hold =  $request->date;
         $shipment->note =  $request->note;
         $isSaved = $shipment->save();
+        $isDeleted = $delivery->delete();
         return response()->json(
             [
                 'message' => $isSaved ? 'Status was successfully' : 'Create failed!'
@@ -958,7 +963,6 @@ class Controller extends BaseController
     {
         return view('Dashboard.admin.importpage');
     }
-
     function importShippment(Request $request)
     {
         $request->validate([

@@ -258,7 +258,23 @@
 
                     {{-- @endforeach --}}
 
-                    <td>{{$assigned->pickup->status}}</td>
+                    {{-- <td>{{$assigned->pickup->status}}</td> --}}
+                    @if ($assigned->pickup->status == 'pickedup')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #94c1e2;width: 80%;text-align: center">
+                            {{$assigned->pickup->status}}</div>
+                    </td>
+                    @elseif($assigned->pickup->status == 'requested')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #7bc1f3;width: 80%;text-align: center">
+                            {{$assigned->pickup->status}}</div>
+                    </td>
+                    @elseif($assigned->pickup->status == 'proccessing')
+                    <td>
+                        <div class="rounded-pill" style="background-color: #52ec7b;width: 80%;text-align: center">
+                            {{$assigned->pickup->status}}</div>
+                    </td>
+                    @endif
 
                     <td>{{$assigned->pickup->date}}</td>
 
