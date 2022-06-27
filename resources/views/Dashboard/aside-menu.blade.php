@@ -32,7 +32,7 @@
                 </a>
             </div>
 
-            @canany(['Create-User'])
+            @hasrole('Super-Admin')
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-2">
                     <span class="menu-section text-muted text-uppercase fs-8 ls-1">Crafted</span>
@@ -126,12 +126,12 @@
 
                 </div>
             </div>
-            @endcanany
+            @endhasrole
             {{-- ========================end page========================= --}}
 
             {{-- ======================== HR ========================= --}}
 
-            @can(['Create-Driver','Create-Employee'])
+            @hasrole('HR-Admin')
 
             <div class="menu-item">
                 <div class="menu-content pt-8 pb-0">
@@ -221,6 +221,7 @@
                 </div>
             </div>
 
+            @canany(['Create-Employee','Read-Employees', 'Create-Employee','Read-Employee'])
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 <span class="menu-link">
                     <span class="menu-icon">
@@ -261,8 +262,10 @@
 
                 </div>
             </div>
+            @endcanany
 
-            @endcan
+
+            @endhasrole
             {{-- ======================== end HR ========================= --}}
 
             {{-- ======================== seller ========================= --}}
