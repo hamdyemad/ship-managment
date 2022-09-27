@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('pickup_id')->nullable()->comment('اذا كانت القيمة فارغة الشحنة pickup');
             // $table->foreignId('pickup_id')->constrained();
             $table->String('cash')->nullable();
+            $table->String('rate')->nullable();
             $table->string('cost')->nullable();
             $table->string('delivery_commission');
             $table->timestamps();

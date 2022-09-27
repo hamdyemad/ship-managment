@@ -148,7 +148,7 @@
                     <div class="px-7 py-5" data-kt-user-table-filter="form">
                         <!--begin::Input group-->
                         <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
+                            <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
                             <select class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                 data-placeholder="Select option" data-allow-clear="true"
                                 data-kt-user-table-filter="name" data-hide-search="true">
@@ -260,7 +260,7 @@
                     <th class="min-w-125px">{{__('site.from')}}</th>
                     <th class="min-w-125px">{{__('site.to')}}</th>
                     <th class="min-w-125px">{{__('site.cost')}}</th>
-                    <th class="min-w-125px">{{__('site.comm')}}</th>
+                    <th class="min-w-125px">{{__('site.pickup_price')}}</th>
                     <th class="min-w-125px">{{__('site.pdf')}}</th>
                 </tr>
                 <!--end::Table row-->
@@ -270,7 +270,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($accounts as $accounts)
+                @foreach ($schedules as $schedule)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -284,30 +284,27 @@
                     <td class="d-flex align-items-center">
                         <!--begin::User details-->
                         <div class="d-flex flex-column">
-                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$accounts->id}}"
-                                data-bs-toggle="modal" role="button">{{$accounts->id}}</a>
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$schedule->id}}"
+                                data-bs-toggle="modal" role="button">{{$schedule->id}}</a>
 
 
                         </div>
                         <!--begin::User details-->
                     </td>
                     <!--end::User=-->
-                    <td>{{$accounts->driver->name}}</td>
-                    <td>{{$accounts->from}}</td>
+                    <td>{{$schedule->driver->name}}</td>
+                    <td>{{$schedule->from}}</td>
 
-                    <td>{{$accounts->to}}</td>
-                    <td>{{$accounts->total_cost}}</td>
-                    <td>{{$accounts->total_delivery_commission}}</td>
+                    <td>{{$schedule->to}}</td>
+                    <td>{{$schedule->total_cost}}</td>
+                    <td>{{$schedule->total_delivery_commission}}</td>
                     <td>
                         {{-- <a href="" onclick="addseller()">pdf</a>
                         --}}
                         <form action="{{route('accountdriver_pdf')}}" method="get" enctype="multipart/form-data">
                             @csrf
                             <div style="display: none">
-                                <input type="text" name="driver_id" value="{{$accounts->driver->id}}">
-                                <input type="date" name="from" value="{{$accounts->from}}">
-                                <input type="date" name="to" value="{{$accounts->to}}">
-
+                                <input type="text" name="schedule_id" value="{{$schedule->id}}">
                             </div>
                             <button type="submit" class="btn btn-light-primary me-3"><i class="fa fa-file"></i></button>
                         </form>

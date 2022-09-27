@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Shippment extends Model
 {
@@ -25,9 +26,14 @@ class Shippment extends Model
         'allow_open',
         'barcode',
         'on_hold',
-
+        'seller_settled',
+        'driver_settled',
 
     ];
+
+    public function histories() {
+        return $this->hasMany(ShippmentHistory::class);
+    }
 
     public function trackings()
     {

@@ -20,17 +20,11 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="{{route('pickup.index')}}" class="text-muted text-hover-primary">{{__('site.pickup')}}</a>
+        @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+            <a href="{{route('assignedpickup.create')}}" class="text-muted text-hover-primary">{{__('site.pickup')}}</a>
+        @else
+            <a href="{{route('pickup.index')}}" class="text-muted text-hover-primary">{{__('site.pickup')}}</a>
+        @endif
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -41,7 +35,7 @@
     <!--begin::Item-->
 
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.create')}}</a>
+        <span  class="text-muted">{{__('site.create')}}</span>
     </li>
     <!--end::Item-->
 </ul>
@@ -85,7 +79,24 @@
             @csrf
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
+                @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+                    <div class="row mb-12">
+                        <!--begin::shipment type-->
+                        <div class="col-lg-12 fv-row">
+                            <label
+                                class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment.seller')}}</label>
+                            <select name="user_id" id="shipment_seller"
+                                class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
+                                <option value="">{{ __('site.choose_seller') }}</option>
+                                @foreach ($sellers as $seller)
+                                    <option value="{{ $seller->id }}">{{ $seller->name }}</option>
+                                @endforeach
 
+                            </select>
+                        </div>
+                        <!--end::shipment type-->
+                    </div>
+                @endif
                 <!--begin::location-->
                 <div class="row mb-12">
                     <!--begin::Col-->
@@ -152,7 +163,7 @@
                     <!--begin::Col-->
                     <div id="name" class="form-floating">
 
-                        <input type="text" id="contactname"
+                        <input type="text" id="contact_name"
                             class="form-control form-control-lg form-control-solid dynamic">
                         <label for="name" class="col-lg-4 col-form-label fw-bold fs-6">name</label>
                     </div>
@@ -264,10 +275,52 @@
 
         });
 
+    $("#shipment_seller").on('change', function() {
+        $("#address").children().each((index, child) => {
+            $(child).remove();
+        })
+        $("#address").append(`
+        <option value="" disabled selected>address
+                            </option>`);
+        $.ajax({
+            'method': 'post',
+            'url': "{{ route('user.addresses') }}",
+            'data': {
+                '_token': $('input[name="_token"]').val(),
+                'user_id': $(this).val()
+            },
+            'success':function(res){
+                if(res.success) {
+                    res.data.forEach((dat) => {
+                        $("#address").append(`
+                            <option id="address_line" value="${dat.id}">
+                                ${dat.address_line}</option>
+                        `);
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            },
+            'err':function(err){
+
+            }
+        })
+    });
+
     //add shipment details
         function addshipment() {
             axios.post('/dashboard/pickup', {
-                user_id:{{auth()->user()->id}},
+                @if(Auth::guard('user')->check())
+                    user_id:{{auth()->user()->id}},
+                @else
+                    user_id: document.getElementById('shipment_seller').value,
+                @endif
                 address: document.getElementById('address').value,
                 time: document.getElementById('time').value,
                 date: document.getElementById('date').value,
@@ -288,7 +341,7 @@
                 timer: 1500
                 });
                 document.getElementById('kt_account_profile_details_form').reset();
-                window.location.href = "/dashboard/pickup";
+                location.reload();
 
             })
             .catch(function (error) {

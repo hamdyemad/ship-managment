@@ -38,6 +38,7 @@ class AreaController extends Controller
     //add area belong to city
     public function store(Request $request)
     {
+        $this->authorize('areas.create');
         $validator = Validator($request->all(), [
             'area' => 'required|string',
             'rate' => 'max:7',
@@ -89,6 +90,7 @@ class AreaController extends Controller
      */
     public function edit(Area $area)
     {
+        $this->authorize('areas.edit');
         return response()->view('Dashboard.admin.area.edit', ['area' => $area]);
     }
 
@@ -101,6 +103,7 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
+        $this->authorize('areas.edit');
         $validator = Validator($request->all(), [
             'area' => 'string',
             'rate' => 'max:7',
@@ -136,6 +139,13 @@ class AreaController extends Controller
      */
     public function destroy(Area $area)
     {
-        //
+        $isSaved = 1;
+        $area->delete();
+        return response()->json(
+            [
+                'message' => $isSaved ? 'Area updated successfully' : 'update failed!'
+            ],
+            $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
     }
 }

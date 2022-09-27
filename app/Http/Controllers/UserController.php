@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\City;
 use App\Models\User;
+use App\Traits\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    use File;
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +21,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
-        return view('Dashboard.admin.seller.index', ['user' => $user]);
+        $users = User::latest()->get();
+        return view('Dashboard.admin.seller.index', ['users' => $users]);
     }
 
     /**
@@ -31,7 +33,7 @@ class UserController extends Controller
     public function create()
     {
         $city = City::all();
-        $roles = Role::where('guard_name', '=', 'web')->get();
+        $roles = Role::all();
         return view('Dashboard.admin.seller.create', ['city' => $city, 'roles' => $roles]);
     }
 
@@ -48,7 +50,7 @@ class UserController extends Controller
             'name' => 'required | max:50',
             'email' => 'string |required| min:2 |max:20',
             'phone' => 'required |numeric|digits:11',
-            'password' => 'required',
+            'password' => 'required|min:8|confirmed',
             'role_id' => 'required|numeric|exists:roles,id',
         ]);
         if (!$validator->fails()) {
@@ -57,7 +59,7 @@ class UserController extends Controller
             $user->email = $request->input('email') . '@shipexeg.com';
             $user->phone = $request->input('phone');
             if (!$request->input('special_pickup')) {
-                $user->special_pickup = 10;
+                $user->special_pickup = 0;
             } else {
                 $user->special_pickup = $request->input('special_pickup');
             }
@@ -65,7 +67,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('password'));
             $isSaved = $user->save();
             if ($isSaved) {
-                $user->syncRoles(Role::findById($request->input('role_id'), 'web'));
+                $user->roles()->attach($request->role_id);
             }
             return response()->json(
                 [
@@ -97,7 +99,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $roles = Role::where('guard_name', '=', 'web')->get();
+        $roles = Role::all();
         return view('Dashboard.admin.seller.edit', ['user' => $user, 'roles' => $roles]);
     }
 
@@ -110,27 +112,43 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
-        $validator = Validator($request->all(), [
+        $rules = [
             'name' => ' max:50',
-            'email' => 'string | min:2 |max:20',
+            'email' => 'string|min:2',
             'phone' => 'numeric |digits:11',
             'special_pickup' => 'numeric',
+            'password' => 'confirmed',
             'role_id' => 'required|numeric|exists:roles,id',
-
-
-        ]);
+        ];
+        if($request->password) {
+            $rules['password'] = ['min:8', 'confirmed'];
+        }
+        $validator = Validator($request->all(), $rules);
 
         if (!$validator->fails()) {
 
             $user->name = $request->input('name');
             $user->email = $request->input('email') . '@shipexeg.com';
             $user->phone = $request->input('phone');
-            $user->password = Hash::make($request->input('password'));
-            $user->special_pickup = $request->input('special_pickup');
+            if($request->input('password') !== null ) {
+                $user->password = Hash::make($request->input('password'));
+            }
+            if($request->input('special_pickup')) {
+                $user->special_pickup = $request->input('special_pickup');
+            }
+            if($request->has('avatar')) {
+                // $this->uploadFile($request, $this->usersPath, 'avatar');
+                // if(file_exists($user->avatar)) {
+                //     $img = last(explode('/', $user->avatar));
+                //     if(in_array($img, scandir(dirname($user->avatar)))) {
+                //         unlink($user->avatar);
+                //     }
+                // }
+            }
             $isSaved = $user->save();
             if ($isSaved) {
-                $user->syncRoles(Role::findById($request->input('role_id'), 'web'));
+                $user->roles()->detach();
+                $user->roles()->attach($request->role_id);
             }
 
 

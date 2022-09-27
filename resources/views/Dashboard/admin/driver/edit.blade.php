@@ -80,7 +80,7 @@
                     <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.role')}}</label>
                     <select class="form-control form-control-lg form-control-solid" id="role_id">
                         @foreach ($roles as $role)
-                        <option value="{{$role->id}}">{{$role->name}}</option>
+                        <option value="{{$role->id}}" @if($driver->roles->contains($role->id)) selected @endif>{{$role->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -150,11 +150,11 @@
                 <!--begin::Input password_confirmation-->
                 <div class="row mb-12">
                     <!--begin::Label-->
-                    <label class="">{{__('site.password_confirmation')}}</label>
+                    <label>{{__('site.password_confirmation')}}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">
-                        <input type="password" name="password_confirmation"
+                        <input type="password" name="password_confirmation" id="password_confirmation"
                             class="form-control form-control-lg form-control-solid">
                     </div>
                     <!--end::Col-->
@@ -163,7 +163,7 @@
 
                 <!--begin::price of pickup-->
 
-                <div class="row">
+                <div class="row mb-12">
 
 
                     <div class="col-lg-12 fv-row fv-plugins-icon-container">
@@ -172,7 +172,7 @@
                                     style="font-size: 10px;color: rgb(160, 151, 151)">
                                     ({{__('site.optional')}})</p></label>
                             <input type="number" name="special_pickup" id="special_pickup" placeholder=""
-                                class="form-control form-control-sm form-control-solid">
+                                class="form-control form-control-sm form-control-solid" value="{{ $driver->special_pickup }}">
 
 
                         </div>
@@ -181,6 +181,25 @@
 
                 </div>
                 <!--end::price of pickup-->
+                <!--end::start-->
+                {{-- <div class="row mb-12">
+
+
+                    <div class="col-lg-12 fv-row fv-plugins-icon-container">
+                        <div class="mb-5">
+                            <label class="col-lg-12 col-form-label fw-bold fs-6">{{__('site.balance')}} <p
+                                    style="font-size: 10px;color: rgb(160, 151, 151)">
+                                    ({{__('site.balance')}})</p></label>
+                            <input type="number" value="{{ $driver->balance }}" name="balance" id="balance" placeholder=""
+                                class="form-control form-control-sm form-control-solid">
+
+
+                        </div>
+
+                    </div>
+
+                </div> --}}
+                <!--end::balance-->
 
             </div>
             <!--end::Card body-->
@@ -213,6 +232,8 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                password_confirmation: document.getElementById('password_confirmation').value,
+                // balance: document.getElementById('balance').value,
                 role_id: document.getElementById('role_id').value,
                 special_pickup: document.getElementById('special_pickup').value,
             })

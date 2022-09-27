@@ -166,20 +166,21 @@
                     </span>
                     <!--end::Svg Icon-->Export
                 </button>
-                <!--begin::Add shipment-->
-
-                <a href="{{route('driver.create')}}" class="btn btn-primary">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
-                                transform="rotate(-90 11.364 20.364)" fill="black" />
-                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->{{__('site.add_driver')}}
-                </a>
-                <!--end::Add shipment-->
+                @can('drivers.create')
+                    <!--begin::Add Driver-->
+                    <a href="{{route('driver.create')}}" class="btn btn-primary">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
+                                    transform="rotate(-90 11.364 20.364)" fill="black" />
+                                <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->{{__('site.add_driver')}}
+                    </a>
+                    <!--end::Add Driver-->
+                @endcan
 
             </div>
             <!--end::Toolbar-->
@@ -215,6 +216,7 @@
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.email')}}</th>
+                    {{-- <th class="min-w-125px">{{__('site.balance')}}</th> --}}
                     <th class="min-w-125px">{{__('site.role')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
@@ -255,6 +257,9 @@
                     <td>
                         <div class="badge badge-light fw-bolder">{{$driver->email}}</div>
                     </td>
+                    {{-- <td>
+                        <div class="badge badge-light fw-bolder">{{$driver->balance}}</div>
+                    </td> --}}
 
 
                     <td>{{$driver->roles[0]->name}}</td>
@@ -281,17 +286,21 @@
                             {{-- <div class="menu-item px-3">
                                 <a href="{{route('shipment.show',$user->id)}}" class="menu-link px-3">show</a>
                             </div> --}}
-                            <div class="menu-item px-3">
-                                <a href="{{route('driver.edit',$driver->id)}}"
-                                    class="menu-link px-3">{{__('site.edit')}}</a>
-                            </div>
+                            @can('drivers.edit')
+                                <div class="menu-item px-3">
+                                    <a href="{{route('driver.edit',$driver->id)}}"
+                                        class="menu-link px-3">{{__('site.edit')}}</a>
+                                </div>
                             <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$driver->id}}',this)" class="menu-link px-3"
-                                    data-kt-users-table-filter="delete_row">Delete</a>
-                            </div>
-                            <!--end::Menu item-->
+                            @endcan
+                            @can('drivers.destroy')
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="#" onclick="confirmDelete('{{$driver->id}}',this)" class="menu-link px-3"
+                                        data-kt-users-table-filter="delete_row">Delete</a>
+                                </div>
+                                <!--end::Menu item-->
+                            @endcan
                         </div>
                         <!--end::Menu-->
                     </td>

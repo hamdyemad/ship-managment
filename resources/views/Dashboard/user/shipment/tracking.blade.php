@@ -139,7 +139,7 @@
         data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
-            <h3 class="fw-bolder m-0">Tracking Order</h3>
+            <h3 class="fw-bolder m-0">{{ __('site.tracking') }}</h3>
         </div>
         <!--end::Card title-->
     </div>
@@ -148,36 +148,22 @@
     <!--begin::Content-->
     <div id="kt_account_profile_details" class="collapse show">
         <div class="card mb-5 mb-xl-10">
-
-            @if (!$tracking->isEmpty())
-
-            <ol class="progtrckr" data-progtrckr-steps="{{$tracking->count()}}">
-
+            <section class="root">
+                <div class="order-track">
                 @foreach ($tracking as $tracking)
-
-                <li class="progtrckr-done">{{$tracking->status}}
-                </li>
-
-
+                    <div class="order-track-step">
+                        <div class="order-track-status">
+                        <span class="order-track-status-dot"></span>
+                        <span class="order-track-status-line"></span>
+                        </div>
+                        <div class="order-track-text">
+                        <p class="order-track-text-stat">{{ $tracking->status }}</p>
+                        <span class="order-track-text-sub">{{ \Carbon\Carbon::parse($tracking->created_at)->format('Y-m-d / h:i:s') }}</span>
+                        </div>
+                  </div>
                 @endforeach
-
-
-            </ol>
-
-
-
-            @else
-            <ol class="progtrckr" data-progtrckr-steps="3">
-                <li class="progtrckr-done">created</li>
-
-                <li class="progtrckr-todo">receiver at hub</li>
-
-                <li class="progtrckr-todo">shipped</li>
-
-            </ol>
-            @endif
-
-
+                </div>
+            </section>
 
             {{-- <div class="progress-track">
                 <ul id="progressbar">

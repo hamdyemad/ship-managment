@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         $user->password = Hash::make(12345);
         $user->special_pickup = '10';
         $isSaved = $user->save();
-        $user->syncRoles(Role::findById(3, 'web'));
+        $user->syncRoles(Role::findById(3));
 
         /* ****** web ****** */
         $admin = new Admin();
@@ -48,6 +48,6 @@ class DatabaseSeeder extends Seeder
         $admin->dofbirth = date('Y-m-d H:i:s');;
         $admin->password = Hash::make(12345);
         $isSaved = $admin->save();
-        $admin->syncRoles(Role::findById(1, 'admin'));
+        $admin->syncRoles(Role::findById(1));
     }
 }

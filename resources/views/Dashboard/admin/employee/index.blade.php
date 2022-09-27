@@ -161,20 +161,22 @@
                     </span>
                     <!--end::Svg Icon-->Export
                 </button> --}}
-                <!--begin::Add shipment-->
+                @can('employees.create')
+                    <!--begin::Add shipment-->
 
-                <a href="{{route('employee.create')}}" class="btn btn-primary">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
-                                transform="rotate(-90 11.364 20.364)" fill="black" />
-                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->{{__('site.add_employee')}}
-                </a>
-                <!--end::Add shipment-->
+                    <a href="{{route('employee.create')}}" class="btn btn-primary">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
+                                    transform="rotate(-90 11.364 20.364)" fill="black" />
+                                <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->{{__('site.add_employee')}}
+                    </a>
+                    <!--end::Add shipment-->
+                @endcan
 
             </div>
             <!--end::Toolbar-->
@@ -279,17 +281,21 @@
                             {{-- <div class="menu-item px-3">
                                 <a href="{{route('shipment.show',$user->id)}}" class="menu-link px-3">show</a>
                             </div> --}}
-                            <div class="menu-item px-3">
-                                <a href="{{route('employee.edit',$employee->id)}}"
-                                    class="menu-link px-3">{{__('site.edit')}}</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" onclick="confirmDelete('{{$employee->id}}',this)" class="menu-link px-3"
-                                    data-kt-users-table-filter="delete_row">Delete</a>
-                            </div>
-                            <!--end::Menu item-->
+                            @can('employees.edit')
+                                <div class="menu-item px-3">
+                                    <a href="{{route('employee.edit',$employee->id)}}"
+                                        class="menu-link px-3">{{__('site.edit')}}</a>
+                                </div>
+                                <!--end::Menu item-->
+                            @endcan
+                            @can('employees.destroy')
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="#" onclick="confirmDelete('{{$employee->id}}',this)" class="menu-link px-3"
+                                        data-kt-users-table-filter="delete_row">Delete</a>
+                                </div>
+                                <!--end::Menu item-->
+                            @endcan
                         </div>
                         <!--end::Menu-->
                     </td>

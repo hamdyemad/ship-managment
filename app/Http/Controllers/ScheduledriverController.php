@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\Scheduledriver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduledriverController extends Controller
 {
@@ -15,9 +16,14 @@ class ScheduledriverController extends Controller
      */
     public function index()
     {
-        $accountsfile = Scheduledriver::with('driver')->get();
-        $drivers = Driver::all();
-        return view('Dashboard.admin.accountfiledriver', ['accounts' => $accountsfile, 'drivers' => $drivers]);
+        if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+            $schedules = Scheduledriver::with('driver')->latest()->get();
+            $drivers = Driver::all();
+        } else if(Auth::guard('driver')->check()) {
+            $schedules = Scheduledriver::with('driver')->where('driver_id', Auth::id())->latest()->get();
+            $drivers = [];
+        }
+        return view('Dashboard.admin.accountfiledriver', ['schedules' => $schedules, 'drivers' => $drivers]);
     }
 
     /**

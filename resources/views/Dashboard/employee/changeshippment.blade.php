@@ -26,8 +26,29 @@
 @endif --}}
 {{-- ================================================ --}}
 
+<div class="form-group">
+    <label for="">{{ __('site.choose_scan') }}</label>
+    <select class="form-control scan_list">
+        <option value="null" @if(request('type') == 'null') selected @endif>{{  __('site.choose_scan') }}</option>
+        <option value="camera" @if(request('type') == 'camera') selected @endif>{{ __('site.camera_scan') }}</option>
+        <option value="device" @if(request('type') == 'device') selected @endif>{{ __('site.device_scan') }}</option>
+    </select>
+</div>
 <center>
-    <div style="width: 500px" id="reader"></div>
+    @if(request('type') == 'camera')
+        <div style="width: 500px" id="reader"></div>
+    @elseif(request('type') == 'device')
+        <div class="form-group">
+            <div class="row">
+                <div class="col-12 col-md-10">
+                    <input type="text" class="form-control mt-2" name="sometext" id="myInput">
+                </div>
+                <div class="col-12 col-md-2">
+                    <button class="btn w-100 btn-primary mt-2" id="add_shipment">{{ __('site.add') }}</button>
+                </div>
+            </div>
+        </div>
+    @endif
 </center>
 <br>
 <div class="container">
@@ -59,12 +80,8 @@
                 <option value="" disabled selected>Select Status ..
                 </option>
 
-                <option value="receiver at hub">receiver at hub</option>
-                <option value="shipped">shipped</option>
-                <option value="delivered">delivered</option>
-
-                <option value="rejected">rejected</option>
-                <option value="rejected_fees_faid">rejected fees faid</option>
+                <option value="receiver_at_hub">Receiver At Hub</option>
+                <option value="out_for_delivery">Out For Delivery</option>
 
 
             </select><br>
@@ -82,17 +99,53 @@
 @endsection
 
 @section('js')
-<script src="html5-qrcode.min.js"></script>
+{{-- <script src="html5-qrcode.min.js"></script> --}}
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <script>
     // =============================================================================
+    $(".scan_list").on('change', function() {
+        location.href = '/dashboard/scan/shippments/status?type=' + $(this).val();
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'you are using ' + $(this).val(),
+            showConfirmButton: false,
+            timer: 1500
+        });
+    });
     const cars = [];
-    let count = 0 ;
+    let count = 1;
+    @if(request('type') == 'device')
+        $("#myInput").focus();
+        $("#add_shipment").on('click', function() {
+            cars.push($("#myInput").val());
+            console.log($("#myInput").val());
+            $("#container").append(`
+                <tr>
+                    <td>${count}</td>
+                    <td>${$("#myInput").val()}</td>
+                </tr>
+            `);
+            document.getElementById("th1").style.display = '' ;
+            document.getElementById("button").style.display = '' ;
+            document.getElementById("status").style.display = '' ;
+            document.getElementById("driver_name").style.display = '' ;
+            const audio = new Audio();
+            audio.src = "{{asset('assets/sound/Barcode-scanner-beep-sound.mp3')}}";
+            audio.play();
+            $("#myInput").val('');
+            $("#myInput").focus();
+            count++;
+        });
+    @endif
+
+    @if(request('type') == 'camera')
         function onScanSuccess(decodedText, decodedResult) {
         // Handle on success condition with the decoded text or result.
         // console.log(`Scan result: ${decodedText}`, decodedResult);
-
+        console.log(decodedText);
+        console.log($('meta[name="csrf-token"]').attr('content'))
             cars.push(decodedText);
             $(document).ready(function() {
                     $("#container").append("<tr>");
@@ -115,48 +168,9 @@
         var html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", { fps: 1, qrbox: 250 });
         html5QrcodeScanner.render(onScanSuccess);
+    @endif
 
     // =============================================================================
-
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-
-        // $("#button").click(function(e){
-
-        //     e.preventDefault();
-        //     $.ajax({
-        //         type:'POST',
-        //         url:"{{ route('scan2') }}",
-        //         data:{
-        //             arr:cars,
-        //             driver_id :document.getElementById("driver_id").value,
-        //         },
-        //         success:function(data){
-        //             console.log('success');
-        //                 Swal.fire({
-        //                     position: 'top-end',
-        //                     icon: 'success',
-        //                     title: 'Shippment assigned successfully',
-        //                     showConfirmButton: false,
-        //                     timer: 1500
-        //                 });
-        //         },error: function (reject) {
-        //             console.log(reject.error);
-        //             Swal.fire({
-        //                 position: 'top-end',
-        //                 icon: 'error',
-        //                 title: 'assigned failed!',
-        //                 showConfirmButton: false,
-        //                 timer: 1500
-        //             });
-        //         }
-        //     });
-
-        // });
-
         function addshipment() {
             axios.post('/dashboard/employee/scan/shippments', {
                 arr:cars,
@@ -178,8 +192,7 @@
                 showConfirmButton: false,
                 timer: 1500
                 });
-                // document.getElementById('kt_account_profile_details_form').reset();
-                // window.location.href = "/dashboard/driver";
+                location.reload();
 
             })
             .catch(function (error) {

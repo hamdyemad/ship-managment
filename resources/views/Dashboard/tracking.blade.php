@@ -27,100 +27,16 @@
     <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <style>
-        ol.progtrckr {
-            margin: 0;
-            padding: 0;
-            list-style-type none;
-        }
-
-        ol.progtrckr li {
-            display: inline-block;
-            text-align: center;
-            line-height: 3.5em;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="2"] li {
-            width: 49%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="3"] li {
-            width: 33%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="4"] li {
-            width: 24%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="5"] li {
-            width: 19%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="6"] li {
-            width: 16%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="7"] li {
-            width: 14%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="8"] li {
-            width: 12%;
-        }
-
-        ol.progtrckr[data-progtrckr-steps="9"] li {
-            width: 11%;
-        }
-
-        ol.progtrckr li.progtrckr-done {
-            color: black;
-            border-bottom: 4px solid yellowgreen;
-        }
-
-        ol.progtrckr li.progtrckr-todo {
-            color: silver;
-            border-bottom: 4px solid silver;
-        }
-
-        ol.progtrckr li:after {
-            content: "\00a0\00a0";
-        }
-
-        ol.progtrckr li:before {
-            position: relative;
-            bottom: -2.5em;
-            float: left;
-            left: 50%;
-            line-height: 1em;
-        }
-
-        ol.progtrckr li.progtrckr-done:before {
-            content: "\2713";
-            color: white;
-            background-color: yellowgreen;
-            height: 2.2em;
-            width: 2.2em;
-            line-height: 2.2em;
-            border: none;
-            border-radius: 2.2em;
-        }
-
-        ol.progtrckr li.progtrckr-todo:before {
-            content: "\039F";
-            color: silver;
-            background-color: white;
-            font-size: 2.2em;
-            bottom: -1.2em;
-        }
-    </style>
-    <!--end::Global Stylesheets Bundle-->
+    <link href="{{asset('assets/css/app.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 
 <body id="kt_body" data-bs-spy="scroll" data-bs-target="#kt_landing_menu" data-bs-offset="200"
-    class="bg-white position-relative">
+    class="bg-white position-relative landing">
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
         <!--begin::Header Section-->
@@ -129,7 +45,7 @@
             <div class="bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-bottom landing-dark-bg"
                 style="background-image: url(assets/media/svg/illustrations/landing.svg)">
                 <!--begin::Header-->
-                <div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header"
+                {{-- <div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header"
                     data-kt-sticky-offset="{default: '200px', lg: '300px'}">
                     <!--begin::Container-->
                     <div class="container">
@@ -200,19 +116,20 @@
                                 </div>
                             </div>
                             <!--end::Menu wrapper-->
-                            <!--begin::Toolbar-->
-                            <div class="flex-equal text-end ms-1">
-                                <a href="{{ url('web/login') }}" class="btn btn-success">Sign In</a>
-                            </div>
-                            <!--end::Toolbar-->
                         </div>
                         <!--end::Wrapper-->
                     </div>
                     <!--end::Container-->
-                </div>
+                </div> --}}
                 <!--end::Header-->
                 <!--begin::Landing hero-->
                 <div class="d-flex flex-column flex-center w-100 min-h-350px min-h-lg-500px px-9">
+                    <!--begin::Logo image-->
+                    <a href="../../demo1/dist/landing.html">
+                        <img alt="Logo" src="{{asset('shippment-logo.png')}}"
+                            class="logo-default" />
+                    </a>
+                    <!--end::Logo image-->
                     <!--begin::Heading-->
                     <div class="text-center mb-5 mb-lg-10 py-10 py-lg-20">
                         <!--begin::Title-->
@@ -313,66 +230,55 @@
                 </div>
                 <!--end::Heading-->
                 <!--begin::Row-->
-                <div class="row w-100 gy-10 mb-md-20">
-                    <div id="kt_account_profile_details" class="collapse show">
-                        <div class="card mb-5 mb-xl-10">
+                <div id="kt_account_profile_details" class="collapse show">
+                    <div class="card mb-5 mb-xl-10">
 
-                            @if (!$tracking->isEmpty())
+                        @if (!$data->isEmpty())
+                            <section class="root">
+                                <div class="order-track">
+                                @foreach ($data as $tracking)
+                                    <div class="order-track-step">
+                                        <div class="order-track-status">
+                                        <span class="order-track-status-dot"></span>
+                                        <span class="order-track-status-line"></span>
+                                        </div>
+                                        <div class="order-track-text">
+                                        <p class="order-track-text-stat">{{ $tracking->status }}</p>
+                                        <span class="order-track-text-sub">{{ \Carbon\Carbon::parse($tracking->created_at)->format('Y-m-d / h:i:s') }}</span>
+                                        </div>
+                                </div>
+                                @endforeach
+                                </div>
+                            </section>
+                        @endif
 
-                            <ol class="progtrckr" data-progtrckr-steps="{{$tracking->count()}}">
 
+
+                        {{-- <div class="progress-track">
+                            <ul id="progressbar">
+                                @if (!$tracking->isEmpty())
+
+                                {{$tracking->count()}}
                                 @foreach ($tracking as $tracking)
-
-                                <li class="progtrckr-done">{{$tracking->status}}
-                                </li>
-
+                                <li class="active step" id="step1">{{$tracking->status}} <br>
+                                    {{$tracking->created_at}}</li>
 
                                 @endforeach
 
-
-                            </ol>
-
-
-
-                            @else
-                            <ol class="progtrckr" data-progtrckr-steps="3">
-                                <li class="progtrckr-done">created</li>
-
-                                <li class="progtrckr-todo">receiver at hub</li>
-
-                                <li class="progtrckr-todo">shipped</li>
-
-                            </ol>
-                            @endif
+                                @else
+                                <li class="active step0 text-center" id="step1">created</li>
+                                <li class=" step0 text-center" id="step1">Shipped</li>
+                                <li class=" step0 text-center" id="step1">Delivered</li>
+                                @endif
 
 
+                            </ul>
 
-                            {{-- <div class="progress-track">
-                                <ul id="progressbar">
-                                    @if (!$tracking->isEmpty())
+                        </div> --}}
 
-                                    {{$tracking->count()}}
-                                    @foreach ($tracking as $tracking)
-                                    <li class="active step" id="step1">{{$tracking->status}} <br>
-                                        {{$tracking->created_at}}</li>
-
-                                    @endforeach
-
-                                    @else
-                                    <li class="active step0 text-center" id="step1">created</li>
-                                    <li class=" step0 text-center" id="step1">Shipped</li>
-                                    <li class=" step0 text-center" id="step1">Delivered</li>
-                                    @endif
-
-
-                                </ul>
-
-                            </div> --}}
-
-
-                        </div>
 
                     </div>
+
                 </div>
                 <!--end::Row-->
                 <!--begin::Product slider-->

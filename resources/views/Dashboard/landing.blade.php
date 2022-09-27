@@ -25,12 +25,16 @@
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     <link href="{{asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/app.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
 <!--begin::Body-->
 
-<body id="kt_body" data-bs-spy="scroll" data-bs-target="#kt_landing_menu" data-bs-offset="200"
+<body id="kt_body" class="landing" data-bs-spy="scroll" data-bs-target="#kt_landing_menu" data-bs-offset="200"
     class="bg-white position-relative">
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
@@ -40,14 +44,14 @@
             <div class="bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-bottom landing-dark-bg"
                 style="background-image: url(assets/media/svg/illustrations/landing.svg)">
                 <!--begin::Header-->
-                <div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header"
+                {{-- <div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header"
                     data-kt-sticky-offset="{default: '200px', lg: '300px'}">
                     <!--begin::Container-->
                     <div class="container">
                         <!--begin::Wrapper-->
                         <div class="d-flex align-items-center justify-content-between">
                             <!--begin::Logo-->
-                            <div class="d-flex align-items-center flex-equal">
+                            <div class="d-flex align-items-center justify-content-center flex-equal">
                                 <!--begin::Mobile menu toggle-->
                                 <button class="btn btn-icon btn-active-color-primary me-3 d-flex d-lg-none"
                                     id="kt_landing_menu_toggle">
@@ -67,11 +71,9 @@
                                 </button>
                                 <!--end::Mobile menu toggle-->
                                 <!--begin::Logo image-->
-                                <a href="../../demo1/dist/landing.html">
+                                <a href="../../demo1/dist/landing.html" class="avatar_link">
                                     <img alt="Logo" src="{{asset('shippment-logo.png')}}"
-                                        class="logo-default h-25px h-lg-30px" />
-                                    <img alt="Logo" src="assets/media/logos/logo-landing-dark.svg"
-                                        class="logo-sticky h-20px h-lg-25px" />
+                                        class="logo-default" />
                                 </a>
                                 <!--end::Logo image-->
                             </div>
@@ -111,19 +113,18 @@
                                 </div>
                             </div>
                             <!--end::Menu wrapper-->
-                            <!--begin::Toolbar-->
-                            <div class="flex-equal text-end ms-1">
-                                <a href="{{ url('web/login') }}" class="btn btn-success">Sign In</a>
-                            </div>
-                            <!--end::Toolbar-->
                         </div>
                         <!--end::Wrapper-->
                     </div>
                     <!--end::Container-->
-                </div>
+                </div> --}}
                 <!--end::Header-->
                 <!--begin::Landing hero-->
                 <div class="d-flex flex-column flex-center w-100 min-h-350px min-h-lg-500px px-9">
+                    <a href="../../demo1/dist/landing.html" class="avatar_link">
+                        <img alt="Logo" src="{{asset('shippment-logo.png')}}"
+                            class="logo-default" />
+                    </a>
                     <!--begin::Heading-->
                     <div class="text-center mb-5 mb-lg-10 py-10 py-lg-20">
                         <!--begin::Title-->
@@ -215,7 +216,7 @@
                         <form id="change_password_form" method="post" action="{{route('gettrackingnumber')}}">
                             @csrf
                             <input type="text" id="tracking_number" name="tracking_number"
-                                class="form-control form-control-lg form-control-solid"><br>
+                                class="form-control form-control-lg"><br>
                             <button type="submit" class="btn btn-primary">Search</button>
                         </form>
                     </div>
@@ -226,39 +227,24 @@
                 <div class="row w-100 gy-10 mb-md-20">
                     <div id="kt_account_profile_details" class="collapse show">
                         <div class="card mb-5 mb-xl-10">
-                            {{-- <div class="title">Purchase Reciept</div> --}}
-                            {{-- <div class="info">
-                                <div class="row">
-                                    <div class="col-7">
-                                        <span id="heading">Date</span><br>
-                                        <span id="details">10 October 2018</span>
-                                    </div>
-                                    <div class="col-5 pull-right">
-                                        <span id="heading">Order No.</span><br>
-                                        <span id="details">012j1gvs356c</span>
-                                    </div>
-                                </div>
-                            </div> --}}
 
-
-                            {{-- <div id="number1"></div> --}}
                             <div class="progress-track">
                                 <ul id="progressbar" id="ajax-modal">
 
 
-                                    @isset($data)
-                                    @if (!$data->isEmpty())
-                                    @foreach ($data as $tracking)
-                                    <li class="active step0  text-center " id="step1">{{$tracking->status}} <br>
-                                        {{$tracking->created_at}}</li>
-                                    @endforeach
+                                    {{-- @isset($data)
+                                        @if (count($data) > 0)
+                                            @foreach ($data as $tracking)
+                                            <li class="active step0  text-center " id="step1">{{$tracking->status}} <br>
+                                                {{$tracking->created_at}}</li>
+                                            @endforeach
 
-                                    @else
-                                    <li class="active step0 text-center" id="step1">created</li>
-                                    <li class=" step0 text-center" id="step1">Shipped</li>
-                                    <li class=" step0 text-center" id="step1">Delivered</li>
-                                    @endif
-                                    @endisset
+                                        @else
+                                            <li class="active step0 text-center" id="step1">created</li>
+                                            <li class=" step0 text-center" id="step1">Shipped</li>
+                                            <li class=" step0 text-center" id="step1">Delivered</li>
+                                        @endif
+                                    @endisset --}}
 
                                 </ul>
                             </div>
@@ -372,6 +358,44 @@
             });
         }
 
+    </script>
+    <script>
+        @if(Session::has('success'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: "{{ Session::get('success') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+        @if(Session::has('error'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: "{{ Session::get('error') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+        @if(Session::has('info'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'info',
+                title: "{{ Session::get('info') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+        @if(Session::has('warning'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'warning',
+                title: "{{ Session::get('warning') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
     </script>
 </body>
 <!--end::Body-->

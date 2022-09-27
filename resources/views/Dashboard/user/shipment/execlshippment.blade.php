@@ -37,39 +37,35 @@
         <table id="example" class="table is-striped" style="width:100%">
             <thead>
                 <tr>
-                    <th>{{__('site.id')}}</th>
+                    <th>{{__('site.tracking')}}</th>
                     <th>{{__('site.status')}}</th>
                     <th>{{__('site.user')}}</th>
                     <th>{{__('site.phone')}}</th>
                     <th>{{__('site.address')}}</th>
-                    <th>{{__('site.traching')}}</th>
                     <th>{{__('site.onhold')}}</th>
-                    <th>{{__('site.created_at')}}</th>
-                    <th>{{__('site.updated_at')}}</th>
                     <th>{{__('site.price')}}</th>
                     <th>{{__('site.city')}}</th>
                     <th>{{__('site.area')}}</th>
+                    <th>{{__('site.created_at')}}</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 fw-bold">
                 @foreach ($show as $shipment)
                 <tr>
-                    <td>{{$shipment->id}}</td>
+                    <td>{{$shipment->barcode}}</td>
                     <td>{{$shipment->status}}</td>
                     <td>{{$shipment->receiver_name}}</td>
                     <td>{{$shipment->receiver_phone}}</td>
                     <td>{{$shipment->address}}</td>
-                    <td>{{$shipment->barcode}}</td>
                     @if ($shipment->on_hold == null)
                     <td>--</td>
                     @else
                     <td>{{$shipment->on_hold}}</td>
                     @endif
-                    <td>{{$shipment->created_at}}</td>
-                    <td>{{$shipment->updated_at}}</td>
                     <td>{{$shipment->price}}</td>
                     <td>{{$shipment->city->city}}</td>
                     <td>{{$shipment->area->area}}</td>
+                    <td>{{$shipment->created_at}}</td>
                 </tr>
                 @endforeach
             </tbody>

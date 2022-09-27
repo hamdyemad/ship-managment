@@ -47,26 +47,11 @@ class ShippmentImport implements
         $city = City::where('city', $row['city'])->first();
         $area = Area::where('area', $row['area'])->first();
 
-        if ($city == null) {
-            $cityId = 1;
-        } else {
-            $cityId = $city->id;
-        }
-
-        if ($area == null) {
-            $areaId = 1;
-        } else {
-            $areaId = $area->id;
-        }
-
-        // $areaId = $area->id;
-
-        $area = Area::where('id', 2)->get();
         $shippment = new Shippment();
         $shippment->shippment_type = $row['shippment_type'];
         $shippment->shipper = $row['shipper_name'];
-        $shippment->city_id =  $cityId;
-        $shippment->area_id = $areaId;
+        $shippment->city_id =  $city->id;
+        $shippment->area_id = $area->id;
         $shippment->business_referance = $row['business_referance'];
         $shippment->receiver_name = $row['receiver_name'];
         $shippment->receiver_phone = $row['phone_number'];
@@ -76,7 +61,6 @@ class ShippmentImport implements
         $shippment->package_details = $row['package_details'];
         $shippment->address = $row['address'];
         $shippment->note = $row['note'];
-        $shippment->status = $row['status'];
         $shippment->barcode = random_int(100000, 999999);
         $isSaved = $shippment->save();
         return  $shippment;
@@ -84,21 +68,16 @@ class ShippmentImport implements
     public function rules(): array
     {
         return [
-            '*.shippment_type' => 'required',
+            '*.shippment_type' => 'required|in:forward,exchange,cash_collection,return_pickup',
             '*.shipper_name' => 'required',
-            '*.area' => 'required',
-            '*.area' => 'required',
+            '*.area' => 'required|exists:areas,area',
+            '*.city' => 'required|exists:cities,city',
             '*.business_referance' => 'required',
             '*.receiver_name' => 'required',
-            '*.shippment_type' => 'required',
-            '*.phone_number' => 'required',
-            '*.allow_open' => 'required',
+            '*.phone_number' => 'required|digits:11',
+            '*.allow_open' => 'required|in:true,false',
             '*.price' => 'required',
-            '*.package_details' => 'required',
             '*.address' => 'required',
-            '*.note' => 'required',
-            '*.status' => 'required',
-
         ];
     }
     public function chunkSize(): int

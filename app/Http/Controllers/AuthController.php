@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         $request->merge(["guard" => $request->guard]);
         $validator = Validator($request->all(), [
-            'guard' => 'required|string|in:admin,web,employee,driver'
+            'guard' => 'required|string|in:admin,user,employee,driver'
         ]);
         if (!$validator->fails()) {
             return response()->view('Dashboard.auth.login', ['guard' => $request->input('guard')]);
@@ -29,7 +29,7 @@ class AuthController extends Controller
         $validator = Validator($request->all(), [
             'email' => "required|email",
             'password' => 'required',
-            'guard' => 'required|string|in:admin,web,employee,driver',
+            'guard' => 'required|string|in:admin,user,employee,driver',
         ]);
 
         if (!$validator->fails()) {
@@ -53,7 +53,20 @@ class AuthController extends Controller
     // logout
     public function logout(Request $request)
     {
-        $guard = auth('web')->check() ? 'web' : 'admin';
+        if(auth('admin')->check()) {
+            $guard = 'admin';
+        } elseif(auth('user')->check())
+        {
+            $guard = 'user';
+        }
+        elseif(auth('driver')->check())
+        {
+            $guard = 'driver';
+        }
+        elseif(auth('employee')->check())
+        {
+            $guard = 'employee';
+        }
         Auth::guard($guard)->logout();
         $request->session()->invalidate();
         return redirect()->route('dashboard.login', $guard);

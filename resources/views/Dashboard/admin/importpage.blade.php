@@ -12,26 +12,6 @@
         <a href="{{route('app')}}" class="text-muted text-hover-primary">{{__('site.home')}}</a>
     </li>
     <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
-    </li>
-    <!--end::Item-->
 </ul>
 
 @endsection
@@ -41,11 +21,11 @@
     h4 {
         /* animation: cssAnimation 0s 5s forwards;
         opacity: 0; */
-        color: rgba(238, 51, 51, 0.663);
+        color: rgba(238, 51, 51, 0.663) !important;
         animation: hideMe 5s forwards;
     }
 
-    @keyframes hideMe {
+    /* @keyframes hideMe {
         0% {
             color: rgba(238, 51, 51, 0.474);
             opacity: 1;
@@ -59,7 +39,7 @@
         100% {
             opacity: 0;
         }
-    }
+    } */
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
@@ -90,16 +70,12 @@
         <!--end::Card title-->
         <div class="card-toolbar">
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                <a href="{{asset('assets/Shippments.xlsx')}}" class="btn btn-primary" download>
+                <a href="{{asset('Shippments.xlsx')}}" class="btn btn-primary" download>
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                     <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
-                                transform="rotate(-90 11.364 20.364)" fill="black" />
-                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                        </svg>
+                        <i class="fas fa-download"></i>
                     </span>
-                    <!--end::Svg Icon-->{{__('site.file_shipment')}}
+                    <!--end::Svg Icon-->{{__('site.download_shippment_file')}}
                 </a>
             </div>
         </div>

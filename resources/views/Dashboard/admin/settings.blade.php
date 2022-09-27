@@ -13,26 +13,6 @@
         <a href="{{route('app')}}" class="text-muted text-hover-primary">{{__('site.home')}}</a>
     </li>
     <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.admin')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="{{route('pickup.index')}}" class="text-muted text-hover-primary">{{__('site.details')}}</a>
-    </li>
-    <!--end::Item-->
 
 </ul>
 
@@ -55,7 +35,7 @@
                 <!--begin::Details toggle-->
                 <div class="d-flex flex-stack fs-4 py-3">
                     <div class="fw-bolder rotate collapsible" data-bs-toggle="collapse" href="#kt_user_view_details"
-                        role="button" aria-expanded="false" aria-controls="kt_user_view_details">Details
+                        role="button" aria-expanded="false" aria-controls="kt_user_view_details">{{ __('site.details') }}
                         <span class="ms-2 rotate-180">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                             <span class="svg-icon svg-icon-3">
@@ -77,22 +57,27 @@
                 <div id="kt_user_view_details" class="collapse show">
                     <div class="pb-5 fs-6">
 
-                        <form id="kt_account_profile_details_form" class="form">
+                        <form id="kt_account_profile_details_form" method="POST" action="{{ route('dashboard.sitting.update') }}" class="form" enctype="multipart/form-data">
+                            @csrf
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
                                 <!--begin::Input img-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Avatar</label>
+                                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('site.avatar') }}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8">
                                         <!--begin::Image input-->
                                         <div class="image-input image-input-outline" data-kt-image-input="true"
-                                            style="background-image: url(assets/media/avatars/blank.png)">
+
+                                            style="background-image: url(/assets/media/avatars/blank.png)
+                                            ">
+
                                             <!--begin::Preview existing avatar-->
                                             <div class="image-input-wrapper w-125px h-125px"
-                                                style="background-image: url(assets/media/avatars/150-26.jpg)"></div>
+                                                    style="background-image:
+                                                    @if(Auth::user()->avatar)url(/{{ Auth::user()->avatar }})@else url(/assets/media/avatars/150-26.jpg)@endif"></div>
                                             <!--end::Preview existing avatar-->
                                             <!--begin::Label-->
                                             <label
@@ -130,18 +115,23 @@
                                     </div>
                                     <!--end::Col-->
                                 </div>
+
                                 <!--end::Input img-->
 
                                 <!--begin::Input Name-->
                                 <div class="row mb-12">
                                     <!--begin::Label-->
-                                    <label class="">{{__('site.name')}}</label>
+                                    <label
+                                    class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.name')}}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-12 fv-row">
                                         <input type="text" name="name"
                                             class="form-control form-control-lg form-control-solid"
                                             value="{{auth()->user()->name}}" />
+                                        @error('name')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -158,7 +148,7 @@
                                             <div class="col-lg-6 fv-row">
                                                 <label
                                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.email')}}</label>
-                                                <input type="email" id="email" name="email"
+                                                <input type="email" id="email" disabled
                                                     value="{{auth()->user()->email}}"
                                                     class="form-control form-control-lg form-control-solid">
                                             </div>
@@ -171,6 +161,9 @@
                                                 <input type="text" id="phone" name="phone"
                                                     value="{{auth()->user()->phone}}"
                                                     class="form-control form-control-lg form-control-solid">
+                                                    @error('phone')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                             </div>
                                             <!--end::phone-->
                                         </div>
@@ -180,33 +173,43 @@
                                 </div>
                                 <!--end::email && phone-->
 
+                                <!--begin::Input old_password-->
+                                <div class="row mb-12">
+                                    <!--begin::Label-->
+                                    <label
+                                    class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.old_password.name')}}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Col-->
+                                    <div class="col-lg-12 fv-row">
+                                        <input type="password" name="old_password"
+                                            class="form-control form-control-lg form-control-solid" />
+                                        @error('old_password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                        @if(Session::has('old_password.invalid'))
+                                            <h6 class="text-danger">{{ Session::get('old_password.invalid') }}</h6>
+                                        @endif
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
+                                <!--end::Input old_password-->
+
                                 <!--begin::Input password-->
                                 <div class="row mb-12">
                                     <!--begin::Label-->
-                                    <label class="">{{__('site.password')}}</label>
+                                    <label class="">{{__('site.new_password')}}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-12 fv-row">
                                         <input type="password" name="password"
-                                            class="form-control form-control-lg form-control-solid" />
+                                            class="form-control form-control-lg form-control-solid" value="" />
+                                        @error('password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Input password-->
-
-                                <!--begin::Input password_confirmation-->
-                                <div class="row mb-12">
-                                    <!--begin::Label-->
-                                    <label class="">{{__('site.password_confirmation')}}</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-12 fv-row">
-                                        <input type="password" name="password_confirmation"
-                                            class="form-control form-control-lg form-control-solid" value="" />
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input password_confirmation-->
 
                             </div>
                             <!--end::Card body-->
@@ -234,5 +237,7 @@
 @endsection
 
 @section('js')
+    <script>
 
+    </script>
 @endsection

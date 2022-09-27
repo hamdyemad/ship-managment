@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 // use App\Models\Role;
+
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
@@ -17,7 +20,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::withCount('permissions')->get();
+        $this->authorize('roles.index');
+        $roles = Role::withCount('permissions')->latest()->get();
         return response()->view('Dashboard.roles.index', ['roles' => $roles]);
     }
 
@@ -28,7 +32,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('roles.create');
+        $permissions = Permission::all()->groupBy('group_by');
+        return view('Dashboard.roles.create', ['permissions' => $permissions]);
     }
 
     /**
@@ -39,7 +45,28 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('roles.create');
+        $rules = [
+            'name' => 'required|string|unique:roles,name',
+            'permissions' => 'required|exists:permissions,id'
+        ];
+        $messages = [
+            'name.required' => __('validation.required'),
+            'name.unique' => __('validation.unique'),
+            'permissions.required' => __('validation.required'),
+            'permissions.exists' => __('validation.exists'),
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->with('error', 'يوجد خطأ ما')->withInput($request->all());
+        }
+        $role = Role::create([
+            'name' => $request->name
+        ]);
+        foreach ($request->permissions as $permession) {
+            $role->permissions()->attach($permession);
+        }
+        return redirect()->to(route('roles.index'))->with('success', __('site.save_changes'));
     }
 
     /**
@@ -50,42 +77,12 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
-        $permissions = Permission::where('guard_name', '=', $role->guard_name)->get();
-        $rolePermissions = $role->permissions;
-        if (count($rolePermissions) > 0) {
-            foreach ($permissions as $permission) {
-                foreach ($rolePermissions as $rolePermission) {
-                    if ($rolePermission->id == $permission->id) {
-                        $permission->setAttribute('assigned', true);
-                    }
-                }
-            }
-        }
-        // dd($permissions);
-        return response()->view('Dashboard.roles.role-permissions', [
+        $this->authorize('roles.edit');
+        $permessions = Permission::all()->groupBy('group_by');
+        return response()->view('Dashboard.roles.edit', [
             'role' => $role,
-            'permissions' => $permissions
+            'permissions' => $permessions
         ]);
-    }
-    public function updateRolePermission(Request $request)
-    {
-        $validator = Validator($request->all(), [
-            'role_id' => 'required|numeric|exists:roles,id',
-            'permission_id' => 'required|numeric|exists:permissions,id',
-        ]);
-        if (!$validator->fails()) {
-            $role = Role::findOrFail($request->input('role_id'));
-            $permission = Permission::findOrFail($request->input('permission_id'));
-            if ($role->hasPermissionTo($permission)) {
-                $role->revokePermissionTo($permission);
-            } else {
-                $role->givePermissionTo($permission);
-            }
-            return response()->json(['message' => 'Updated successfully'], Response::HTTP_OK);
-        } else {
-            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
-        }
     }
 
     /**
@@ -108,7 +105,34 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        //
+        $this->authorize('roles.edit');
+        $rules = [
+            'name' => ['required', 'string', Rule::unique('roles', 'name')->ignore($role->id)],
+            'permissions' => 'required|exists:permissions,id'
+        ];
+        $messages = [
+            'name.required' => __('validation.required'),
+            'name.unique' => __('validation.unique'),
+            'permissions.required' => __('validation.required'),
+            'permissions.exists' => __('validation.exists'),
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->with('error', 'يوجد خطأ ما')->withInput($request->all());
+        }
+        $role->update([
+            'name' => $request->name
+        ]);
+        // remove all previous permessions
+        foreach ($role->permissions as $permission) {
+            $role->permissions()->detach($permission);
+        }
+        // add new permessions
+        foreach ($request->permissions as $permission) {
+            $role->permissions()->attach($permission);
+
+        }
+        return redirect()->to(route('roles.index'))->with('success', __('site.save_changes'));
     }
 
     /**
@@ -119,6 +143,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $this->authorize('roles.destroy');
+        $role->delete();
+        return response()->json(['message' => __('site.save_changes')], Response::HTTP_OK);
     }
 }

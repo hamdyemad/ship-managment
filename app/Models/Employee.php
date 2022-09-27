@@ -15,7 +15,13 @@ class Employee extends Authenticatable
     protected $fillable = [
         'id',
         'name',
+        'phone',
+        'avatar',
         'email',
         'password',
     ];
+
+    public function roles() {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id');
+    }
 }

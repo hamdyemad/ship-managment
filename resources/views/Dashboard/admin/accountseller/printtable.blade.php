@@ -21,7 +21,6 @@
 
 <style>
     div.dataTables_wrapper {
-        /* width: 800px; */
         margin: 0 auto;
     }
 </style>
@@ -38,6 +37,7 @@
             <thead>
                 <tr>
                     <th>id</th>
+                    <th width="100">type</th>
                     <th>date</th>
                     <th>status</th>
                     <th>Co.name</th>
@@ -45,86 +45,70 @@
                     <th>city</th>
                     <th>area</th>
                     <th>cash</th>
-                    <th>area rate</th>
+                    <th>rate</th>
                     <th>cost</th>
+                    <th>pickup_price</th>
+                    <th>pure</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 fw-bold">
-                {{-- @foreach ($show as $shipment)
-                <tr>
-                    <td>{{$shipment->id}}</td>
-                    <td>{{$shipment->status}}</td>
-                    <td>{{$shipment->receiver_name}}</td>
-                    <td>{{$shipment->receiver_phone}}</td>
-                    <td>{{$shipment->address}}</td>
-                    <td>{{$shipment->barcode}}</td>
-                    @if ($shipment->on_hold == null)
-                    <td>--</td>
-                    @else
-                    <td>{{$shipment->on_hold}}</td>
-                    @endif
-                    <td>{{$shipment->created_at}}</td>
-                    <td>{{$shipment->updated_at}}</td>
-                    <td>{{$shipment->price}}</td>
-                    <td>{{$shipment->city->city}}</td>
-                    <td>{{$shipment->area->area}}</td>
-                </tr>
-                @endforeach --}}
                 @foreach ($show as $PDFReports)
-                @if ($PDFReports->pickup_id == null)
-                <tr>
-                    <td>{{ $PDFReports->id }}</td>
-                    <td>{{ $PDFReports->created_at }}</td>
-                    <td>{{ $PDFReports->shippment->status }}</td>
-                    <td>{{ $PDFReports->shippment->receiver_name }}</td>
-                    <td>{{ $PDFReports->shippment->receiver_phone }}</td>
-                    <td>{{ $PDFReports->shippment->city->city }}</td>
-                    <td>{{ $PDFReports->shippment->area->area }}</td>
-                    <td>{{ $PDFReports->cash }}</td>
-
-                    @if ($PDFReports->shippment->user->specialprices->isEmpty())
-                    <td>{{$PDFReports->shippment->area->rate}}</td>
+                    @if($PDFReports->shippment)
+                        <tr>
+                            <td>{{ $PDFReports->shippment_id }}</td>
+                            <td>shippment</td>
+                            <td>{{ $PDFReports->created_at }}</td>
+                            <td>{{ $PDFReports->shippment->status }}</td>
+                            <td>{{ $PDFReports->shippment->receiver_name }}</td>
+                            <td>{{ $PDFReports->shippment->receiver_phone }}</td>
+                            <td>{{ $PDFReports->shippment->city->city }}</td>
+                            <td>{{ $PDFReports->shippment->area->area }}</td>
+                            <td>{{ $PDFReports->cash }}</td>
+                            <td>{{-$PDFReports->rate}}</td>
+                            <td>{{ $PDFReports->cost }}</td>
+                            <td>--</td>
+                            <td>{{ $PDFReports->cost }}</td>
+                        </tr>
                     @else
-
-                    @foreach ($PDFReports->shippment->user->specialprices as $item)
-
-                    @if($PDFReports->shippment->city_id == $item->city_id &&
-                    $PDFReports->shippment->area->id == $item->area_id)
-
-                    <td>{{$item->special_price}}</td>
-                    {{-- @else --}}
-                    {{-- <td>{{$PDFReports->shippment->area->rate}}</td> --}}
+                        <tr>
+                            <td>{{ $PDFReports->pickup_id }}</td>
+                            <td>pickup</td>
+                            <td>{{ $PDFReports->created_at }}</td>
+                            <td>{{ $PDFReports->pickup->status }}</td>
+                            <td>{{ $PDFReports->pickup->name }}</td>
+                            <td>{{ $PDFReports->pickup->phone }}</td>
+                            <td>{{ $PDFReports->pickup->address->city->city }}</td>
+                            <td>{{ $PDFReports->pickup->address->area->area }}</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>-{{ $PDFReports->seller_commission }}</td>
+                            <td>-{{ $PDFReports->seller_commission }}</td>
+                        </tr>
                     @endif
-
-                    @endforeach
-
-                    @endif
-                    <td>{{ $PDFReports->cost }}</td>
-
-                </tr>
-                @elseif($PDFReports->shippment_id == null)
-                <tr>
-                    <td>{{ $PDFReports->id }}</td>
-                    <td>{{ $PDFReports->created_at }}</td>
-                    <td>{{ $PDFReports->pickup->status }}</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>{{ $PDFReports->pickup->address->city->city }}</td>
-                    <td>{{ $PDFReports->pickup->address->area->area }}</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                </tr>
-                @endif
-
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="9">
+                    <td>
+                        <span class="text-muted">Additional Price</span>
+                    </td>
+                    <td colspan="2">
+                        <form class="d-flex" action="{{ route('settlement_sellers') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="seller_id" value="{{ request('seller_id') }}">
+                            <input type="hidden" name="from" value="{{ request('from') }}">
+                            <input type="hidden" name="to" value="{{ request('to') }}">
+                            <input class="form-control additional" value="0" name="additional" type="number">
+                            <button class="btn btn-success">save</button>
+                        </form>
+                    </td>
+                    <td colspan="7">
                         <center>Total</center>
                     </td>
-                    <td>{{$total}}</td>
+                    <td>
+                        <div class="total">{{$total}}</div>
+                    </td>
                 </tr>
             </tfoot>
 
@@ -163,6 +147,10 @@
         table.buttons().container()
         .appendTo( $('div.column.is-half', table.table().container()).eq(0) );
     } );
+    let total = parseInt($('.total').text());
+    $(".additional").on('change keyup', function() {
+        $('.total').text(total + parseInt($(this).val()))
+    });
 
 
 </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,13 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employee = Employee::all();
+        $this->authorize('employees.index');
+        if(Auth::guard('admin')->check()) {
+            $employee = Employee::all();
+        } elseif(Auth::guard('employee')->check()) {
+            $employee = Employee::where('id', '!=', Auth::id())->get();
+        }
+
         return view('Dashboard.admin.employee.index', ['employee' => $employee]);
     }
 
@@ -29,7 +36,8 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $roles = Role::where('guard_name', '=', 'employee')->get();
+        $this->authorize('employees.create');
+        $roles = Role::all();
         return view('Dashboard.admin.employee.create', ['roles' => $roles]);
     }
 
@@ -41,15 +49,13 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('employees.create');
         $validator = Validator($request->all(), [
-            'name' => 'required | max:50',
+            'name' => 'required|max:50',
             'email' => 'required|string | min:2 |max:20',
-            'phone' => 'required |numeric|digits:11',
-            'password' => 'required',
-            'password_confirmation' => 'required',
+            'phone' => 'required|numeric|digits:11',
+            'password' => 'required|min:8|confirmed',
             'role_id' => 'required|numeric|exists:roles,id',
-
-
         ]);
         if (!$validator->fails()) {
             $employee = new Employee();
@@ -59,7 +65,8 @@ class EmployeeController extends Controller
             $employee->password = Hash::make($request->input('password'));
             $isSaved = $employee->save();
             if ($isSaved) {
-                $employee->syncRoles(Role::findById($request->input('role_id'), 'employee'));
+                $employee->roles()->attach($request->role_id);
+
             }
             return response()->json(
                 [
@@ -92,7 +99,8 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        $roles = Role::where('guard_name', '=', 'employee')->get();
+        $this->authorize('employees.edit');
+        $roles = Role::all();
         return view('Dashboard.admin.employee.edit', ['employee' => $employee, 'roles' => $roles]);
     }
 
@@ -105,14 +113,17 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        $validator = Validator($request->all(), [
+        $this->authorize('employees.edit');
+        $rules = [
             'name' => ' max:50',
             'email' => 'string',
             'phone' => 'numeric|digits:11',
             'role_id' => 'required|numeric|exists:roles,id',
-
-
-        ]);
+        ];
+        if($request->password) {
+            $rules['password'] = ['min:8', 'confirmed'];
+        }
+        $validator = Validator($request->all(), $rules);
 
         if (!$validator->fails()) {
 
@@ -123,7 +134,8 @@ class EmployeeController extends Controller
             $employee->password = Hash::make($request->input('password'));
             $isSaved = $employee->save();
             if ($isSaved) {
-                $employee->syncRoles(Role::findById($request->input('role_id'), 'employee'));
+                $employee->roles()->detach();
+                $employee->roles()->attach($request->role_id);
             }
 
             return response()->json(
@@ -145,6 +157,7 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
+        $this->authorize('employees.destroy');
         $isDeleted = $employee->delete();
         return response()->json(
             ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],

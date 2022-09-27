@@ -17,17 +17,6 @@
     <li class="breadcrumb-item">
         <span class="bullet bg-gray-200 w-5px h-2px"></span>
     </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
         <a href="{{route('shipment.index')}}" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
@@ -63,21 +52,6 @@
             <h3 class="fw-bolder m-0">{{__('site.shipment')}}</h3>
         </div>
         <!--end::Card title-->
-        <div class="card-toolbar">
-            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                <a href="{{route('view.import')}}" class="btn btn-primary">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
-                                transform="rotate(-90 11.364 20.364)" fill="black" />
-                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->{{__('site.add_shipment')}}
-                </a>
-            </div>
-        </div>
     </div>
     <!--begin::Card header-->
 
@@ -88,7 +62,24 @@
             @csrf
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
+                @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+                    <div class="row mb-12">
+                        <!--begin::shipment type-->
+                        <div class="col-lg-12 fv-row">
+                            <label
+                                class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment.seller')}}</label>
+                            <select name="user_id" id="shipment_seller"
+                                class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
+                                <option value="">{{ __('site.choose_seller') }}</option>
+                                @foreach ($sellers as $seller)
+                                    <option value="{{ $seller->id }}">{{ $seller->name }}</option>
+                                @endforeach
 
+                            </select>
+                        </div>
+                        <!--end::shipment type-->
+                    </div>
+                @endif
                 <!--begin::shipper-->
                 <div class="row mb-12">
                     <!--begin::Col-->
@@ -357,7 +348,11 @@
         //add shipment details
         function addshipment() {
             axios.post('/dashboard/shipment', {
-                user_id:{{auth()->user()->id}},
+                @if(Auth::guard('user')->check())
+                    user_id:{{auth()->user()->id}},
+                @else
+                    user_id: document.getElementById('shipment_seller').value,
+                @endif
                 area: document.getElementById('area').value,
                 city: document.getElementById('city').value,
                 shipment_type: document.getElementById('shipment_type').value,

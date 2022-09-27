@@ -19,6 +19,8 @@ class ScheduleSeller extends Model
         'user_id',
         'from',
         'to',
-        'costs',
+        'price',
+        'additional_price',
+        'costs'
     ];
 }

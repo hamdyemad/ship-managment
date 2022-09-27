@@ -26,13 +26,27 @@
 <h4>{{$errors->first()}}</h4>
 @endif
 {{-- ================================================ --}}
+<div class="form-group">
+    <label for="">{{ __('site.choose_scan') }}</label>
+    <select class="form-control scan_list">
+        <option value="null" @if(request('type') == 'null') selected @endif>{{  __('site.choose_scan') }}</option>
+        <option value="camera" @if(request('type') == 'camera') selected @endif>{{ __('site.camera_scan') }}</option>
+        <option value="device" @if(request('type') == 'device') selected @endif>{{ __('site.device_scan') }}</option>
+    </select>
+</div>
+@if(request('type') == 'camera')
+    <div style="width: 500px" id="reader"></div>
+    <form id="myFunction" method="post" action="{{route('scan')}}" onsubmit="sendsometext()">
+        @csrf
+        <input type="number" style="display: none" name="sometext" id="myInput">
+    </form>
+@elseif(request('type') == 'device')
+    <form class="mt-2" id="myFunction" method="post" action="{{route('scan', request()->all())}}" onsubmit="sendsometext()">
+        @csrf
+        <input type="text" class="form-control" name="sometext" id="myInput">
+    </form>
+@endif
 
-<div style="width: 500px" id="reader"></div>
-
-<form id="myFunction" method="post" action="{{route('scan')}}" onsubmit="sendsometext()">
-    @csrf
-    <input type="number" style="display: none" placeholder="" name="sometext" id="myInput">
-</form>
 
 {{-- with this function the camera still working and scan --}}
 {{-- <script>
@@ -65,6 +79,24 @@
 <script src="html5-qrcode.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+
+    @if(request('type') == 'device')
+        $("#myInput").focus();
+        $("#myInput").on('keyup', function() {
+            document.getElementById("myFunction").submit();
+        });
+    @endif
+    $(".scan_list").on('change', function() {
+        location.href = '/dashboard/scan?type=' + $(this).val();
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'you are using ' + $(this).val(),
+            showConfirmButton: false,
+            timer: 1500
+        });
+    });
+
     // function onScanSuccess(decodedText, decodedResult) {
     //             console.log(`Code matched = ${decodedText}`, decodedResult);
     //             }
@@ -78,7 +110,7 @@
 
                 let html5QrcodeScanner = new Html5QrcodeScanner(
                     "reader",
-                    { fps: 10, qrbox: {width: 250, height: 250} },
+                    { fps: 1, qrbox: {width: 250, height: 250} },
                     /* verbose= */ false);
 
                 // html5QrcodeScanner.render(onScanSuccess, onScanFailure);

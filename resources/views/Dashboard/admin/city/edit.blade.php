@@ -46,6 +46,7 @@
                         <!--end::Input rate-->
 
                         <div class="modal-footer">
+                            <a class="btn btn-info" href="/dashboard/city">{{ __('site.back') }}</a>
                             <button type="button" id="button_value" value="{{$city->rate}}" onclick="updatecity()"
                                 class="btn btn-primary">{{__('site.update')}}</button>
                         </div>

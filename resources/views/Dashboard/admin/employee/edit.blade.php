@@ -155,7 +155,7 @@
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">
-                        <input type="password" name="password_confirmation"
+                        <input type="password" name="password_confirmation" id="password_confirmation"
                             class="form-control form-control-lg form-control-solid">
                     </div>
                     <!--end::Col-->
@@ -193,6 +193,7 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                password_confirmation: document.getElementById('password_confirmation').value,
                 role_id: document.getElementById('role_id').value,
             })
             .then(function (response) {

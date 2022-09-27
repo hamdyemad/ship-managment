@@ -124,7 +124,7 @@
                 <!--begin::Input password-->
                 <div class="row mb-12">
                     <!--begin::Label-->
-                    <label class="">{{__('site.password')}}</label>
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.password')}}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">
@@ -138,7 +138,7 @@
                 <!--begin::Input password_confirmation-->
                 <div class="row mb-12">
                     <!--begin::Label-->
-                    <label class="">{{__('site.password_confirmation')}}</label>
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.password_confirmation')}}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">

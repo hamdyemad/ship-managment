@@ -24,8 +24,12 @@ class User extends Authenticatable
     protected $fillable = [
         'id',
         'name',
+        'avatar',
+        'phone',
         'email',
+        'special_pickup',
         'password',
+        'balance'
     ];
 
     /**
@@ -47,6 +51,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function roles() {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id');
+    }
 
     public function shipments()
     {

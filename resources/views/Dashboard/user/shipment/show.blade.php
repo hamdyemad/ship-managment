@@ -1,6 +1,6 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.add'))
+@section('title',__('site.show_shippment'))
 
 @section('page_name',__('site.shipment'))
 
@@ -99,7 +99,7 @@
                 <div class="row mb-6">
                     <label class="col-lg-4 col-form-label fw-bold fs-6">{{__('site.onhold')}}</label>
                     <input type="date" class="form-control form-control-lg form-control-solid"
-                        value="{{$shippment->on_hold}}" name="" id="">
+                        value="{{$shippment->on_hold}}" name="" id="" disabled>
                 </div>
                 @endif
 
@@ -114,7 +114,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment_type')}}</label>
-                                <select name="shipment_type" id="shipment_type" data-placeholder="date_period"
+                                <select disabled name="shipment_type" id="shipment_type" data-placeholder="date_period"
                                     class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
                                     <option value="{{$shippment->shippment_type}}" disabled selected>
                                         {{$shippment->shippment_type}}
@@ -131,7 +131,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.business')}}</label>
-                                <input type="text" id="business" name="business"
+                                <input disabled type="text" id="business" name="business"
                                     value="{{$shippment->business_referance}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
@@ -168,7 +168,7 @@
                             <!--begin::receiver name-->
                             <div class="col-lg-6 fv-row">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.name')}}</label>
-                                <input type="text" id="receiver_name" name="receiver_name"
+                                <input  disabled type="text" id="receiver_name" name="receiver_name"
                                     value="{{$shippment->receiver_name}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
@@ -178,7 +178,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.phone')}}</label>
-                                <input type="text" id="receiver_phone" name="receiver_phone"
+                                <input disabled type="text" id="receiver_phone" name="receiver_phone"
                                     value="{{$shippment->receiver_phone}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
@@ -196,7 +196,7 @@
                     <div class="form-floating">
                         {{-- <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.address')}}</label>
                         --}}
-                        <input type="text" id="address" name="address"
+                        <input disabled type="text" id="address" name="address"
                             class="form-control form-control-lg form-control-solid" value="{{$shippment->address}}">
                         <label for="address" class="col-lg-4 col-form-label fw-bold fs-6">address</label>
                     </div>
@@ -210,7 +210,7 @@
                     <!--begin::city-->
                     <div class="col-lg-6 fv-row fv-plugins-icon-container">
                         <div class="mb-5">
-                            <select data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
+                            <select disabled data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
                                 data-control="select2" data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid dynamic">
                                 <option value="{{$shippment->city->city}}" disabled selected>
@@ -225,7 +225,7 @@
                     <!--begin::area-->
                     <div class="col-lg-6 fv-row fv-plugins-icon-container">
                         <div class="mb-5">
-                            <select name="area" id="area" aria-label="Select a Timezone" data-control="select2"
+                            <select disabled name="area" id="area" aria-label="Select a Timezone" data-control="select2"
                                 data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid dynamic">
                                 <option value="{{$shippment->area->area}}" disabled selected>
@@ -251,7 +251,6 @@
                         <span class="ms-2 rotate-180">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                             <span class="svg-icon svg-icon-3">
-
                             </span>
                             <!--end::Svg Icon-->
                         </span>
@@ -263,8 +262,8 @@
                 <div class="row mb-6">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <textarea class="form-control form-control-lg form-control-solid" name="package" id="package"
-                            style="height: 100px" aria-valuemax="{{$shippment->package_details}}"></textarea>
+                        <textarea disabled class="form-control form-control-lg form-control-solid" name="package" id="package"
+                            style="height: 100px">{{$shippment->package_details}}</textarea>
                         <label for="package">{{__('site.package')}}</label>
 
                     </div>
@@ -276,7 +275,7 @@
                 <div class="row mb-6">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <input type="number" id="price" name="price"
+                        <input disabled type="number" id="price" name="price"
                             class="form-control form-control-lg form-control-solid" value="{{$shippment->price}}">
                         <label for="price" class="col-lg-4 col-form-label fw-bold fs-6">{{__('site.price')}}</label>
                     </div>
@@ -288,13 +287,34 @@
                 <div class="row mb-8">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <textarea class="form-control form-control-lg form-control-solid" name="note" id="note"
-                            style="height: 100px" aria-valuemax="{{$shippment->note}}"></textarea>
+                        <textarea disabled class="form-control form-control-lg form-control-solid" name="note" id="note"
+                            style="height: 100px">{{$shippment->note}}</textarea>
                         <label for="note">{{__('site.note')}}</label>
                     </div>
                     <!--end::Col-->
                 </div>
                 <!--end::note-->
+                <h3>{{ __("site.shippment_histories") }}</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ __('site.employee') }}</th>
+                            <th>{{ __('site.status') }}</th>
+                            <th>{{ __('site.date') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($shippment->histories()->latest()->get() as $history)
+                            @if($history->user)
+                                <tr>
+                                    <td>{{ $history->user->name }}</td>
+                                    <td>{{ $history->status }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($history->created_at)->format('Y-m-d / h:i:s')}}</td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
 
             </div>
             <!--end::Card body-->
@@ -308,6 +328,7 @@
             </div> --}}
             <!--end::Actions-->
         </form>
+
         <!--end::Form-->
     </div>
     <!--end::Content-->

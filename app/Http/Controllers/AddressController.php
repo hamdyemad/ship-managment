@@ -85,6 +85,17 @@ class AddressController extends Controller
         // return view('Dashboard.user.settings');
     }
 
+
+    public function addresses(Request $request) {
+        $addresses = Address::where('user_id', $request->user_id)->get();
+        if(count($addresses) > 0) {
+            return response()->json(['success' => 1,'data' => $addresses]);
+        } else {
+            return response()->json(['message' => 'seller has no addresses']);
+
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

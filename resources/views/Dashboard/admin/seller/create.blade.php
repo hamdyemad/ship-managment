@@ -124,12 +124,12 @@
                 <!--begin::Input password-->
                 <div class="row mb-12">
                     <!--begin::Label-->
-                    <label class="">{{__('site.password')}}</label>
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.password')}}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">
                         <input type="password" id="password" name="password"
-                            class="form-control form-control-lg form-control-solid">
+                            class="form-control form-control-lg  form-control-solid">
                     </div>
                     <!--end::Col-->
                 </div>
@@ -138,11 +138,11 @@
                 <!--begin::Input password_confirmation-->
                 <div class="row mb-12">
                     <!--begin::Label-->
-                    <label class="">{{__('site.password_confirmation')}}</label>
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.password_confirmation')}}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-12 fv-row">
-                        <input type="password" name="password_confirmation"
+                        <input type="password" name="password_confirmation" id="password_confirmation"
                             class="form-control form-control-lg form-control-solid">
                     </div>
                     <!--end::Col-->
@@ -168,6 +168,20 @@
 
                 </div>
                 <!--end::price of pickup-->
+
+                <!--begin::Input balance-->
+                {{-- <div class="row mb-12">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{__('site.balance')}}</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-12 fv-row">
+                        <input type="number" name="balance" id="balance"
+                            class="form-control form-control-lg form-control-solid">
+                    </div>
+                    <!--end::Col-->
+                </div> --}}
+                <!--end::Input balance-->
 
             </div>
             <!--end::Card body-->
@@ -227,6 +241,8 @@
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
+                password_confirmation: document.getElementById('password_confirmation').value,
+                // balance: document.getElementById('balance').value,
                 role_id: document.getElementById('role_id').value,
                 special_pickup: document.getElementById('special_pickup').value,
 

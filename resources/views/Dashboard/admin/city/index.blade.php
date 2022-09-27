@@ -1,15 +1,15 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.city'))
+@section('title',__('site.cities'))
 
-@section('page_name',__('site.city'))
+@section('page_name',__('site.cities'))
 
 @section('pages')
 
 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="{{route('app')}}" class="text-muted text-hover-primary">Home</a>
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">{{ __('site.home') }}</a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -18,7 +18,7 @@
     </li>
     <!--end::Item-->
     <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">City</li>
+    <li class="breadcrumb-item text-muted">{{ __('site.cities') }}</li>
     <!--end::Item-->
 </ul>
 
@@ -34,10 +34,12 @@
 
 @endsection
 
-@section('button')
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-    data-bs-whatever="@mdo">{{__('site.add_city')}}</button>
-@endsection
+@can('cities.create')
+    @section('button')
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        data-bs-whatever="@mdo">{{__('site.add_city')}}</button>
+    @endsection
+@endcan
 
 @section('content')
 
@@ -52,7 +54,7 @@
                 <form id="create-form">
                     @csrf
                     <div class="mb-3">
-                        <label for="city" class="col-form-label">{{__('sit.city')}}</label>
+                        <label for="city" class="col-form-label">{{__('site.city')}}</label>
                         <input type="text" class="form-control" id="city" name="city">
                     </div>
                     <div class="mb-3">
@@ -73,7 +75,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <table id="example" class="ui celled table table-hover " style="width:100%">
+                <table class="table table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>
@@ -91,14 +93,14 @@
                         </tr>
                     </thead>
                     <tbody id="list_tbody">
-                        @foreach ($city as $city)
+                        @foreach ($cities as $city)
                         <tr>
                             <td st>{{$city->id}}</td>
                             <td>{{$city->city}}</td>
                             <td>{{$city->rate}}</td>
                             <td class="text-end">
                                 <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
-                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">{{ __('site.actions') }}
                                     <span class="svg-icon svg-icon-5 m-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none">
@@ -113,20 +115,24 @@
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                                     data-kt-menu="true">
 
-                                    <div class="menu-item px-3">
-                                        <a href="{{route('city.show',$city->id)}}"
-                                            class="menu-link px-3">{{__('site.area')}}</a>
-                                    </div>
-
-                                    <div class="menu-item px-3">
-                                        <a href="{{route('city.edit',$city->id)}}" id="editf"
-                                            class="menu-link px-3">{{__('site.update')}}</a>
-                                    </div>
-
-                                    <div class="menu-item px-3">
-                                        <a href="#" onclick="confirmDelete('{{$city->id}}',this)" class="menu-link px-3"
-                                            data-kt-customer-table-filter="delete_row">{{__('site.delete')}}</a>
-                                    </div>
+                                    @can('areas.index')
+                                        <div class="menu-item px-3">
+                                            <a href="{{route('city.show',$city->id)}}"
+                                                class="menu-link px-3">{{__('site.area')}}</a>
+                                        </div>
+                                    @endcan
+                                    @can('cities.edit')
+                                        <div class="menu-item px-3">
+                                            <a href="{{route('city.edit',$city->id)}}" id="editf"
+                                                class="menu-link px-3">{{__('site.update')}}</a>
+                                        </div>
+                                    @endcan
+                                    @can('cities.destroy')
+                                        <div class="menu-item px-3">
+                                            <a href="#" onclick="confirmDelete('{{$city->id}}',this)" class="menu-link px-3"
+                                                data-kt-customer-table-filter="delete_row">{{__('site.delete')}}</a>
+                                        </div>
+                                    @endcan
 
                                 </div>
 
@@ -137,6 +143,7 @@
                     </tbody>
 
                 </table>
+                {{ $cities->links() }}
             </div>
 
         </div>

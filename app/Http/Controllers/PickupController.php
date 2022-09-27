@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\Pickup;
+use App\Models\PickupHistory;
 use App\Models\Shippment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,9 +24,13 @@ class PickupController extends Controller
      */
     public function index()
     {
-
-        $pickup = Pickup::where('user_id', auth()->user()->id)->get();
-        return view('Dashboard.user.pickup.index', ['pickup' => $pickup]);
+        if(Auth::guard('user')->user()) {
+            $pickup = Pickup::where('user_id', auth()->user()->id)->get();
+            return view('Dashboard.user.pickup.index', ['pickup' => $pickup]);
+        }
+        else {
+            return redirect()->back()->with('error', __('site.error'));
+        }
     }
 
     /**
@@ -33,11 +40,18 @@ class PickupController extends Controller
      */
     public function create()
     {
-        $address = Address::where('user_id', auth()->user()->id)->get();
+        if(Auth::guard('user')->check()) {
+            $address = Address::where('user_id', auth()->user()->id)->get();
+        } else {
+            $address = [];
+        }
         $shipment = Shippment::where('status', 'created')->count();
         $city = City::all();
-
-        return view('Dashboard.user.pickup.create', ['address' => $address, 'shipment' => $shipment, 'city' => $city]);
+        $sellers = User::all();
+        return view('Dashboard.user.pickup.create', ['address' => $address,
+        'shipment' => $shipment,
+        'city' => $city,
+        'sellers' => $sellers]);
     }
 
     /**
@@ -67,6 +81,7 @@ class PickupController extends Controller
                     $updated = $shipment->save();
                 }
             }
+
             $pickup = new Pickup();
             $pickup->name = $request->input('name');
             $pickup->status = 'requested';
@@ -99,7 +114,6 @@ class PickupController extends Controller
      */
     public function show(Pickup $pickup)
     {
-
         $pickups = Pickup::findOrFail($pickup->id);
         return view('Dashboard.user.pickup.show', ['pickup' => $pickups]);
     }
@@ -126,6 +140,12 @@ class PickupController extends Controller
     {
         $pickup->status = 'pickedup';
         $isSaved = $pickup->save();
+
+        $pickup_history = new PickupHistory();
+        $pickup_history->user_id = Auth::id();
+        $pickup_history->pickup_id = $pickup->id;
+        $pickup_history->status = 'pickedup';
+        $pickup_history->save();
 
         return response()->json(
             [

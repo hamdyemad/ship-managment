@@ -10,7 +10,19 @@
 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="{{route('app')}}" class="text-muted text-hover-primary">Home</a>
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">{{ __('site.home') }}</a>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <span class="bullet bg-gray-200 w-5px h-2px"></span>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="/dashboard/city" class="text-muted text-hover-primary">
+            {{ $city->city }}
+        </a>
     </li>
     <!--end::Item-->
     <!--begin::Item-->
@@ -20,20 +32,6 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">{{__('site.area')}}</li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">
-            @foreach ($area as $areas)
-            {{$areas->city->city}}
-            @endforeach
-        </a>
-    </li>
     <!--end::Item-->
 </ul>
 
@@ -47,15 +45,14 @@
 
 @endsection
 
-@section('button')
+@can('areas.create')
+    @section('button')
+    <button type="button" id="button_arae" value="{{$city->id}}" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add Area</button>
 
+    @endsection
+@endcan
 
-<button type="button" id="button_arae" value="{{$city}}" class="btn btn-primary" data-bs-toggle="modal"
-    data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add Area</button>
-
-
-
-@endsection
 
 @section('content')
 
@@ -98,7 +95,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($area as $area)
+        @foreach ($areas as $area)
         <tr>
             <td>{{$area->id}}</td>
             <td>{{$area->area}}</td>
@@ -119,13 +116,16 @@
                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                     data-kt-menu="true">
 
-                    <div class="menu-item px-3">
-                        <a href="{{route('area.edit',$area->id)}}" class="menu-link px-3">update</a>
-                    </div>
-
-                    <div class="menu-item px-3">
-                        <a href="" class="menu-link px-3" data-kt-customer-table-filter="delete_row">Delete</a>
-                    </div>
+                    @can('areas.edit')
+                        <div class="menu-item px-3">
+                            <a href="{{route('area.edit',$area->id)}}" class="menu-link px-3">update</a>
+                        </div>
+                    @endcan
+                    @can('areas.destroy')
+                        <div class="menu-item px-3">
+                            <a href="#" onclick="confirmDelete('{{$area->id}}',this)" class="menu-link px-3" data-kt-customer-table-filter="delete_row">Delete</a>
+                        </div>
+                    @endcan
 
                 </div>
 
@@ -182,6 +182,54 @@
             showConfirmButton: false,
             timer: 1500
             })
+        });
+    }
+
+    // show message to be sure to delete
+    function confirmDelete(id,reference) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                performDelete(id,reference);
+            }
+        });
+    }
+
+    // delete area with his area ....
+    function performDelete(id,reference) {
+        var table1 = $('#example').DataTable();
+        axios.delete('/dashboard/area/'+id)
+        .then(function (response) {
+            //2xx
+            console.log(response);
+            Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+            });
+            reference.closest('tr').remove();
+            location.reload();
+
+        })
+        .catch(function (error) {
+            //4xx - 5xx
+            console.log(error);
+            Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: error.response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+            });
         });
     }
 

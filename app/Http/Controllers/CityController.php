@@ -17,9 +17,10 @@ class CityController extends Controller
      */
     public function index()
     {
-        $city = City::all();
+        $this->authorize('cities.index');
+        $cities = City::latest()->paginate(10);
 
-        return response()->view('Dashboard.admin.city.index', ['city' => $city]);
+        return response()->view('Dashboard.admin.city.index', ['cities' => $cities]);
     }
 
     /**
@@ -41,6 +42,7 @@ class CityController extends Controller
     //store city
     public function store(Request $request)
     {
+        $this->authorize('cities.create');
         $validator = Validator($request->all(), [
             'city' => 'required|string',
             'rate' => 'required|string|min:1|max:7',
@@ -71,8 +73,8 @@ class CityController extends Controller
      */
     public function show(City $city)
     {
-
-        return view('Dashboard.admin.area.index', ['city' => $city->id, 'area' => $city->areas]);
+        $this->authorize('areas.index');
+        return view('Dashboard.admin.area.index', ['city' => $city, 'areas' => $city->areas]);
     }
 
     /**
@@ -83,6 +85,7 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
+        $this->authorize('cities.edit');
         return response()->view('Dashboard.admin.city.edit', ['city' => $city]);
     }
 
@@ -97,6 +100,7 @@ class CityController extends Controller
     area rate like city rate will change */
     public function update(Request $request, City $city)
     {
+        $this->authorize('cities.edit');
 
         $area = $city->areas()->where('city_id', $request->id)
             ->where('rate', $request->old_value)->get();
@@ -141,6 +145,7 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
+        $this->authorize('cities.destroy');
         $area = $city->areas()->where('city_id', $city->id)->delete();
         $isDeleted = $city->delete();
         return response()->json(

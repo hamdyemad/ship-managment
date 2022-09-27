@@ -1,119 +1,176 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.accountdriver'))
+@section('title',__('site.roles'))
 
-@section('page_name',__('site.accountdriver'))
+@section('page_name',__('site.roles'))
 
 @section('pages')
+
+<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('app')}}" class="text-muted text-hover-primary">Home</a>
+    </li>
+    <!--end::Item-->
+</ul>
 
 @endsection
 
 @section('css')
 
-
-{{--
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bulma.min.css">
-
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bulma.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css" rel="stylesheet"
+    type="text/css" />
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css" />
 
 
-{{-- <style>
-    div.dataTables_wrapper {
-        /* width: 800px; */
-        margin: 0 auto;
-    }
-</style> --}}
+
 @endsection
+
+@can('roles.create')
+    @section('button')
+        <a href="/dashboard/roles/create" class="btn btn-primary">{{__('site.add_role')}}</a>
+    @endsection
+@endcan
 
 @section('content')
 
-<div class="card">
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="example" class="ui celled table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>{{__('site.name')}}</th>
+                            <th>{{__('site.permissions')}}</th>
+                            <th>{{__('site.created_at')}}</th>
+                            <th>{{__('site.updated_at')}}</th>
+                            <th>{{__('site.settings')}}</th>
 
-    <div class="card-body pt-0">
-        <br>
-        <!--begin::Table-->
+                        </tr>
+                    </thead>
+                    <tbody id="list_tbody">
+                        @foreach ($roles as $role)
+                        <tr>
+                            <td st>{{$role->id}}</td>
+                            <td>{{$role->name}}</td>
+                            <td>
+                                @if(Auth::user()->can('roles.edit'))
+                                    <a class="btn btn-app bg-info" href="{{route('roles.show',$role->id)}}">
+                                        <span class="badge bg-danger">{{$role->permissions_count}}</span>
+                                        <i class="fas fa-heart"></i> {{__('site.permissions')}}
+                                    </a>
+                                @else
+                                    <div class="alert bg-info" href="{{route('roles.show',$role->id)}}">
+                                        <span class="badge bg-danger">{{$role->permissions_count}}</span>
+                                        <i class="fas fa-heart"></i> {{__('site.permissions')}}
+                                    </div>
+                                @endif
+                            </td>
+                            <td>{{$role->created_at}}</td>
+                            <td>{{$role->updated_at}}</td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                    <span class="svg-icon svg-icon-5 m-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path
+                                                d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                fill="black" />
+                                        </svg>
+                                    </span>
 
-        <table class="table align-middle table-row-dashed fs-6 gy-5">
-            <thead>
-                <tr>
-                    <th style="width: 10px">#</th>
-                    <th>{{__('site.name')}}</th>
-                    <th>{{__('site.guard')}}</th>
-                    <th>{{__('site.permissions')}}</th>
-                    <th>{{__('site.created_at')}}</th>
-                    <th>{{__('site.updated_at')}}</th>
-                    {{-- <th style="width: 40px">Settings</th> --}}
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($roles as $role)
-                <tr>
-                    <td>{{$role->id}}</td>
-                    <td>{{$role->name}}</td>
-                    <td>{{$role->guard_name}}</td>
-                    <td>
-                        <a class="btn btn-app bg-info" href="{{route('roles.show',$role->id)}}">
-                            <span class="badge bg-danger">{{$role->permissions_count}}</span>
-                            <i class="fas fa-heart"></i> {{__('site.permissions')}}
-                        </a>
-                    </td>
-                    <td>{{$role->created_at}}</td>
-                    <td>{{$role->updated_at}}</td>
-                    {{-- <td>
-                        <div class="btn-group">
-                            <a href="{{route('roles.edit',$role->id)}}" class="btn btn-warning">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="#" onclick="confirmDelete('{{$role->id}}',this)" class=" btn btn-danger">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </td> --}}
-                </tr>
-                @endforeach
+                                </a>
 
-            </tbody>
-        </table>
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                    data-kt-menu="true">
+                                    @can('roles.destroy')
+                                        <div class="menu-item px-3">
+                                            <a href="#" onclick="confirmDelete('{{$role->id}}',this)" class="menu-link px-3"
+                                                data-kt-customer-table-filter="delete_row">{{__('site.delete')}}</a>
+                                        </div>
+                                    @endcan
 
-        <!--end::Table-->
+                                </div>
+
+                            </td>
+
+                        </tr>
+                        @endforeach
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+
     </div>
 
 </div>
 
 @endsection
 
-@push('scripts')
-{{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bulma.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bulma.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
---}}
+@section('js')
 
-
-{{-- <script type="text/javascript">
+<script>
     $(document).ready(function() {
-            var table = $('#example').DataTable( {
-            lengthChange: false,
-            scrollX: true,
-            buttons: [  'excel', 'pdf', 'print' ]
-        } );
+        $('#example').DataTable();
 
-        // Insert at the top left of the table
-        table.buttons().container()
-        .appendTo( $('div.column.is-half', table.table().container()).eq(0) );
-    } );
+    });
 
 
-</script> --}}
+    // show message to be sure to delete
+    function confirmDelete(id,reference) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                performDelete(id,reference);
+            }
+        });
+    }
 
-@endpush
+    // delete City with his area ....
+    function performDelete(id,reference) {
+        var table1 = $('#example').DataTable();
+        axios.delete('/dashboard/roles/'+id)
+        .then(function (response) {
+            //2xx
+            console.log(response);
+            Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+            });
+            reference.closest('tr').remove();
+            location.reload();
+
+        })
+        .catch(function (error) {
+            //4xx - 5xx
+            console.log(error);
+            Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: error.response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+            });
+        });
+    }
+
+
+
+</script>
+
+@endsection

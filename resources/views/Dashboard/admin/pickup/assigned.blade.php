@@ -156,29 +156,88 @@
                                                 <!--begin::Row-->
                                                 <div class="row">
 
-                                                    <!--begin::address line-->
-                                                    <div class="col-lg-12 fv-row fv-plugins-icon-container" id="scroll">
-                                                        {{-- <select id="pickup_id" class="selectpicker" multiple
-                                                            data-live-search="true">
-                                                            @foreach ($pickup as $pickups)
-                                                            <option value="{{$pickups->id}}">
-                                                                {{$pickups->address->city->city}} //
-                                                                {{$pickups->address->area->area}}
-                                                                //{{$pickups->address->address_line}}
-                                                            </option>
-                                                            @endforeach
-                                                        </select> --}}
-                                                        @foreach ($pickup as $pickups)
-                                                        <label><input type="checkbox" value="{{$pickups->id}}"
-                                                                name="address">{{$pickups->address->city->city}}
-                                                            //
-                                                            {{$pickups->address->area->area}}
-                                                            //{{$pickups->address->address_line}}</label>
-                                                        @endforeach
-                                                    </div>
-                                                    <!--end::address line-->
+                                                    <!--begin::Table-->
+                                                        <table class="table d-block overflow-auto align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th  class="w-10px pe-2">
+                                                                        <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                            <input class="form-check-input" type="checkbox" data-kt-check="true"
+                                                                                data-kt-check-target="#kt_table_users .form-check-input" value="1" />
+                                                                        </div>
+                                                                    </th>
+                                                                    <th class="min-w-125px">{{__('pickup.id')}}</th>
+                                                                    <th class="min-w-125px">{{__('pickup.package')}}</th>
+                                                                    <th class="min-w-125px">{{__('pickup.user')}}</th>
+                                                                    <th class="min-w-125px">{{__('pickup.name')}}</th>
+                                                                    <th class="min-w-125px">{{__('pickup.phone')}}</th>
+                                                                    <th class="min-w-125px">{{__('pickup.email')}}</th>
+                                                                    <th class="min-w-125px">{{__('pickup.address')}}</th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+
+                                                            <tbody class="text-gray-600 fw-bold">
+
+                                                                @foreach ($pickups as $pickup)
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                            <input class="form-check-input" type="checkbox" name="address" value="{{$pickup->id}}" />
+                                                                        </div>
+                                                                        {{-- <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                            <input class="form-check-input" value="{{$pickup->id}}" type="checkbox" data-kt-check="true"
+                                                                                data-kt-check-target="#kt_table_users .form-check-input" name="address" />
+                                                                        </div> --}}
+                                                                    <!--begin::Checkbox-->
+                                                                    {{-- <td>
+                                                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                            <input class="form-check-input" type="checkbox" value="1" />
+                                                                        </div>
+                                                                    </td> --}}
+                                                                    <!--end::Checkbox-->
+
+                                                                    <!--begin::User=-->
+                                                                    <td class="d-flex align-items-center">
+                                                                        <!--begin::User details-->
+                                                                        <div class="d-flex flex-column">
+                                                                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$pickup->id}}"
+                                                                                data-bs-toggle="modal" role="button">{{$pickup->id}}</a>
 
 
+                                                                        </div>
+                                                                        <!--begin::User details-->
+                                                                    </td>
+
+
+                                                                    <td>{{$pickup->package}}</td>
+                                                                    <td>{{$pickup->user->name}}</td>
+                                                                    <td>{{$pickup->name}}</td>
+
+                                                                    <td>{{$pickup->phone}}</td>
+
+                                                                    <td>
+                                                                        <div class="badge badge-light fw-bolder">{{$pickup->email}}</div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{$pickup->address->city->city}}
+                                                                        //
+                                                                        {{$pickup->address->area->area}}
+                                                                        //{{$pickup->address->address_line}}
+                                                                    </td>
+                                                                </tr>
+
+                                                                @endforeach
+
+                                                            </tbody>
+
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                    <!--end::Table-->
 
                                                 </div>
                                                 <!--end::Row-->
@@ -227,8 +286,9 @@
     function assignepickup() {
         var favorite = [];
         $.each($("input[name='address']:checked"), function(){
-        favorite.push($(this).val());
+            favorite.push($(this).val());
         });
+
 
         axios.post('/dashboard/assignedpickup', {
 

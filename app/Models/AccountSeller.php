@@ -9,6 +9,11 @@ class AccountSeller extends Model
 {
     use HasFactory;
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function shippment()
     {
         return $this->belongsTo(Shippment::class);

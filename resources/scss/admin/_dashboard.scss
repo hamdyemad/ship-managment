@@ -1,0 +1,16 @@
+.dashboard {
+    .svg-icon {
+        i {
+            font-size: 35px;
+        }
+    }
+    canvas {
+        width: 600px !important;
+        height: 600px !important;
+        margin: auto;
+        @media(max-width: 991px) {
+            width: 100% !important;
+            height: 300px !important;
+        }
+    }
+}

@@ -17,6 +17,7 @@ class DriverController extends Controller
      */
     public function index()
     {
+        $this->authorize('drivers.index');
         $driver = Driver::all();
         return view('Dashboard.admin.driver.index', ['driver' => $driver]);
     }
@@ -28,7 +29,8 @@ class DriverController extends Controller
      */
     public function create()
     {
-        $roles = Role::where('guard_name', '=', 'driver')->get();
+        $this->authorize('drivers.create');
+        $roles = Role::all();
         return view('Dashboard.admin.driver.create', ['roles' => $roles]);
     }
 
@@ -40,6 +42,7 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('drivers.create');
         $validator = Validator($request->all(), [
             'name' => 'required | max:50',
             'email' => 'required|string | min:2 |max:20',
@@ -54,8 +57,9 @@ class DriverController extends Controller
             $driver->name = $request->input('name');
             $driver->email = $request->input('email') . '@shipexeg.com';
             $driver->phone = $request->input('phone');
+            $driver->balance = $request->input('balance');
             if (!$request->input('special_pickup')) {
-                $driver->special_pickup = 10;
+                $driver->special_pickup = 0;
             } else {
                 $driver->special_pickup = $request->input('special_pickup');
             }
@@ -63,7 +67,7 @@ class DriverController extends Controller
             $driver->password = Hash::make($request->input('password'));
             $isSaved = $driver->save();
             if ($isSaved) {
-                $driver->syncRoles(Role::findById($request->input('role_id'), 'driver'));
+                $driver->roles()->attach($request->role_id);
             }
             return response()->json(
                 [
@@ -95,8 +99,9 @@ class DriverController extends Controller
      */
     public function edit(Driver $driver)
     {
+        $this->authorize('drivers.edit');
         // $driver = Driver::findOrFail($id);
-        $roles = Role::where('guard_name', '=', 'driver')->get();
+        $roles = Role::all();
         return view('Dashboard.admin.driver.edit', ['driver' => $driver, 'roles' => $roles]);
     }
 
@@ -109,18 +114,21 @@ class DriverController extends Controller
      */
     public function update(Request $request, Driver $driver)
     {
-        $validator = Validator($request->all(), [
+        $this->authorize('drivers.edit');
+        $rules = [
             'name' => ' max:50',
             'email' => 'string',
             'phone' => 'numeric|digits:11',
             'special_pickup' => 'numeric',
             'role_id' => 'required|numeric|exists:roles,id',
+        ];
+        if($request->password) {
+            $rules['password'] = ['min:8', 'confirmed'];
+        }
+        $validator = Validator($request->all(), $rules);
 
-        ]);
 
         if (!$validator->fails()) {
-
-
             $driver->name = $request->input('name');
             $driver->email = $request->input('email') . '@shipexeg.com';
             $driver->phone = $request->input('phone');
@@ -128,7 +136,8 @@ class DriverController extends Controller
             $driver->special_pickup = $request->input('special_pickup');
             $isSaved = $driver->save();
             if ($isSaved) {
-                $driver->syncRoles(Role::findById($request->input('role_id'), 'driver'));
+                $driver->roles()->detach();
+                $driver->roles()->attach($request->role_id);
             }
 
             return response()->json(
@@ -150,6 +159,7 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
+        $this->authorize('drivers.destroy');
         $isDeleted = $driver->delete();
         return response()->json(
             ['message' => $isDeleted ? 'Deleted successfully' : 'Delete failed!'],

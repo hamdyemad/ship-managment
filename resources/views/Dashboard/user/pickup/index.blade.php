@@ -214,11 +214,12 @@
                         </div>
                     </th>
                     <th class="min-w-125px">{{__('site.pickupid')}}</th>
+                    <th class="min-w-125px">{{__('site.settled')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
+                    <th class="min-w-125px">{{__('site.packages')}}</th>
                     <th class="min-w-125px">{{__('site.pickupdate')}}</th>
                     <th class="min-w-125px">{{__('site.user')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
-                    {{-- <th class="min-w-125px">{{__('site.price')}}</th> --}}
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
                 <!--end::Table row-->
@@ -250,6 +251,17 @@
                         </div>
                         <!--begin::User details-->
                     </td>
+                    <td>
+                        @if($pickup->settled)
+                            <span class="badge badge-success">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        @else
+                            <span class="badge badge-danger">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        @endif
+                    </td>
                     <!--end::User=-->
                     {{-- @foreach ($shipment as $shipment)
                     --}}
@@ -259,7 +271,19 @@
 
                     {{-- @endforeach --}}
 
-                    <td>{{$pickup->status}}</td>
+                    <td>
+                        @if ($pickup->status == 'pickedup')
+                            <div class="rounded-pill" style="background-color: #94c1e2;width: 80%;text-align: center">
+                                {{$pickup->status}}</div>
+                        @elseif($pickup->status == 'requested')
+                            <div class="rounded-pill" style="background-color: #7bc1f3;width: 80%;text-align: center">
+                                {{$pickup->status}}</div>
+                        @elseif($pickup->status == 'proccessing')
+                            <div class="rounded-pill" style="background-color: #52ec7b;width: 80%;text-align: center">
+                                {{$pickup->status}}</div>
+                        @endif
+                    </td>
+                    <td>{{ $pickup->package }}</td>
 
                     <td>{{$pickup->date}}</td>
 

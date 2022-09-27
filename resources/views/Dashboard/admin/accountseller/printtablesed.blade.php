@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Scheduless Seller</title>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 
@@ -13,30 +13,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <style>
-        /* .page {
-            display: flex;
-            align-items: center;
-        }
 
-        .page-break {
-            page-break-after: always;
-        } */
-        /* body {
-            font-family: 'DejaVu Sans', sans-serif;
-        } */
+        td,th {
+            background-color: rgb(239, 239, 239);
+            padding: 10px;
+            margin:10px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="text-center" style="padding:20px;">
-        <input type="button" id="rep" value="Print" class="btn btn-info btn_print">
-    </div>
     <div style="text-align: center;" id="printpdf">
-
         <table class="table">
             <thead style="background-color: rgb(191, 189, 189)">
                 <tr>
-                    <th>id</th>
+                    <td colspan="3">Seller Name</td>
+                    <td colspan="8">{{ $seller->name }}</td>
+                </tr>
+                <tr>
+                    <th>ship & pickup id</th>
+                    <th>type</th>
                     <th>date</th>
                     <th>status</th>
                     <th>contact name</th>
@@ -51,34 +47,55 @@
             </thead>
             <tbody>
                 @foreach ($show as $PDFReports)
-                <tr>
-                    <td>{{ $PDFReports->id }}</td>
-                    <td>{{ $PDFReports->created_at }}</td>
-                    <td>{{ $PDFReports->shippment->status }}</td>
-                    <td>{{ $PDFReports->shippment->receiver_name }}</td>
-                    <td>{{ $PDFReports->shippment->receiver_phone }}</td>
-                    <td>{{ $PDFReports->shippment->city->city }}</td>
-                    <td>{{ $PDFReports->shippment->area->area }}</td>
-                    <td>{{ $PDFReports->cash }}</td>
-                    @if($PDFReports->shippment->user->special_price != 0 && $PDFReports->shippment->city->id ==
-                    $PDFReports->shippment->user->city_id &&
-                    $PDFReports->shippment->area->id == $PDFReports->shippment->user->area_id)
-
-                    <td>{{$PDFReports->shippment->user->special_price}}</td>
-                    @else
-                    <td>{{$PDFReports->shippment->area->rate}}</td>
-                    @endif
-                    <td>{{ $PDFReports->cost }}</td>
-
-                </tr>
+                @if($PDFReports->shippment_id !== null)
+                    <tr>
+                        <td>{{ $PDFReports->shippment->id }}</td>
+                        <td>shippment</td>
+                        <td>{{ $PDFReports->created_at }}</td>
+                        <td>{{ $PDFReports->shippment->status }}</td>
+                        <td>{{ $PDFReports->shippment->receiver_name }}</td>
+                        <td>{{ $PDFReports->shippment->receiver_phone }}</td>
+                        <td>{{ $PDFReports->shippment->city->city }}</td>
+                        <td>{{ $PDFReports->shippment->area->area }}</td>
+                        <td>{{ $PDFReports->cash }}</td>
+                        <td>{{-$PDFReports->rate}}</td>
+                        <td>{{ $PDFReports->cost }}</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>{{ $PDFReports->pickup->id }}</td>
+                        <td>pickup</td>
+                        <td>{{ $PDFReports->created_at }}</td>
+                        <td>{{ $PDFReports->pickup->status }}</td>
+                        <td>{{ $PDFReports->pickup->name }}</td>
+                        <td>{{ $PDFReports->pickup->phone }}</td>
+                        <td>{{ $PDFReports->pickup->address->city->city }}</td>
+                        <td>{{ $PDFReports->pickup->address->area->area }}</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>-{{ $PDFReports->seller_commission }}</td>
+                    </tr>
+                @endif
                 @endforeach
             </tbody>
             <tfoot style="background-color: rgb(191, 189, 189)">
                 <tr>
-                    <td colspan="9">
-                        <center>Total</center>
+                    <td colspan="10">
+                        <center>Price</center>
                     </td>
-                    <td>{{$total}}</td>
+                    <td>{{ $schedule->price }}</td>
+                </tr>
+                <tr>
+                    <td colspan="10">
+                        <center>Additional Price</center>
+                    </td>
+                    <td>{{ $schedule->additional_price }}</td>
+                </tr>
+                <tr>
+                    <td colspan="10">
+                        <center>Costs</center>
+                    </td>
+                    <td>{{ $schedule->costs }}</td>
                 </tr>
             </tfoot>
         </table>

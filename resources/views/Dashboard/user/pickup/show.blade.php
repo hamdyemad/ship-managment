@@ -20,17 +20,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.user')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="{{route('pickup.index')}}" class="text-muted text-hover-primary">{{__('site.pickup')}}</a>
+        <a href="{{route('assignedpickup.index')}}" class="text-muted text-hover-primary">{{__('site.pickup')}}</a>
     </li>
     <!--end::Item-->
 
@@ -55,23 +45,24 @@
         <!--end::Card title-->
         {{-- //export link --}}
         <div class="card-toolbar">
-            {{-- status dropdown --}}
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    {{__('site.status')}}
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <hr>
-                    <li><a class="dropdown-item" onclick="addshipment('pickedup',{{$pickup->id}})"><i
-                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;Picked up</a>
-                    </li>
-                    <hr>
+                @if(Auth::guard('admin')->check() || Auth::guard('employee')->check() || Auth::guard('driver')->check())
+                    {{-- status dropdown --}}
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{__('site.status')}}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <hr>
+                            <li><a class="dropdown-item" onclick="addshipment('pickedup',{{$pickup->id}})"><i
+                                        class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;Picked up</a>
+                            </li>
+                            <hr>
 
-                </ul>
+                        </ul>
+                    </div>
+                @endif
             </div>
-
-        </div>
     </div>
     <!--begin::Card header-->
 
@@ -200,6 +191,27 @@
                     <!--end::Col-->
                 </div>
                 <!--end::note-->
+                <h3>{{ __("site.pickup_histories") }}</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ __('site.employee') }}</th>
+                            <th>{{ __('site.status') }}</th>
+                            <th>{{ __('site.date') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pickup->histories()->latest()->get() as $history)
+                            @if($history->user)
+                                <tr>
+                                    <td>{{ $history->user->name }}</td>
+                                    <td>{{ $history->status }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($history->created_at)->format('Y-m-d / h:i:s')}}</td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
 
             </div>
             <!--end::Card body-->

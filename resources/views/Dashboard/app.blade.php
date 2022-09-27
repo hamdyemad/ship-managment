@@ -75,9 +75,11 @@ License: For each use you must have a valid license purchased only from above li
         type="text/css" />
     <link href="{{asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
-
-
     @endif
+    <link href="{{asset('assets/css/app.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
 
 
 
@@ -900,7 +902,13 @@ License: For each use you must have a valid license purchased only from above li
                                         <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end">
-                                            <img src="{{asset('assets/media/avatars/150-26.jpg')}}" alt="user" />
+                                            <img src="
+                                                @if(Auth::user()->avatar)
+                                                    {{ asset(Auth::user()->avatar) }}
+                                                @else
+                                                {{ asset('/assets/media/avatars/150-26.jpg') }}
+                                                @endif
+                                                " alt="user" />
                                         </div>
                                         <!--begin::Menu-->
                                         <div id="menu"
@@ -912,7 +920,13 @@ License: For each use you must have a valid license purchased only from above li
                                                     <!--begin::Avatar-->
                                                     <div class="symbol symbol-50px me-5">
                                                         <img alt="Logo"
-                                                            src="{{asset('assets/media/avatars/150-26.jpg')}}" />
+                                                            src="
+                                                            @if(Auth::user()->avatar)
+                                                                {{ asset(Auth::user()->avatar) }}
+                                                            @else
+                                                                {{ asset('/assets/media/avatars/150-26.jpg') }}
+                                                            @endif
+                                                            " />
                                                     </div>
                                                     <!--end::Avatar-->
                                                     <!--begin::Username-->
@@ -1010,6 +1024,13 @@ License: For each use you must have a valid license purchased only from above li
                                             </div> --}}
                                             <!--end::Menu item-->
                                             <!--begin::Menu item-->
+                                            {{-- @if(Auth::guard('driver')->check() || Auth::guard('user')->check())
+                                                <div class="menu-item px-5">
+                                                    <span class="px-5">
+                                                        {{ __('site.balance') }} : {{ Auth::user()->balance . ' EGP'}}
+                                                    </span>
+                                                </div>
+                                            @endif --}}
                                             <div class="menu-item px-5">
 
                                                 <a class="menu-link px-5" href="{{ route('dashboard.logout') }}"
@@ -1103,7 +1124,7 @@ License: For each use you must have a valid license purchased only from above li
                     </div>
                     <!--end::Toolbar-->
                     <!--begin::Post-->
-                    <div class="post d-flex flex-column-fluid" id="kt_post">
+                    <div class="post d-flex flex-column-fluid admin" id="kt_post">
                         <!--begin::Container-->
                         <div id="kt_content_container" class="container-xxl">
 
@@ -2310,18 +2331,63 @@ License: For each use you must have a valid license purchased only from above li
     <script src="{{asset('assets/js/custom/apps/chat/chat.js')}}"></script>
     <script src="{{asset('assets/js/custom/modals/create-app.js')}}"></script>
     <script src="{{asset('assets/js/custom/modals/upgrade-plan.js')}}"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.semanticui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
+    {{-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
+    <script src="{{ asset('assets/js/libs/jquery/jquery-3.5.1.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/dataTables.semanticui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/semantic.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/axios.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/axios.pckg.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/chart.min.js') }}"></script>
+    {{-- <script src="https://cdn.datatables.net/1.11.5/js/dataTables.semanticui.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.js"></script> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> --}}
+    {{-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> --}}
     <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script src="{{asset('assets/js/custom/apps/user-management/users/list/table.js')}}"></script>
-    <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script>
-    <script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script>
+    {{-- <script src="{{asset('assets/js/custom/apps/user-management/users/list/export-users.js')}}"></script> --}}
+    {{-- <script src="{{asset('assets/js/custom/apps/user-management/users/list/add.js')}}"></script> --}}
     @yield('js')
     @stack('scripts')
+    <script>
+        @if(Session::has('success'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: "{{ Session::get('success') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+        @if(Session::has('error'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: "{{ Session::get('error') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+        @if(Session::has('info'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'info',
+                title: "{{ Session::get('info') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+        @if(Session::has('warning'))
+            Swal.fire({
+                position: 'top-end',
+                icon: 'warning',
+                title: "{{ Session::get('warning') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+    </script>
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
 </body>

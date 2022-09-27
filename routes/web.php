@@ -34,10 +34,15 @@ use Illuminate\Support\Facades\Route;
 
 /* ############################### login ############################### */
 
-Route::view('/dashboard/landing', 'Dashboard.landing')->name('open.scan');
-Route::post('dashboard/landing/tracking', [Controller::class, 'gettrackingnumber'])->name('gettrackingnumber');
+Route::view('/', 'Dashboard.landing')->name('open.scan');
+Route::post('/tracking', [Controller::class, 'gettrackingnumber'])->name('gettrackingnumber');
 
-Route::middleware('guest:web,admin,employee,driver')->group(function () {
+Route::redirect('/admin', '/admin/login');
+Route::redirect('/user', '/user/login');
+Route::redirect('/employee', '/employee/login');
+Route::redirect('/driver', '/driver/login');
+
+Route::middleware('guest:user,admin,employee,driver')->group(function () {
     Route::get('{guard}/login', [AuthController::class, 'showLogin'])->name('dashboard.login');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 });
@@ -47,7 +52,7 @@ Route::middleware('guest:web,admin,employee,driver')->group(function () {
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth:web,admin,employee,driver']
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'auth:user,admin,employee,driver']
     ],
     function () {
 
@@ -55,7 +60,12 @@ Route::group(
 
             Route::get('/', [Controller::class, 'home_page'])->name('app');
             /* ############################### admin ############################### */
-            Route::get('/admin', [AdminController::class, 'show'])->name('dashboard.sitting');
+            Route::group(['prefix' => 'admin'], function() {
+                Route::get('/', [AdminController::class, 'show'])->name('dashboard.sitting');
+                Route::post('/update', [AdminController::class, 'update'])->name('dashboard.sitting.update');
+
+            });
+
             Route::resource('city', CityController::class);
             Route::resource('area', AreaController::class);
             /* ############################### end admin ############################### */
@@ -69,6 +79,8 @@ Route::group(
 
             /* ############################### user ############################### */
             Route::resource('user', UserController::class);
+
+            Route::post('/addresses', [AddressController::class, 'addresses'])->name('user.addresses');
             Route::resource('specialprice', SpecialpriceController::class);
 
             Route::resource('address', AddressController::class);
@@ -83,16 +95,17 @@ Route::group(
             Route::get('select/city/{id}', [Controller::class, 'specialprice_city'])->name('special.price');
             //print shipment pdf
             Route::get('/downloadPDF/{id}', [Controller::class, 'download'])->name('print');
-            Route::post('ViewPages', [Controller::class, 'index1'])->name('pdf');
+            Route::post('/ViewPages', [Controller::class, 'index1'])->name('pdf');
             Route::get('users', [Controller::class, 'index'])->name('account.user');
             Route::post('/user/sitting/fetch/', [Controller::class, 'fetch'])->name('dynamicdependent.fetch');
             Route::post('/user/sitting/fetch2/', [Controller::class, 'fetch2'])->name('dynamicdependent.fetch2');
-            Route::get('/admin/all-shipment', [Controller::class, 'getshipment'])->name('getshipment');
+            Route::get('/admin/all-shipment', [ShippmentController::class, 'index'])->name('getshipment');
             Route::post('/shipment/scan', [Controller::class, 'getshipmentscan'])->name('scan');
             Route::post('/shipment/status/{id}', [Controller::class, 'getshipmentstatus'])->name('getshipmentstatus');
             Route::get('/shippment/{id}', [Controller::class, 'getshipmentstatusid'])->name('getshipmentstatusid');
 
-            Route::get('/driver/shipment/delivery', [Controller::class, 'drivershipment'])->name('driver.shipment');
+            Route::get('/driver/pickups/delivery', [Controller::class, 'driverpickups'])->name('driver.pickups');
+            Route::get('/driver/shippments/delivery', [Controller::class, 'drivershippments'])->name('driver.shippments');
             // change the status from driver
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
             Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
@@ -102,6 +115,7 @@ Route::group(
 
             Route::get('accountdriver', [Controller::class, 'getaccounts'])->name('shipments_drivers');
 
+            Route::post('sellers/settlement', [Controller::class,'settlement_sellers'])->name('settlement_sellers');
             /* print accounts for  users */
             Route::get('acountseller', [Controller::class, 'accountsellerpdf'])->name('accountseller_pdf');
             Route::get('Schedulesellerpdf', [Controller::class, 'accountseller2'])->name('Scheduleseller_pdf');
@@ -128,8 +142,6 @@ Route::group(
 
             Route::resource('roles', RoleController::class);
             Route::resource('permissions', PermissionController::class);
-            Route::post('role/update-permission', [RoleController::class, 'updateRolePermission']);
-
 
             /* ############################### end user ############################### */
         });
@@ -137,7 +149,7 @@ Route::group(
 );
 
 /* ############################### logout ############################### */
-Route::middleware('auth:web,admin,employee,driver')->group(function () {
+Route::middleware('auth:user,admin,employee,driver')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('dashboard.logout');
 });
 /* ############################### end logout ############################### */

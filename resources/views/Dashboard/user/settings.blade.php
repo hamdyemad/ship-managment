@@ -47,66 +47,15 @@
                 <div id="kt_user_view_details" class="collapse show">
                     <div class="pb-5 fs-6">
 
-                        <form id="kt_account_profile_details_form" class="form">
+                        <form id="kt_account_profile_details_form" class="form" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" id="role_id" name="role_id" value="{{ auth()->user()->roles[0]['id'] }}">
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
-                                <!--begin::Input img-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-bold fs-6">Avatar</label>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8">
-                                        <!--begin::Image input-->
-                                        <div class="image-input image-input-outline" data-kt-image-input="true"
-                                            style="background-image: url(assets/media/avatars/blank.png)">
-                                            <!--begin::Preview existing avatar-->
-                                            <div class="image-input-wrapper w-125px h-125px"
-                                                style="background-image: url(assets/media/avatars/150-26.jpg)"></div>
-                                            <!--end::Preview existing avatar-->
-                                            <!--begin::Label-->
-                                            <label
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="change" data-bs-toggle="tooltip"
-                                                title="Change avatar">
-                                                <i class="bi bi-pencil-fill fs-7"></i>
-                                                <!--begin::Inputs-->
-                                                <input type="file" name="avatar" accept=".png, .jpg, .jpeg" />
-                                                <input type="hidden" name="avatar_remove" />
-                                                <!--end::Inputs-->
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Cancel-->
-                                            <span
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="cancel" data-bs-toggle="tooltip"
-                                                title="Cancel avatar">
-                                                <i class="bi bi-x fs-2"></i>
-                                            </span>
-                                            <!--end::Cancel-->
-                                            <!--begin::Remove-->
-                                            <span
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="remove" data-bs-toggle="tooltip"
-                                                title="Remove avatar">
-                                                <i class="bi bi-x fs-2"></i>
-                                            </span>
-                                            <!--end::Remove-->
-                                        </div>
-                                        <!--end::Image input-->
-                                        <!--begin::Hint-->
-                                        <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-                                        <!--end::Hint-->
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input img-->
-
                                 <!--begin::Input Name-->
                                 <div class="row mb-6">
                                     <!--begin::Label-->
-                                    <label class="">{{__('site.name')}}</label>
+                                    <label  class="required">{{__('site.name')}}</label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-10 fv-row">
@@ -125,7 +74,7 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-10 fv-row">
-                                        <input type="email" id="email" name="email"
+                                        <input type="email" id="email" disabled name="email"
                                             class="form-control form-control-lg form-control-solid"
                                             value="{{auth()->user()->email}}" />
                                     </div>
@@ -491,6 +440,7 @@
     function performUpdate() {
         axios.put('/dashboard/user/{{auth()->user()->id}}', {
             name: document.getElementById('name').value,
+            role_id: document.getElementById('role_id').value,
             email: document.getElementById('email').value,
             phone: document.getElementById('phone').value,
             password: document.getElementById('password').value,

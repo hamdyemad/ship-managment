@@ -47,7 +47,8 @@ class TrackingController extends Controller
     public function show($id)
     {
         // dd('bader');
-        $tracking = Tracking::with('shippment')->where('shippment_id', $id)->orderBy('created_at')->get();
+        $tracking = Tracking::with('shippment')->where('shippment_id', $id)->orderBy('created_at', 'ASC')->get();
+
         // dd($tracking[0]->shippment);
         return view('Dashboard.user.shipment.tracking', ['tracking' => $tracking]);
     }

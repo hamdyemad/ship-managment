@@ -7,6 +7,7 @@ use App\Models\Shippment;
 use App\Models\Specialprice;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AccountSellerController extends Controller
 {
@@ -17,20 +18,15 @@ class AccountSellerController extends Controller
      */
     public function index()
     {
-        $shipments = AccountSeller::with('shippment', 'pickup')
-            ->where('shippment_id', '!=', null)
-            ->orWhereNull('pickup_id')->get();
-        $specialprice = Specialprice::all();
-        $users = User::all();
-        // dd($shipments);
 
-        // $shipments = AccountSeller::with('shippment', 'pickup')->where(function ($query) {
-        //     $query->whereIn('shippment_id', '!=', null);
-        // })->where(function ($query) {
-        //     $query->orWhereNull('pickup_id');
-        // })->get();
-
-        return view('Dashboard.admin.accountseller.accountsellers', ['shipment' => $shipments, 'users' => $users, 'specialprice' => $specialprice]);
+        if(Auth::guard('admin')->check() || Auth::guard('employee')->check() ) {
+            $accounts = AccountSeller::with('shippment', 'pickup')->latest()->get();
+            $sellers = User::all();
+        } else if(Auth::guard('user')->check()) {
+            $accounts = AccountSeller::with('shippment', 'pickup')->where('user_id', Auth::id())->latest()->get();
+            $sellers = [];
+        }
+        return view('Dashboard.admin.accountseller.accountsellers', ['accounts' => $accounts, 'sellers' => $sellers]);
     }
 
     /**

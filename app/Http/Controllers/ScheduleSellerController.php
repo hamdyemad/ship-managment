@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ScheduleSeller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleSellerController extends Controller
 {
@@ -14,9 +15,13 @@ class ScheduleSellerController extends Controller
      */
     public function index()
     {
-        $accountsfile = ScheduleSeller::with('user')->get();
-        
-        return view('Dashboard.admin.accountseller.accountfile', ['accounts' => $accountsfile]);
+        if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+            $schedules = ScheduleSeller::with('user')->latest()->get();
+        } else if(Auth::guard('user')->check()) {
+            $schedules = ScheduleSeller::with('user')->where('user_id', Auth::id())->latest()->get();
+
+        }
+        return view('Dashboard.admin.accountseller.accountfile', ['schedules' => $schedules]);
     }
 
     /**

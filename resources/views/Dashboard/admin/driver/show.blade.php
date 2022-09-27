@@ -1,6 +1,6 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.add'))
+@section('title',__('site.shipment'))
 
 @section('page_name',__('site.shipment'))
 
@@ -18,29 +18,9 @@
     </li>
     <!--end::Item-->
     <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.driver')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.shipment')}}</a>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
-    <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-    </li>
-    <!--end::Item-->
-    <!--begin::Item-->
 
     <li class="breadcrumb-item text-muted">
-        <a href="" class="text-muted text-hover-primary">{{__('site.showshipment')}}</a>
+        <span class="text-muted ">{{__('site.showshipment')}}</span>
     </li>
     <!--end::Item-->
 </ul>
@@ -116,14 +96,16 @@
                     data-bs-toggle="dropdown" aria-expanded="false">
                     {{__('site.status')}}
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" onclick="addshipment('receiver at hub',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
-                    </li>
-                    <hr>
-                    <li><a class="dropdown-item" onclick="addshipment('shipped',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Shipped</a>
-                    </li>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                    @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                        <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',{{$shippment->id}})"><i
+                                    class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                        </li>
+                        <hr>
+                        <li><a class="dropdown-item" onclick="addshipment('out_for_delivery',{{$shippment->id}})"><i
+                                    class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
+                        </li>
+                    @endif
                     <li><a class="dropdown-item" onclick="addshipment('delivered',{{$shippment->id}})"><i
                                 class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
                     </li>
@@ -140,7 +122,7 @@
                     <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i
                                 class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
                     </li>
-                    <li><a class="dropdown-item" onclick="addshipment('rejected_fees_faid',{{$shippment->id}})"><i
+                    <li><a class="dropdown-item" onclick="addshipment('rejected_fees_paid',{{$shippment->id}})"><i
                                 class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
                     </li>
 
@@ -148,7 +130,7 @@
             </div>
 
             {{-- print --}}
-            <a href="{{route('print',$shippment->id)}}" class="btn btn-light-primary me-3">
+            <a href="{{route('print',$shippment->id)}}" class="btn btn-light-primary me-3 ms-3">
                 <i class="fa fa-print"></i>
                 {{__('site.print')}}
             </a>
@@ -178,7 +160,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment_type')}}</label>
-                                <select name="shipment_type" id="shipment_type" data-placeholder="date_period"
+                                <select disabled name="shipment_type" id="shipment_type" data-placeholder="date_period"
                                     class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
                                     <option value="{{$shippment->shippment_type}}" disabled selected>
                                         {{$shippment->shippment_type}}
@@ -195,7 +177,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.business')}}</label>
-                                <input type="text" id="business" name="business"
+                                <input disabled type="text" id="business" name="business"
                                     value="{{$shippment->business_referance}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
@@ -232,7 +214,7 @@
                             <!--begin::receiver name-->
                             <div class="col-lg-6 fv-row">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.name')}}</label>
-                                <input type="text" id="receiver_name" name="receiver_name"
+                                <input disabled type="text" id="receiver_name" name="receiver_name"
                                     value="{{$shippment->receiver_name}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
@@ -242,7 +224,7 @@
                             <div class="col-lg-6 fv-row">
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.phone')}}</label>
-                                <input type="text" id="receiver_phone" name="receiver_phone"
+                                <input disabled type="text" id="receiver_phone" name="receiver_phone"
                                     value="{{$shippment->receiver_phone}}"
                                     class="form-control form-control-lg form-control-solid">
                             </div>
@@ -260,7 +242,7 @@
                     <div class="form-floating">
                         {{-- <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.address')}}</label>
                         --}}
-                        <input type="text" id="address" name="address"
+                        <input disabled type="text" id="address" name="address"
                             class="form-control form-control-lg form-control-solid" value="{{$shippment->address}}">
                         <label for="address" class="col-lg-4 col-form-label fw-bold fs-6">address</label>
                     </div>
@@ -274,7 +256,7 @@
                     <!--begin::city-->
                     <div class="col-lg-6 fv-row fv-plugins-icon-container">
                         <div class="mb-5">
-                            <select data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
+                            <select disabled data-dependent="area" name="city" id="city" aria-label="Select a Timezone"
                                 data-control="select2" data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid dynamic">
                                 <option value="{{$shippment->city->city}}" disabled selected>
@@ -289,7 +271,7 @@
                     <!--begin::area-->
                     <div class="col-lg-6 fv-row fv-plugins-icon-container">
                         <div class="mb-5">
-                            <select name="area" id="area" aria-label="Select a Timezone" data-control="select2"
+                            <select disabled name="area" id="area" aria-label="Select a Timezone" data-control="select2"
                                 data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid dynamic">
                                 <option value="{{$shippment->area->area}}" disabled selected>
@@ -327,7 +309,7 @@
                 <div class="row mb-6">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <textarea class="form-control form-control-lg form-control-solid" name="package" id="package"
+                        <textarea disabled class="form-control form-control-lg form-control-solid" name="package" id="package"
                             style="height: 100px" aria-valuemax="">{{$shippment->package_details}}</textarea>
                         <label for="package">{{__('site.package')}}</label>
 
@@ -340,7 +322,7 @@
                 <div class="row mb-6">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <input type="number" id="price" name="price"
+                        <input disabled type="number" id="price" name="price"
                             class="form-control form-control-lg form-control-solid" value="{{$shippment->price}}">
                         <label for="price" class="col-lg-4 col-form-label fw-bold fs-6">{{__('site.price')}}</label>
                     </div>
@@ -352,7 +334,7 @@
                 <div class="row mb-8">
                     <!--begin::Col-->
                     <div class="form-floating">
-                        <textarea class="form-control form-control-lg form-control-solid" name="note" id="note"
+                        <textarea disabled class="form-control form-control-lg form-control-solid" name="note" id="note"
                             style="height: 100px" aria-valuemax="">{{$shippment->note}}</textarea>
                         <label for="note">{{__('site.note')}}</label>
                     </div>

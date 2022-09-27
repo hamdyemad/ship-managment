@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
         Admin::create([
             'name' => 'bader',
             'email' => 'bader@app.com',
+            'type' => 'admin',
             'gender' => 'male',
             'dofbirth' => '12\12\20',
             'phone' => '999999999',

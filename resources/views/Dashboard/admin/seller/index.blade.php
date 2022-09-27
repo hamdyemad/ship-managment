@@ -210,6 +210,7 @@
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.email')}}</th>
+                    {{-- <th class="min-w-125px">{{__('site.balance')}}</th> --}}
                     <th class="min-w-125px">{{__('site.role')}}</th>
                     <th class="text-end min-w-100px">Actions</th>
                 </tr>
@@ -220,7 +221,7 @@
 
             <tbody class="text-gray-600 fw-bold">
 
-                @foreach ($user as $user)
+                @foreach ($users as $user)
                 <tr>
                     <!--begin::Checkbox-->
                     {{-- <td>
@@ -250,6 +251,9 @@
                     <td>
                         <div class="badge badge-light fw-bolder">{{$user->email}}</div>
                     </td>
+                    {{-- <td>
+                        <div class="badge badge-light fw-bolder">{{$user->balance}}</div>
+                    </td> --}}
 
                     <td>{{$user->roles[0]->name}}</td>
 

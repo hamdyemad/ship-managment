@@ -62,7 +62,6 @@
 
         .container {
             display: block !important;
-            max-width: 500px !important;
             margin: 0 auto !important;
             clear: both !important;
         }
@@ -100,18 +99,14 @@
 </head>
 
 <body>
-    <div class="text-center" style="padding:20px;">
-        {{-- <input type="button" id="rep" value="Print" class="btn btn-info btn_print"> --}}
-        <button id="rep" onclick="showDivAttid()" class="btn btn-info btn_print">Print this page</button>
-    </div>
     <center>
         <table id="container_content2" class="main" cellpadding="0" cellspacing="0">
             <tr>
-                <td rowspan="2"><img width="130px" src="{{asset('shippment-logo.png')}}" alt=""></td>
+                <td rowspan="2"><img src="{{asset('shippment-logo.png')}}" alt=""></td>
                 <td style="font-weight: bold;font-size: 18px;">city</td>
-                <td style="font-weight: bold;font-size: 18px;">area</td>
-                <td style="font-weight: bold;font-size: 18px;width: 15%">Allow to open</td>
-                <td style="width: 5%">@if ($show->allow_open =='true')
+                <td style="font-weight: bold;font-size: 18px;">{{$show->city->city}}</td>
+                <td style="font-weight: bold;font-size: 18px; width:30%">Allow to open</td>
+                <td>@if ($show->allow_open =='true')
                     (yes)
                     @else
                     (NO)
@@ -119,24 +114,23 @@
 
             </tr>
             <tr>
-                <td>{{$show->city->city}}</td>
-                <td>{{$show->area->area}}</td>
+                <td style="font-weight: bold;font-size: 18px;">Area</td>
+                <td style="font-weight: bold;font-size: 18px;">{{$show->area->area}}</td>
                 <td colspan="2">
-                    <div style="font-weight: bold;font-size: 15px;">Business Ref</div> <br>{{$show->shippment_type}}
+                    <div style="font-weight: bold;font-size: 15px;">Business Ref</div> <br>{{$show->business_referance}}
                 </td>
 
             </tr>
             <tr>
                 <td colspan="2" style="font-weight: bold;font-size: 27px;">{{$show->shippment_type}}</td>
                 <td colspan="3"><br>
-                    <div style="margin-left:35%!important;">
-                        <?php
-                        $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-                        echo $generator->getBarcode($show->barcode, $generator::TYPE_CODE_128);
-                    ?>
-                        <p style="margin-left:48px!important;">{{$show->barcode}}</p>
-                    </div>
+                    @php
+                        \Storage::disk('public')->put('barcodes/' . $show->barcode . '.png',base64_decode(DNS1D::getBarcodePNG($show->barcode, 'C128')));
+                    @endphp
+                    <img class="barcode" src="{{ asset('barcodes/' . $show->barcode . '.png') }}" alt="">
                     <br>
+                    <br>
+                    {{ $show->barcode }}
                 </td>
 
             </tr>
@@ -160,59 +154,16 @@
             </tr>
             <tr>
                 <td colspan="5">
-                    @if (!$show->note)
-                    {{$show->note}}
+                    @if ($show->note)
+                        {{$show->note}}
                     @else
-                    No Notes
+                        No Notes
                     @endif
                 </td>
             </tr>
         </table>
 
     </center>
-
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <script type="text/javascript">
-        function showDivAttid(){
-            document.getElementById("rep").style.display = 'none';
-            window.print('height=800, width=800');
-
-            // var a = window.open('height=500, width=500');
-
-            // a.document.close();
-            // a.print();
-
-        }
-        // $(document).ready(function($)
-    	// {
-
-    	// 	$(document).on('click', '.btn_print', function(event)
-    	// 	{
-    	// 		event.preventDefault();
-        //         // $('#container_content2').css( {'transform': 'rotate(-0.25turn)'});
-    	// 		var element = document.getElementById('container_content2');
-
-    	// 		var opt =
-    	// 		{
-    	// 		  margin:       1,
-    	// 		  filename:     'shippment_'+js.AutoCode()+'.pdf',
-    	// 		  image:        { type: 'jpeg', quality: 0.98 },
-    	// 		  html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true},
-    	// 		  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    	// 		};
-
-    	// 		// New Promise-based usage:
-    	// 		html2pdf().set(opt).from(element).save();
-
-
-    	// 	});
-
-
-
-    	// });
-    </script>
 </body>
 
 </html>

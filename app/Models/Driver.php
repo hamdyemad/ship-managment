@@ -18,6 +18,10 @@ class Driver extends Authenticatable
         'special_pickup',
     ];
 
+    public function roles() {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id');
+    }
+
     public function deliveries()
     {
         return $this->hasMany(Delivery::class);
