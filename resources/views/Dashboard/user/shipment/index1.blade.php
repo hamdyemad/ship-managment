@@ -87,7 +87,19 @@
                         <!--end::Svg Icon-->
                     </span>
                 </div>
-                <div class="d-block d-md-flex">
+                <div class="d-block d-md-flex align-items-end">
+                    <form id="assign_shippments" action="{{ route('driver.assign_shippments') }}" method="POST">
+                        @csrf
+                        <div class=" me-3">
+                            <label class="form-label fs-6 fw-bold">{{__('site.assign_shippments')}}:</label>
+                            <select class="form-select form-select-solid fw-bolder assign_shippments_select" name="driver">
+                                <option></option>
+                                @foreach ($drivers as $driver)
+                                    <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
                     <form id="pdf" action="{{ route('pdf') }}" method="POST">
                         @csrf
                         <input type="hidden" name="export_by_choose" value="1">
@@ -323,7 +335,7 @@
                         <!--begin::Checkbox-->
                             <td>
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" name="shippment[]" form="pdf" type="checkbox" value="{{$shipment->id}}" />
+                                    <input class="form-check-input check_input" name="shippment[]" form="pdf" type="checkbox" value="{{$shipment->id}}" />
                                 </div>
                             </td>
                         <!--end::Checkbox-->
@@ -340,7 +352,9 @@
                             {{ $shipment->shippment_type }}
                         </td>
                         <td>
-                            {{ $shipment->user->name }}
+                            @if($shipment->user)
+                                {{ $shipment->user->name }}
+                            @endif
                         </td>
                         <td >
                             <!--begin::User details-->
@@ -599,6 +613,12 @@
     $(".delete_btn").on('click', function() {
         $("#delete_shipping").modal('show');
         $("#delete_shipping").find('form').attr('action', '/dashboard/shipment/' + $(this).data('id'));
+    });
+
+
+    $(".assign_shippments_select").on('change', function() {
+        $(".check_input").attr('form', 'assign_shippments');
+        $(this).parent().parent().submit();
     });
 
 

@@ -49,7 +49,7 @@ class UserController extends Controller
 
             'name' => 'required | max:50',
             'email' => 'string |required| min:2 |max:20',
-            'phone' => 'required |numeric|digits:11',
+            'phone' => 'required |numeric',
             'password' => 'required|min:8|confirmed',
             'role_id' => 'required|numeric|exists:roles,id',
         ]);
@@ -115,7 +115,7 @@ class UserController extends Controller
         $rules = [
             'name' => ' max:50',
             'email' => 'string|min:2',
-            'phone' => 'numeric |digits:11',
+            'phone' => 'numeric',
             'special_pickup' => 'numeric',
             'password' => 'confirmed',
             'role_id' => 'required|numeric|exists:roles,id',

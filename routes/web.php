@@ -70,6 +70,8 @@ Route::group(
             Route::resource('area', AreaController::class);
             /* ############################### end admin ############################### */
             Route::resource('driver', DriverController::class);
+            Route::post('driver/assign-shippments', [DriverController::class, 'AssignShippments'])->name('driver.assign_shippments');
+
             Route::resource('employee', EmployeeController::class);
 
             Route::view('/scan', 'Dashboard.admin.scanner')->name('open.scan');

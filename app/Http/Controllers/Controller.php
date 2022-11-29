@@ -135,6 +135,9 @@ class Controller extends BaseController
                     $show = Shippment::whereIn('id', $assignedShippments)
                     ->whereDate('created_at', '>=', $from)
                     ->whereDate('created_at', '<=', $to)->latest()->get();
+                } else if(Auth::guard('user')->check()) {
+                    $show = Shippment::whereDate('created_at', '>=', $from)
+                        ->whereDate('created_at', '<=', $to)->where('user_id', Auth::guard('user')->user()->id)->latest()->get();
                 }
                 return view('Dashboard.user.shipment.execlshippment', ['show' => $show]);
             } else {
@@ -153,6 +156,11 @@ class Controller extends BaseController
                 } else if(Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
                     $show = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
+                } else if(Auth::guard('user')->check()) {
+                    $show = Shippment::whereIn('id', $req->shippment)
+                    ->where('user_id', Auth::guard('user')->user()->id)
+                    ->latest()->get();
+
                 }
                 return view('Dashboard.user.shipment.execlshippment', ['show' => $show]);
             } else {
@@ -1024,6 +1032,7 @@ class Controller extends BaseController
     //import data
     function viewimport()
     {
+
         return view('Dashboard.admin.importpage');
     }
     function importShippment(Request $request)

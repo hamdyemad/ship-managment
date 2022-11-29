@@ -5,8 +5,10 @@ namespace App\Imports;
 use App\Models\Area;
 use App\Models\City;
 use App\Models\Shippment;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
@@ -44,8 +46,18 @@ class ShippmentImport implements
     public function model(array $row)
     {
 
-        $city = City::where('city', $row['city'])->first();
-        $area = Area::where('area', $row['area'])->first();
+        $city = City::where('city', 'like', '%'. $row['city'] . '%')->first();
+
+        $area = Area::where('area', 'like', '%' . $row['area'] . '%')->first();
+        $seller = User::where('name', 'like', '%' . $row['seller_name'] . '%')->first();
+
+        if(Auth::guard('user')->check()) {
+            if(Auth::guard('user')->user()->id == $seller->id) {
+                $seller = $seller;
+            } else {
+                $seller = null;
+            }
+        }
 
         $shippment = new Shippment();
         $shippment->shippment_type = $row['shippment_type'];
@@ -55,7 +67,7 @@ class ShippmentImport implements
         $shippment->business_referance = $row['business_referance'];
         $shippment->receiver_name = $row['receiver_name'];
         $shippment->receiver_phone = $row['phone_number'];
-        $shippment->user_id = auth()->user()->id;
+        $shippment->user_id = $seller->id;
         $shippment->allow_open = $row['allow_open'];
         $shippment->price = $row['price'];
         $shippment->package_details = $row['package_details'];
@@ -70,11 +82,11 @@ class ShippmentImport implements
         return [
             '*.shippment_type' => 'required|in:forward,exchange,cash_collection,return_pickup',
             '*.shipper_name' => 'required',
-            '*.area' => 'required|exists:areas,area',
-            '*.city' => 'required|exists:cities,city',
+            '*.area' => 'required',
+            '*.city' => 'required',
             '*.business_referance' => 'required',
             '*.receiver_name' => 'required',
-            '*.phone_number' => 'required|digits:11',
+            '*.phone_number' => 'required',
             '*.allow_open' => 'required|in:true,false',
             '*.price' => 'required',
             '*.address' => 'required',

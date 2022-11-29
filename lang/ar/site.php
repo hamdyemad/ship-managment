@@ -25,7 +25,7 @@ return [
     'zones' => 'المناطق',
     'export-shippment' => 'استخراج الشحنات',
     'export-drivers' => 'استخراج السائقين',
-    'save_changes' => 'حذف التعديلات',
+    'save_changes' => 'حفظ التعديلات',
     'id' => 'الرقم',
     'city' => 'المدينة',
     'rate' => 'السعر',

@@ -53,7 +53,7 @@ class EmployeeController extends Controller
         $validator = Validator($request->all(), [
             'name' => 'required|max:50',
             'email' => 'required|string | min:2 |max:20',
-            'phone' => 'required|numeric|digits:11',
+            'phone' => 'required|numeric',
             'password' => 'required|min:8|confirmed',
             'role_id' => 'required|numeric|exists:roles,id',
         ]);
@@ -117,7 +117,7 @@ class EmployeeController extends Controller
         $rules = [
             'name' => ' max:50',
             'email' => 'string',
-            'phone' => 'numeric|digits:11',
+            'phone' => 'numeric',
             'role_id' => 'required|numeric|exists:roles,id',
         ];
         if($request->password) {

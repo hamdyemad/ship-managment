@@ -24,11 +24,10 @@ class ShippmentController extends Controller
      */
     public function index()
     {
-
         $this->authorize('shippments.index');
+        $drivers = Driver::all();
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
             $shipments = Shippment::latest();
-            $drivers = Driver::all();
             $sellers = User::all();
             if(request('driver_id')) {
                 $deliveries = Delivery::where('driver_id', request('driver_id'))->where('shippment_id', '!=',null)->pluck('shippment_id');
@@ -39,7 +38,6 @@ class ShippmentController extends Controller
             }
         } else {
             $shipments = Shippment::where('user_id', auth()->user()->id)->latest();
-            $drivers = [];
             $sellers = [];
         }
 
@@ -75,7 +73,6 @@ class ShippmentController extends Controller
             }
             $shipments = $shipments->where('driver_settled', $driver_settled);
         }
-
         $shipments = $shipments->paginate(10);
         return view('Dashboard.user.shipment.index1', ['shipments' => $shipments, 'sellers' => $sellers,'drivers' => $drivers]);
     }
