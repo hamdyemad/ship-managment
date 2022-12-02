@@ -231,6 +231,16 @@
                 // balance: document.getElementById('balance').value,
                 role_id: document.getElementById('role_id').value,
                 special_pickup: document.getElementById('special_pickup').value,
+                address_line: document.getElementById('address_line').value,
+                city: document.getElementById('city').value,
+                area: document.getElementById('area').value,
+                building: document.getElementById('building').value,
+                floor: document.getElementById('floor').value,
+                apartment: document.getElementById('apartment').value,
+                contact_name: document.getElementById('contact_name').value,
+                contact_mobile: document.getElementById('contact_mobile').value,
+                contact_email: document.getElementById('contact_email').value,
+
             })
             .then(function (response) {
                 //2xx

@@ -207,6 +207,7 @@
                         </div>
                     </th>
                     <th class="min-w-125px">{{__('site.id')}}</th>
+                    <th class="min-w-125px">{{__('site.addresses')}}</th>
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
                     <th class="min-w-125px">{{__('site.email')}}</th>
@@ -241,6 +242,14 @@
 
                         </div>
                         <!--begin::User details-->
+                    </td>
+                    <td>
+                        <a href="{{route('getCity') . '?user_id=' . $user->id}}" class="btn btn-light-primary me-3" target="_blank">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+                            <span class="svg-icon svg-icon-2">
+                            </span>
+                            <!--end::Svg Icon-->Add Address
+                        </a>
                     </td>
 
 

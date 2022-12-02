@@ -28,6 +28,8 @@ class Shippment extends Model
         'on_hold',
         'seller_settled',
         'driver_settled',
+        'rejected_fees_paid',
+        'driver_changed',
 
     ];
 

@@ -214,6 +214,7 @@
                         </div>
                     </th>
                     <th class="min-w-125px">{{__('site.pickupid')}}</th>
+                    <th class="min-w-125px">{{__('site.driver')}}</th>
                     <th class="min-w-125px">{{__('site.settled')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
                     <th class="min-w-125px">{{__('site.packages')}}</th>
@@ -250,6 +251,11 @@
 
                         </div>
                         <!--begin::User details-->
+                    </td>
+                    <td>
+                        @foreach ($pickup->deliveries as $delivery)
+                            {{ $delivery->driver->name }}<br>
+                        @endforeach
                     </td>
                     <td>
                         @if($pickup->settled)

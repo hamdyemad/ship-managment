@@ -50,7 +50,7 @@
                 @if($PDFReports->shippment_id !== null)
                     <tr>
                         <td>{{ $PDFReports->shippment->id }}</td>
-                        <td>shippment</td>
+                        <td>shippment-{{ $PDFReports->shippment->shippment_type }}</td>
                         <td>{{ $PDFReports->created_at }}</td>
                         <td>{{ $PDFReports->shippment->status }}</td>
                         <td>{{ $PDFReports->shippment->receiver_name }}</td>

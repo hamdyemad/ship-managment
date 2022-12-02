@@ -332,7 +332,6 @@
             })
             .then(function (response) {
                 //2xx
-                console.log(response);
                 Swal.fire({
                 position: 'top-end',
                 icon: 'success',

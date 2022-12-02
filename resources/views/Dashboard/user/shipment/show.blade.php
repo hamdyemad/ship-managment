@@ -63,7 +63,7 @@
         aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
-            <h3 class="fw-bolder m-0">{{__('site.shipment')}}</h3>
+            <h3 class="fw-bolder m-0">{{__('site.shipment') . '-' . $shippment->barcode}}</h3>
         </div>
         <!--end::Card title-->
 

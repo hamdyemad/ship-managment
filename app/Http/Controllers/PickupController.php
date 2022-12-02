@@ -25,7 +25,7 @@ class PickupController extends Controller
     public function index()
     {
         if(Auth::guard('user')->user()) {
-            $pickup = Pickup::where('user_id', auth()->user()->id)->get();
+            $pickup = Pickup::where('user_id', auth()->user()->id)->orderBy('date', 'DESC')->get();
             return view('Dashboard.user.pickup.index', ['pickup' => $pickup]);
         }
         else {
@@ -63,7 +63,7 @@ class PickupController extends Controller
     //store data pick up and change the shipment status to picked up
     public function store(Request $request)
     {
-
+        $time = 1669996800; // 4 pm
         $validator = Validator($request->all(), [
             'name' => 'required',
             // 'email' => 'required',
@@ -73,6 +73,9 @@ class PickupController extends Controller
             'date' => 'required',
             'note' => 'max:150',
         ]);
+        if(strtotime($request->time) > $time) {
+            $request['date'] = Carbon::createFromDate($request->date)->addDay();
+        }
         $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
         if (!$validator->fails()) {
             foreach ($shipment as $shipment) {
@@ -81,7 +84,6 @@ class PickupController extends Controller
                     $updated = $shipment->save();
                 }
             }
-
             $pickup = new Pickup();
             $pickup->name = $request->input('name');
             $pickup->status = 'requested';

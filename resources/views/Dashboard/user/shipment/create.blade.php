@@ -79,6 +79,16 @@
                         </div>
                         <!--end::shipment type-->
                     </div>
+                @elseif(Auth::guard('user')->check())
+                    <div class="row mb-12">
+                        <!--begin::shipment type-->
+                        <div class="col-lg-12 fv-row">
+                            <label
+                                class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment.seller')}}</label>
+                                <input class="form-control" type="text" name="user_id" disabled value="{{ Auth::guard('user')->user()->name }}">
+                        </div>
+                        <!--end::shipment type-->
+                    </div>
                 @endif
                 <!--begin::shipper-->
                 <div class="row mb-12">

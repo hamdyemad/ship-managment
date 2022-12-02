@@ -20,12 +20,16 @@ class AccountSellerController extends Controller
     {
 
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check() ) {
-            $accounts = AccountSeller::with('shippment', 'pickup')->latest()->get();
+            $accounts = AccountSeller::with('shippment', 'pickup')->latest();
             $sellers = User::all();
         } else if(Auth::guard('user')->check()) {
-            $accounts = AccountSeller::with('shippment', 'pickup')->where('user_id', Auth::id())->latest()->get();
+            $accounts = AccountSeller::with('shippment', 'pickup')->where('user_id', Auth::id())->latest();
             $sellers = [];
         }
+        if(request('keyword')) {
+            $accounts = $accounts->where('id', request('keyword'));
+        }
+        $accounts = $accounts->paginate(10);
         return view('Dashboard.admin.accountseller.accountsellers', ['accounts' => $accounts, 'sellers' => $sellers]);
     }
 

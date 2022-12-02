@@ -85,7 +85,7 @@
                                     class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
                                     <option value="">{{ __('site.choose_seller') }}</option>
                                     @foreach ($sellers as $seller)
-                                        <option value="{{ $seller->id }}">{{ $seller->name }}</option>
+                                        <option value="{{ $seller->id }}" @if(request('user_id') == $seller->id) selected @endif>{{ $seller->name }}</option>
                                     @endforeach
 
                                 </select>

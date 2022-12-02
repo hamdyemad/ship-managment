@@ -12,6 +12,8 @@ class Tracking extends Model
     protected $fillable = [
         'id',
         'shippment_id',
+        'user_id',
+        'user_type',
         'status',
         'created_at',
     ];

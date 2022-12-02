@@ -307,9 +307,9 @@
                     <th class="min-w-125px">{{__('site.receiver_name')}}</th>
                     <th class="min-w-125px">{{__('site.status')}}</th>
                     <th class="min-w-125px">{{__('site.seller_settled')}}</th>
+                    <th class="min-w-125px">{{__('site.driver')}}</th>
                     @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
                         <th class="min-w-125px">{{__('site.driver_settled')}}</th>
-                        <th class="min-w-125px">{{__('site.driver')}}</th>
                     @endif
                     <th class="min-w-125px">{{__('site.print')}}</th>
                     <th class="min-w-125px">{{__('site.phone')}}</th>
@@ -342,10 +342,11 @@
 
                         <!--begin::User=-->
                         <td>
+                            <span class="badge badge-secondary mb-2 d-block">{{$shipment->barcode}}</span>
                             <form action="{{ route('scan') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="sometext" value="{{$shipment->barcode}}">
-                                <button class="btn btn-secondary">{{$shipment->barcode}}</button>
+                                <button class="btn btn-secondary w-100">{{__('site.show')}}</button>
                             </form>
                         </td>
                         <td>
@@ -442,6 +443,11 @@
                                 </span>
                             @endif
                         </td>
+                        <td>
+                            @foreach ($shipment->deliveries as $delivery)
+                                {{ $delivery->driver->name }}<br>
+                            @endforeach
+                        </td>
                         @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
                             <td>
                                 @if($shipment->driver_settled)
@@ -453,11 +459,6 @@
                                         <i class="fas fa-times"></i>
                                     </span>
                                 @endif
-                            </td>
-                            <td>
-                                @foreach ($shipment->deliveries as $delivery)
-                                    {{ $delivery->driver->name }}<br>
-                                @endforeach
                             </td>
                         @endif
                         <td>

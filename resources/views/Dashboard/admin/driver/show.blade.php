@@ -63,9 +63,38 @@
                             </div>
 
                             <div class="col-md-4">
-                                <button type="button" onclick="updatestatusshipment()" class="btn btn-secondary btn-sm"
+                                <button type="button" onclick="addshipment('onhold', {{ $shippment->id }})" class="btn btn-secondary btn-sm"
                                     name="">
                                     add</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="feesPaidModal" tabindex="-1" aria-labelledby="feesPaidModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feesPaidModalLabel">rejected fees paid</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="ViewPages" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="container">
+                        <div class="row">
+                            <label for="from" class="col-form-label">{{__('site.paid')}}</label>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control input-sm" name="rejected_fees_paid" id="rejected_fees_paid">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" onclick="addshipment('rejected_fees_paid', {{ $shippment->id }})" class="btn btn-secondary btn-sm"
+                                    name="">
+                                    update</button>
                             </div>
                         </div>
                     </div>
@@ -82,7 +111,7 @@
         aria-expanded="true" aria-controls="kt_account_profile_details">
         <!--begin::Card title-->
         <div class="card-title m-0">
-            <h3 class="fw-bolder m-0">{{__('site.shipment')}}</h3>
+            <h3 class="fw-bolder m-0">{{__('site.shipment') . '-' . $shippment->barcode }}</h3>
         </div>
         <!--end::Card title-->
 
@@ -91,43 +120,50 @@
         {{-- //status --}}
         <div class="card-toolbar">
             {{-- status dropdown --}}
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    {{__('site.status')}}
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
-                    @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
-                        <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',{{$shippment->id}})"><i
-                                    class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
-                        </li>
-                        <hr>
-                        <li><a class="dropdown-item" onclick="addshipment('out_for_delivery',{{$shippment->id}})"><i
-                                    class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
-                        </li>
-                    @endif
-                    <li><a class="dropdown-item" onclick="addshipment('delivered',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
-                    </li>
-                    <hr>
-                    <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                            data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
-                                class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
-                    </li>
+            @if(Auth::guard('driver')->user() && !$shippment->driver_changed
+            ||Auth::guard('user')->check()
+            ||Auth::guard('admin')->check()
+            ||Auth::guard('employee')->check()
+            )
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {{__('site.status')}}
+                    </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                            @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                                <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',{{$shippment->id}})"><i
+                                            class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                                </li>
+                                <hr>
+                                <li><a class="dropdown-item" onclick="addshipment('out_for_delivery',{{$shippment->id}})"><i
+                                            class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
+                                </li>
+                            @endif
+                            <li><a class="dropdown-item" onclick="addshipment('delivered',{{$shippment->id}})"><i
+                                        class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                            </li>
+                            <hr>
+                            <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
+                                        class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
+                            </li>
 
-                    <li><a class="dropdown-item" onclick="addshipment('no_answer',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
-                    </li>
-                    <hr>
-                    <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
-                    </li>
-                    <li><a class="dropdown-item" onclick="addshipment('rejected_fees_paid',{{$shippment->id}})"><i
-                                class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
-                    </li>
+                            <li><a class="dropdown-item" onclick="addshipment('no_answer',{{$shippment->id}})"><i
+                                        class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
+                            </li>
+                            <hr>
+                            <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i
+                                        class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
+                            </li>
+                            <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo"><i
+                                        class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
+                            </li>
 
-                </ul>
-            </div>
+                        </ul>
+                </div>
+            @endif
 
             {{-- print --}}
             <a href="{{route('print',$shippment->id)}}" class="btn btn-light-primary me-3 ms-3">
@@ -366,13 +402,21 @@
 <script>
     // //update the status shipment details
         function addshipment(statusofshipment,id) {
-            axios.post('/dashboard/driver/shipment/status', {
+            let obj = {
                 status: statusofshipment,
                 shipment_id: id,
-            })
+            };
+            if(statusofshipment == 'rejected_fees_paid') {
+                obj.rejected_fees_paid = document.getElementById('rejected_fees_paid').value
+            }
+            if(statusofshipment == 'onhole') {
+                obj.date = document.getElementById('date').value,
+                obj.note = document.getElementById('note').value
+            }
+            axios.post('/dashboard/driver/shipment/status', obj)
             .then(function (response) {
+                console.log(response.data);
                 //2xx
-                console.log(response);
                 Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -380,7 +424,7 @@
                 showConfirmButton: false,
                 timer: 1500
                 });
-                // document.getElementById('kt_account_profile_details_form').reset();
+                document.getElementById('kt_account_profile_details_form').reset();
 
             })
             .catch(function (error) {
@@ -398,13 +442,23 @@
         }
 
         // update status to on hold
-         function updatestatusshipment() {
-            axios.post('/dashboard/driver/shipment/status/onhold', {
-                status: 'onhold',
-                shipment_id: '{{$shippment->id}}',
-                date:document.getElementById('date').value,
-                note:document.getElementById('note').value,
-            })
+         function updatestatusshipment(status, url) {
+            // onhold
+            if(status == 'onhold') {
+                let obj = {
+                    status: status,
+                    shipment_id: '{{$shippment->id}}',
+                    date:document.getElementById('date').value,
+                    note:document.getElementById('note').value,
+                };
+            } else if(status == 'rejected_fees_paid') {
+                let obj = {
+                    status: status,
+                    shipment_id: '{{$shippment->id}}',
+                    rejected_fees_paid:document.getElementById('rejected_fees_paid').value,
+                }
+            }
+            axios.post(url, obj)
             .then(function (response) {
                 //2xx
                 console.log(response);

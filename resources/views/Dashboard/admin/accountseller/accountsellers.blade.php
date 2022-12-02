@@ -108,9 +108,11 @@
                             fill="black" />
                     </svg>
                 </span>
+                <form id="assign_shippments" action="{{ route('account.index') }}" method="GET">
+                    <input type="text" data-kt-user-table-filter="search" name="keyword" value="{{ request('keyword') }}"
+                        class="form-control form-control-solid w-250px ps-14" placeholder="Search" />
+                </form>
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search" />
             </div>
             <!--end::Search-->
         </div>
@@ -265,6 +267,7 @@
                         </div>
                     </th>
                     <th class="min-w-115px">{{__('site.id')}}</th>
+                    <th class="min-w-115px">{{__('site.shippment_barcode')}}</th>
                     <th class="min-w-125px">{{__('site.seller')}}</th>
                     <th class="min-w-125px">{{__('site.type')}}</th>
                     <th class="min-w-125px">{{__('site.date')}}</th>
@@ -300,18 +303,22 @@
                             <!--end::Checkbox-->
 
                             <!--begin::User=-->
+                            <td>
+                                {{ $account->id }}
+                            </td>
                             <td class="d-flex align-items-center">
                                 <!--begin::User details-->
                                 <div class="d-flex flex-column">
-                                    <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$account->id}}"
+                                    {{ $account->shippment->barcode }}
+                                    {{-- <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$account->id}}"
                                         href="{{route('account.show',$account->shippment->id)}}"
-                                        >{{ $account->shippment_id }}</a>
+                                        >{{ $account->shippment_id }}</a> --}}
                                 </div>
                                 <!--begin::User details-->
                             </td>
                             <!--end::User=-->
                             <td>{{ $account->user->name }}</td>
-                            <td>{{ __("site.shipment") }}</td>
+                            <td>{{ __("site.shipment") . '-' . $account->shippment->shippment_type }}</td>
                             <td>{{$account->created_at}}</td>
                             <td>{{$account->shippment->status}}</td>
                             <td>
@@ -473,6 +480,7 @@
             </tbody>
             <!--end::Table body-->
         </table>
+        {{ $accounts->links() }}
         <!--end::Table-->
     </div>
     <!--end::Card body-->

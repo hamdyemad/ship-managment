@@ -244,7 +244,22 @@
                                         </div>
                                         <div class="order-track-text">
                                         <p class="order-track-text-stat">{{ $tracking->status }}</p>
-                                        <span class="order-track-text-sub">{{ \Carbon\Carbon::parse($tracking->created_at)->format('Y-m-d / h:i:s') }}</span>
+                                        <p class="order-track-text-stat">
+                                            @php
+                                                if($tracking->user_type == 'admin')
+                                                    $user = \App\Models\Admin::find($tracking->user_id);
+                                                elseif($tracking->user_type == 'employee')
+                                                    $user = \App\Models\Employee::find($tracking->user_id);
+                                                elseif($tracking->user_type == 'driver')
+                                                    $user = \App\Models\Driver::find($tracking->user_id);
+                                                elseif($tracking->user_type == 'user')
+                                                    $user = \App\Models\User::find($tracking->user_id);
+                                            @endphp
+                                            @if($user)
+                                                {{ $user->name }}
+                                            @endif
+                                            <span class="order-track-text-sub">{{ \Carbon\Carbon::parse($tracking->created_at)->format('Y-m-d / h:i:s') }}</span>
+                                        </p>
                                         </div>
                                 </div>
                                 @endforeach

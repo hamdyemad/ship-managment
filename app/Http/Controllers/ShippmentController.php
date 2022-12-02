@@ -128,7 +128,12 @@ class ShippmentController extends Controller
             $shipment->business_referance = $request->input('business');
             $shipment->receiver_name = $request->input('receiver_name');
             $shipment->receiver_phone = $request->input('receiver_phone');
-            $shipment->user_id = $request->input('user_id');
+            if(Auth::guard('user')->check()) {
+                $shipment->user_id = Auth::guard('user')->user()->id;
+
+            } else {
+                $shipment->user_id = $request->input('user_id');
+            }
             $shipment->price = $request->input('price');
             $shipment->package_details = $request->input('package_details');
             $shipment->address = $request->input('address');
@@ -147,6 +152,18 @@ class ShippmentController extends Controller
 
             $tracking = new Tracking();
             $tracking->shippment_id = $shipment->id;
+            $tracking->user_id = Auth::id();;
+            if(Auth::guard('admin')->check()) {
+                $tracking->user_type = 'admin';
+            } else if(Auth::guard('employee')->check()) {
+                $tracking->user_type = 'employee';
+
+            } elseif(Auth::guard('user')->check()) {
+                $tracking->user_type = 'user';
+
+            } elseif(Auth::guard('driver')->check()) {
+                $tracking->user_type = 'driver';
+            }
             $tracking->status = $shipment->status;
             $Saved = $tracking->save();
             return response()->json(

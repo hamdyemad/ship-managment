@@ -110,7 +110,8 @@ Route::group(
             Route::get('/driver/shippments/delivery', [Controller::class, 'drivershippments'])->name('driver.shippments');
             // change the status from driver
             Route::post('/driver/shipment/status', [Controller::class, 'changestatue'])->name('driver.status');
-            Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
+            // Route::post('/driver/shipment/status/onhold', [Controller::class, 'changestatue_onhold'])->name('changestatue_onhold');
+            // Route::post('/driver/shipment/status/rejected_fees_paid', [Controller::class, 'changestatue_refejcted_fees_paid'])->name('changestatue_refejcted_fees_paid');
             Route::post('/employee/scan', [Controller::class, 'getshipmentscan2'])->name('scan2');
             Route::post('/employee/scan/shippments', [Controller::class, 'getshipmentscan3'])->name('scan3');
 

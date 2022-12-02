@@ -161,6 +161,11 @@
                     @endif
                 </td>
             </tr>
+            <tr>
+                <td colspan="2" style="font-weight: bold;font-size: 18px;">Package Details</td>
+                <td colspan="3">{{$show->package_details}}</td>
+
+            </tr>
         </table>
 
     </center>

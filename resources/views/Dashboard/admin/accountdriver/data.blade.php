@@ -75,7 +75,7 @@
                     @elseif($PDFReports->pickup_id==null)
                     <tr>
                         <td>{{ $PDFReports->shippment->id }}</td>
-                        <td>shippment</td>
+                        <td>{{ __("site.shipment") . '-' . $PDFReports->shippment->shippment_type }}</td>
                         <td>{{ $PDFReports->shippment->status }}</td>
                         <td>{{ $PDFReports->shippment->user->name }}</td>
                         <td>{{ $PDFReports->shippment->user->phone}}</td>
