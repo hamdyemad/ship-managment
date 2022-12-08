@@ -70,7 +70,7 @@ License: For each use you must have a valid license purchased only from above li
     </style>
     @else
     <link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="{{asset('assets/media/logos/favicon.ico')}}" />
+    <link rel="shortcut icon" href="{{asset('/shippment-logo.png')}}" />
     <link href="{{asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css')}}" rel="stylesheet"
         type="text/css" />
     <link href="{{asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
@@ -105,7 +105,7 @@ License: For each use you must have a valid license purchased only from above li
                 <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                     <!--begin::Logo-->
                     <a>
-                        <img alt="Logo" src="{{asset('assets/media/logos/logo-1-dark.svg')}}" class="h-25px logo" />
+                        <img alt="Logo" src="{{asset('/shippment-logo.png')}}" class="logo" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Aside toggler-->
@@ -180,7 +180,7 @@ License: For each use you must have a valid license purchased only from above li
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                             <a href="../../demo1/dist/index.html" class="d-lg-none">
-                                <img alt="Logo" src="{{asset('assets/media/logos/logo-2.svg')}}" class="h-30px" />
+                                <img alt="Logo" src="{{asset('/shippment-logo.png')}}" class="h-30px" />
                             </a>
                         </div>
                         <!--end::Mobile logo-->

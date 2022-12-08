@@ -18,6 +18,8 @@ use App\Models\ScheduleSeller;
 use App\Models\Shippment;
 use App\Models\ShippmentHistory;
 use App\Models\Specialprice;
+use App\Models\ShippmentView;
+
 use App\Models\Tracking;
 use App\Models\User;
 use Carbon\Carbon;
@@ -331,7 +333,6 @@ class Controller extends BaseController
     // get one shipment after do scan using driver or emplyee
     function getshipmentscan(Request $request)
     {
-
         $barcode = $request->sometext;
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check() || Auth::guard('user')->check()) {
             $shippment = Shippment::where('barcode', $barcode)->first();
@@ -343,6 +344,28 @@ class Controller extends BaseController
             }
         } else {
             $shippment = null;
+        }
+
+        $user_type = '';
+        if(Auth::guard('admin')->check())
+            $user_type = 'admin';
+        elseif(Auth::guard('employee')->check())
+            $user_type = 'employee';
+        elseif(Auth::guard('driver')->check())
+            $user_type = 'driver';
+        elseif(Auth::guard('user')->check())
+            $user_type = 'user';
+        $shippment_view = ShippmentView::where([
+            'shippment_id' => $shippment->id,
+            'user_id' => Auth::id(),
+            'user_type' => $user_type,
+        ])->first();
+        if(!$shippment_view) {
+            ShippmentView::create([
+                'shippment_id' => $shippment->id,
+                'user_id' => Auth::id(),
+                'user_type' => $user_type,
+            ]);
         }
 
         if ($shippment != null) {
@@ -485,7 +508,16 @@ class Controller extends BaseController
     {
         $shippment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
         if(Auth::guard('driver')->user()) {
-            $shippment->driver_changed = 1;
+            if($shippment->driver_changed == 0) {
+                $shippment->driver_changed = 1;
+            } else {
+                return response()->json(
+                    [
+                        'message' => __('site.can_not_change_staus_again')
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
         }
         $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
         if($shippment->user) {

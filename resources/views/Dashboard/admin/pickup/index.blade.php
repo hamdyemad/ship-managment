@@ -276,6 +276,7 @@
                     <td>
                         @foreach ($pickup->deliveries as $delivery)
                             {{ $delivery->driver->name }}<br>
+                            {{ $delivery->driver->phone }}<br>
                         @endforeach
                     </td>
                     <td>

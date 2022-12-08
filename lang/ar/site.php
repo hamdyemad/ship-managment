@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'assign_shippments' => 'تعيين شحنات',
     'dashboard' => 'الرئيسية',
     'home' => 'الرئيسية',
     'Logout' => 'تسجيل الخروج',

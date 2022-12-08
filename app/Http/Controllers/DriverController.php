@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Delivery;
 use App\Models\Driver;
+use App\Models\Shippment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -47,7 +48,7 @@ class DriverController extends Controller
         $validator = Validator($request->all(), [
             'name' => 'required | max:50',
             'email' => 'required|string | min:2 |max:20',
-            'phone' => 'required |numeric',
+            'phone' => 'required |numeric|digits:11',
             'password' => 'required',
             'password_confirmation' => 'required',
             'role_id' => 'required|numeric|exists:roles,id',
@@ -119,7 +120,7 @@ class DriverController extends Controller
         $rules = [
             'name' => ' max:50',
             'email' => 'string',
-            'phone' => 'numeric',
+            'phone' => 'numeric|digits:11',
             'special_pickup' => 'numeric',
             'role_id' => 'required|numeric|exists:roles,id',
         ];
@@ -156,6 +157,9 @@ class DriverController extends Controller
     public function AssignShippments(Request $request) {
         if($request->shippment) {
             foreach($request->shippment as $shippment) {
+                $shipModel = Shippment::find($shippment);
+                $shipModel->driver_changed = 0;
+                $shipModel->save();
                 $delivery = Delivery::where([
                     'shippment_id' => $shippment
                 ])->first();

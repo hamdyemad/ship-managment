@@ -46,7 +46,7 @@ class AddressController extends Controller
             'floor' => 'required',
             'apartment' => 'required',
             'contact_name' => 'required',
-            'contact_mobile' => 'required',
+            'contact_mobile' => 'required|digits:11',
         ]);
 
         if (!$validator->fails()) {

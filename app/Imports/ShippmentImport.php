@@ -57,6 +57,8 @@ class ShippmentImport implements
             } else {
                 $seller = null;
             }
+        } else {
+            $seller = $seller;
         }
 
         $shippment = new Shippment();
@@ -81,6 +83,7 @@ class ShippmentImport implements
     {
         return [
             '*.shippment_type' => 'required|in:forward,exchange,cash_collection,return_pickup',
+            '*.seller_name' => 'required',
             '*.shipper_name' => 'required',
             '*.area' => 'required',
             '*.city' => 'required',

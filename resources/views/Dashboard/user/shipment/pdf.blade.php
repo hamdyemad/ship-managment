@@ -102,7 +102,7 @@
     <center>
         <table id="container_content2" class="main" cellpadding="0" cellspacing="0">
             <tr>
-                <td rowspan="2"><img src="{{asset('shippment-logo.png')}}" alt=""></td>
+                <td rowspan="2"><img src="{{asset('/shippment-logo.png')}}" alt=""></td>
                 <td style="font-weight: bold;font-size: 18px;">city</td>
                 <td style="font-weight: bold;font-size: 18px;">{{$show->city->city}}</td>
                 <td style="font-weight: bold;font-size: 18px; width:30%">Allow to open</td>

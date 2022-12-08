@@ -240,7 +240,30 @@
             <tbody class="text-gray-600 fw-bold">
 
                 @foreach ($shipments as $shipment)
-                    <tr>
+                    @php
+                        $viewed = 0;
+                        $user_type = '';
+                        if(Auth::guard('admin')->check())
+                            $user_type = 'admin';
+                        elseif(Auth::guard('employee')->check())
+                            $user_type = 'employee';
+                        elseif(Auth::guard('driver')->check())
+                            $user_type = 'driver';
+                        elseif(Auth::guard('user')->check())
+                            $user_type = 'user';
+
+                        $shippment_view = App\Models\ShippmentView::where([
+                            'shippment_id' => $shipment->id,
+                            'user_id' => Auth::id(),
+                            'user_type' => $user_type,
+                        ])->first();
+                        if($shippment_view) {
+                            $viewed = 1;
+                        }
+                    @endphp
+                    <tr class="
+                        @if($viewed) bg-light @endif
+                    ">
                         <!--begin::Checkbox-->
                         <td>
                             <div class="form-check form-check-sm form-check-custom form-check-solid">

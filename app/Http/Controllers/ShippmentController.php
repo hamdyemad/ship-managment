@@ -7,10 +7,12 @@ use App\Models\Delivery;
 use App\Models\Driver;
 use App\Models\Shippment;
 use App\Models\ShippmentHistory;
+use App\Models\ShippmentView;
 use App\Models\Tracking;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Milon\Barcode\DNS1D;
 
@@ -107,7 +109,7 @@ class ShippmentController extends Controller
             'area' => 'required',
             'business' => 'required',
             'receiver_name' => 'required',
-            'receiver_phone' => 'required|numeric',
+            'receiver_phone' => 'required|numeric|digits:11',
             'address' => 'required',
             'package' => 'max:150',
             'price' => 'required|numeric',
@@ -222,7 +224,7 @@ class ShippmentController extends Controller
             'area' => 'required',
             'business' => 'required',
             'receiver_name' => 'required',
-            'receiver_phone' => 'required|numeric',
+            'receiver_phone' => 'required|numeric|digits:11',
             'address' => 'required',
             'package' => 'max:150',
             'price' => 'required|numeric',

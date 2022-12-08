@@ -15,8 +15,7 @@ License: For each use you must have a valid license purchased only from above li
 
 <head>
     <base href="">
-    <title>Metronic - the world's #1 selling Bootstrap Admin Theme Ecosystem for HTML, Vue, React, Angular &amp; Laravel
-        by Keenthemes</title>
+    <title>Shipexeg</title>
     <meta name="description"
         content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
     <meta name="keywords"
@@ -30,7 +29,7 @@ License: For each use you must have a valid license purchased only from above li
     <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Keenthemes | Metronic" />
     <link rel="canonical" href="Https://preview.keenthemes.com/metronic8" />
-    <link rel="shortcut icon" href="{{asset('assets/media/logos/favicon.ico')}}" />
+    <link rel="shortcut icon" href="{{asset('/shippment-logo.png')}}" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
@@ -51,8 +50,8 @@ License: For each use you must have a valid license purchased only from above li
             <!--begin::Content-->
             <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
                 <!--begin::Logo-->
-                <a href="../../demo1/dist/index.html" class="mb-12">
-                    <img alt="Logo" src="{{asset('assets/media/logos/logo-1.svg')}}" class="h-40px" />
+                <a href="{{ route('landing') }}" class="mb-12">
+                    <img alt="Logo" src="{{asset('/shippment-logo.png')}}" class="h-40px" />
                 </a>
                 <!--end::Logo-->
                 <!--begin::Wrapper-->
@@ -62,7 +61,7 @@ License: For each use you must have a valid license purchased only from above li
                         <!--begin::Heading-->
                         <div class="text-center mb-10">
                             <!--begin::Title-->
-                            <h1 class="text-dark mb-3">Sign In to Metronic</h1>
+                            <h1 class="text-dark mb-3">Sign In to Shipexeg</h1>
                             <!--end::Title-->
 
                         </div>

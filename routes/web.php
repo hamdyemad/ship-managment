@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 
 /* ############################### login ############################### */
 
-Route::view('/', 'Dashboard.landing')->name('open.scan');
+Route::view('/', 'Dashboard.landing')->name('landing');
 Route::post('/tracking', [Controller::class, 'gettrackingnumber'])->name('gettrackingnumber');
 
 Route::redirect('/admin', '/admin/login');

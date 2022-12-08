@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'assign_shippments' => 'assign shippments',
     'balance' => 'balance',
     'settled_files' => 'settled files',
     'seller_commission' => 'seller commission',

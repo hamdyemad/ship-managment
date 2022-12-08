@@ -18,7 +18,7 @@ class AccountSellerController extends Controller
      */
     public function index()
     {
-
+        $this->authorize('accounts_seller.index');
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check() ) {
             $accounts = AccountSeller::with('shippment', 'pickup')->latest();
             $sellers = User::all();

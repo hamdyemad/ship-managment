@@ -71,4 +71,8 @@ class Shippment extends Model
     {
         return $this->belongsTo(Area::class);
     }
+
+    public function viewes() {
+        return $this->hasMany(ShippmentView::class, 'shippment_id', 'id');
+    }
 }

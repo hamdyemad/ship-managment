@@ -63,19 +63,15 @@ class PickupController extends Controller
     //store data pick up and change the shipment status to picked up
     public function store(Request $request)
     {
-        $time = 1669996800; // 4 pm
         $validator = Validator($request->all(), [
             'name' => 'required',
             // 'email' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|digits:11',
             'address' => 'required',
             'time' => 'required',
             'date' => 'required',
             'note' => 'max:150',
         ]);
-        if(strtotime($request->time) > $time) {
-            $request['date'] = Carbon::createFromDate($request->date)->addDay();
-        }
         $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
         if (!$validator->fails()) {
             foreach ($shipment as $shipment) {
