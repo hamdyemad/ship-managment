@@ -52,13 +52,7 @@ class ShippmentImport implements
         $seller = User::where('name', 'like', '%' . $row['seller_name'] . '%')->first();
 
         if(Auth::guard('user')->check()) {
-            if(Auth::guard('user')->user()->id == $seller->id) {
-                $seller = $seller;
-            } else {
-                $seller = null;
-            }
-        } else {
-            $seller = $seller;
+            $seller = Auth::guard('user')->user();
         }
 
         $shippment = new Shippment();
@@ -83,13 +77,13 @@ class ShippmentImport implements
     {
         return [
             '*.shippment_type' => 'required|in:forward,exchange,cash_collection,return_pickup',
-            '*.seller_name' => 'required',
+            '*.seller_name' => 'required|exists:users,name',
             '*.shipper_name' => 'required',
-            '*.area' => 'required',
-            '*.city' => 'required',
+            '*.area' => 'required|exists:areas,area',
+            '*.city' => 'required|exists:cities,city',
             '*.business_referance' => 'required',
             '*.receiver_name' => 'required',
-            '*.phone_number' => 'required',
+            '*.phone_number' => 'required|digits:11',
             '*.allow_open' => 'required|in:true,false',
             '*.price' => 'required',
             '*.address' => 'required',

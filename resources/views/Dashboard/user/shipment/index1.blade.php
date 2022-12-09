@@ -73,7 +73,7 @@
         <!--begin::Card title-->
             <div class="d-flex justify-content-between w-100 fs-4 py-3">
                 <div class="fw-bolder rotate collapsible" data-bs-toggle="collapse" href="#kt_view_search"
-                    role="button" aria-expanded="false" aria-controls="kt_view_search">Advanced Search
+                    role="button" aria-expanded="false" aria-controls="kt_view_search">{{ __('site.advanced_search') }}
                     <span class="ms-2">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                         <span class="svg-icon svg-icon-3">
@@ -88,18 +88,20 @@
                     </span>
                 </div>
                 <div class="d-block d-md-flex align-items-end">
-                    <form id="assign_shippments" action="{{ route('driver.assign_shippments') }}" method="POST">
-                        @csrf
-                        <div class=" me-3">
-                            <label class="form-label fs-6 fw-bold">{{__('site.assign_shippments')}}:</label>
-                            <select class="form-select form-select-solid fw-bolder assign_shippments_select" name="driver">
-                                <option></option>
-                                @foreach ($drivers as $driver)
-                                    <option value="{{ $driver->id }}">{{ $driver->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </form>
+                    @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+                        <form id="assign_shippments" action="{{ route('driver.assign_shippments') }}" method="POST">
+                            @csrf
+                            <div class=" me-3">
+                                <label class="form-label fs-6 fw-bold">{{__('site.assign_shippments')}}:</label>
+                                <select class="form-select form-select-solid fw-bolder assign_shippments_select" name="driver">
+                                    <option></option>
+                                    @foreach ($drivers as $driver)
+                                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </form>
+                    @endif
                     <form id="pdf" action="{{ route('pdf') }}" method="POST">
                         @csrf
                         <input type="hidden" name="export_by_choose" value="1">
@@ -151,144 +153,144 @@
     <div class="card-body pt-0">
         <div id="kt_view_search" class="collapse">
             <!--begin::Card toolbar-->
-        <div class="card-toolbar">
-            <form action="{{ route('getshipment') }}" method="GET">
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <!--begin::Input group-->
-                        <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.tracking')}}:</label>
-                            <input type="text" class="form-control" name="barcode" value="{{ request('barcode') }}">
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <!--begin::Input group-->
-                        <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.receiver_name')}}:</label>
-                            <input type="text" name="receiver_name" value="{{ request('receiver_name') }}" class="form-control">
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <!--begin::Input group-->
-                        <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.receiver_phone')}}:</label>
-                            <input type="text" name="receiver_phone" value="{{ request('receiver_phone') }}" class="form-control">
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <!--begin::Input group-->
-                        <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
-                            <select class="form-select form-select-solid fw-bolder" name="status">
-                                <option></option>
-                                <option value="created" @if(request('status') == 'created') selected @endif> created</option>
-                                <option value="receiver_at_hub" @if(request('status') == 'receiver_at_hub') selected @endif>receiver at hub</option>
-                                <option value="out_for_delivery" @if(request('status') == 'out_for_delivery') selected @endif>out for delivery</option>
-                                <option value="delivered" @if(request('status') == 'delivered') selected @endif>delivered</option>
-                                <option value="onhold" @if(request('status') == 'onhold') selected @endif>on hold</option>
-                                <option value="no_answer" @if(request('status') == 'no_answer') selected @endif>no_answer</option>
-                                <option value="rejected" @if(request('status') == 'rejected') selected @endif>rejected</option>
-                                <option value="rejected_fees_paid" @if(request('status') == 'rejected_fees_paid') selected @endif>rejected fees paid</option>
-
-                            </select>
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-                    @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
-                        <div class="col-12 col-md-6">
-                            <!--begin::Input group-->
+                <div class="card-toolbar">
+                    <form action="{{ route('getshipment') }}" method="GET">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
                                 <div class="mb-10">
-                                    <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
-                                    <select class="form-select form-select-solid fw-bolder" name="driver_id">
-                                        <option></option>
-                                        @foreach ($drivers as $driver)
-                                            <option value="{{ $driver->id }}" @if(request('driver_id') == $driver->id) selected @endif>{{ $driver->name }}</option>
-                                        @endforeach
-
-                                    </select>
+                                    <label class="form-label fs-6 fw-bold">{{__('site.tracking')}}:</label>
+                                    <input type="text" class="form-control" name="barcode" value="{{ request('barcode') }}">
                                 </div>
-                            <!--end::Input group-->
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <!--begin::Input group-->
-                                <div class="mb-10">
-                                    <label class="form-label fs-6 fw-bold">{{__('site.seller')}}:</label>
-                                    <select class="form-select form-select-solid fw-bolder" name="seller_id">
-                                        <option></option>
-                                        @foreach ($sellers as $seller)
-                                            <option value="{{ $seller->id }}" @if(request('seller_id') == $seller->id) selected @endif>{{ $seller->name }}</option>
-                                        @endforeach
-
-                                    </select>
-                                </div>
-                            <!--end::Input group-->
-                        </div>
-                    @endif
-                    <div class="col-12 col-md-6">
-                        <!--begin::Input group-->
-                        <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.shippment_type')}}:</label>
-                            <select class="form-select form-select-solid fw-bolder" name="shippment_type">
-                                <option></option>
-                                <option value="forward" @if(request('shippment_type') == 'forward') selected @endif>forward</option>
-                                <option value="exchange" @if(request('shippment_type') == 'exchange') selected @endif>exchange</option>
-                                <option value="cash_collection" @if(request('shippment_type') == 'cash_collection') selected @endif>cash_collection</option>
-                                <option value="return_pickup" @if(request('shippment_type') == 'return_pickup') selected @endif>return_pickup</option>
-
-                            </select>
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <!--begin::Input group-->
-                        <div class="mb-10">
-                            <label class="form-label fs-6 fw-bold">{{__('site.seller_settled')}}:</label>
-                            <select class="form-select form-select-solid fw-bolder" name="seller_settled">
-                                <option></option>
-                                <option value="2" @if(request('seller_settled') == '2') selected @endif>settled</option>
-                                <option value="1" @if(request('seller_settled') == '1') selected @endif>not settled</option>
-
-                            </select>
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-                    @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
-                        <div class="col-12 col-md-6">
-                            <!--begin::Input group-->
-                            <div class="mb-10">
-                                <label class="form-label fs-6 fw-bold">{{__('site.driver_settled')}}:</label>
-                                <select class="form-select form-select-solid fw-bolder" name="driver_settled">
-                                    <option></option>
-                                    <option value="2" @if(request('driver_settled') == '2') selected @endif>{{ __('site.settled') }}</option>
-                                    <option value="1" @if(request('driver_settled') == '1') selected @endif>{{ __('site.not_settled') }}</option>
-
-                                </select>
+                                <!--end::Input group-->
                             </div>
-                            <!--end::Input group-->
-                        </div>
-                    @endif
-                    <div class="col-12 col-md-6">
-                        <div class="mb-10 mt-5">
-                            <button class="btn btn-block w-100 btn-primary">{{ __('site.search') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <!--begin::Group actions-->
-            <div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
-                <div class="fw-bolder me-5">
-                    <span class="me-2" data-kt-user-table-select="selected_count"></span>Selected
-                </div>
-                <button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete
-                    Selected</button>
-            </div>
-            <!--end::Group actions-->
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <label class="form-label fs-6 fw-bold">{{__('site.receiver_name')}}:</label>
+                                    <input type="text" name="receiver_name" value="{{ request('receiver_name') }}" class="form-control">
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <label class="form-label fs-6 fw-bold">{{__('site.receiver_phone')}}:</label>
+                                    <input type="text" name="receiver_phone" value="{{ request('receiver_phone') }}" class="form-control">
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
+                                    <select class="form-select form-select-solid fw-bolder" name="status">
+                                        <option></option>
+                                        <option value="created" @if(request('status') == 'created') selected @endif> created</option>
+                                        <option value="receiver_at_hub" @if(request('status') == 'receiver_at_hub') selected @endif>receiver at hub</option>
+                                        <option value="out_for_delivery" @if(request('status') == 'out_for_delivery') selected @endif>out for delivery</option>
+                                        <option value="delivered" @if(request('status') == 'delivered') selected @endif>delivered</option>
+                                        <option value="onhold" @if(request('status') == 'onhold') selected @endif>on hold</option>
+                                        <option value="no_answer" @if(request('status') == 'no_answer') selected @endif>no_answer</option>
+                                        <option value="rejected" @if(request('status') == 'rejected') selected @endif>rejected</option>
+                                        <option value="rejected_fees_paid" @if(request('status') == 'rejected_fees_paid') selected @endif>rejected fees paid</option>
 
-        </div>
-        <!--end::Card toolbar-->
+                                    </select>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+                                <div class="col-12 col-md-6">
+                                    <!--begin::Input group-->
+                                        <div class="mb-10">
+                                            <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
+                                            <select class="form-select form-select-solid fw-bolder" name="driver_id">
+                                                <option></option>
+                                                @foreach ($drivers as $driver)
+                                                    <option value="{{ $driver->id }}" @if(request('driver_id') == $driver->id) selected @endif>{{ $driver->name }}</option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <!--begin::Input group-->
+                                        <div class="mb-10">
+                                            <label class="form-label fs-6 fw-bold">{{__('site.seller')}}:</label>
+                                            <select class="form-select form-select-solid fw-bolder" name="seller_id">
+                                                <option></option>
+                                                @foreach ($sellers as $seller)
+                                                    <option value="{{ $seller->id }}" @if(request('seller_id') == $seller->id) selected @endif>{{ $seller->name }}</option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                    <!--end::Input group-->
+                                </div>
+                            @endif
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <label class="form-label fs-6 fw-bold">{{__('site.shippment_type')}}:</label>
+                                    <select class="form-select form-select-solid fw-bolder" name="shippment_type">
+                                        <option></option>
+                                        <option value="forward" @if(request('shippment_type') == 'forward') selected @endif>forward</option>
+                                        <option value="exchange" @if(request('shippment_type') == 'exchange') selected @endif>exchange</option>
+                                        <option value="cash_collection" @if(request('shippment_type') == 'cash_collection') selected @endif>cash_collection</option>
+                                        <option value="return_pickup" @if(request('shippment_type') == 'return_pickup') selected @endif>return_pickup</option>
+
+                                    </select>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <label class="form-label fs-6 fw-bold">{{__('site.seller_settled')}}:</label>
+                                    <select class="form-select form-select-solid fw-bolder" name="seller_settled">
+                                        <option></option>
+                                        <option value="2" @if(request('seller_settled') == '2') selected @endif>{{ __('site.settled') }}</option>
+                                        <option value="1" @if(request('seller_settled') == '1') selected @endif>{{ __('site.not_settled') }}</option>
+                                    </select>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+                                <div class="col-12">
+                                    <!--begin::Input group-->
+                                    <div class="mb-10">
+                                        <label class="form-label fs-6 fw-bold">{{__('site.driver_settled')}}:</label>
+                                        <select class="form-select form-select-solid fw-bolder" name="driver_settled">
+                                            <option></option>
+                                            <option value="2" @if(request('driver_settled') == '2') selected @endif>{{ __('site.settled') }}</option>
+                                            <option value="1" @if(request('driver_settled') == '1') selected @endif>{{ __('site.not_settled') }}</option>
+
+                                        </select>
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                            @endif
+                            <div class="col-12">
+                                <div>
+                                    <button class="btn  btn-primary">{{ __('site.search') }}</button>
+                                    <a href="{{ route('getshipment') }}" class="btn btn-danger">{{ __('site.reset') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--begin::Group actions-->
+                    <div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
+                        <div class="fw-bolder me-5">
+                            <span class="me-2" data-kt-user-table-select="selected_count"></span>Selected
+                        </div>
+                        <button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete
+                            Selected</button>
+                    </div>
+                    <!--end::Group actions-->
+
+                </div>
+            <!--end::Card toolbar-->
         </div>
         <!--begin::Table-->
         <table class="table d-block overflow-auto align-middle table-row-dashed fs-6 gy-5">
@@ -410,51 +412,40 @@
                         <!--end::User=-->
 
 
-                        @if ($shipment->status == 'receiver_at_hub')
                         <td>
-                            <div class="rounded-pill" style="background-color: #94c1e2;text-align: center">
-                                {{$shipment->status}}</div>
+                            @if ($shipment->status == 'receiver_at_hub')
+                                <div class="rounded-pill p-2" style="background-color: #94c1e2;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'out_for_delivery')
+                                <div class="rounded-pill p-2" style="background-color: #7bc1f3;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'delivered')
+                                <div class="rounded-pill p-2" style="background-color: #52ec7b;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'OnHold')
+                                <div class="rounded-pill p-2" style="background-color: #b9bc7f;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'no_answer')
+                                <div class="rounded-pill p-2" style="background-color: #bec35f;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'rejected')
+                                <div class="rounded-pill p-2" style="background-color: #ee83a5;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'rejected_fees_paid')
+                                <div class="rounded-pill p-2" style="background-color: #fcc6c6;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'created')
+                                <div class="rounded-pill p-2" style="background-color: #b2cd94;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @else
+                                <div class="rounded-pill p-2" style="background-color: #cbcbcb;text-align: center">{{ $shipment->status }}</div>
+                            @endif
+                            @if($shipment->rejected_fees_paid)
+                                <span class="mt-2 badge badge-secondary text-center d-block">
+                                    {{ $shipment->rejected_fees_paid }}
+                                </span>
+                            @endif
                         </td>
-                        @elseif($shipment->status == 'out_for_delivery')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #7bc1f3;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'delivered')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #52ec7b;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'OnHold')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #b9bc7f;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'no_answer')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #bec35f;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'rejected')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #ee83a5;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'rejected_fees_paid')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #f16060;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'created')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #b2cd94;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @else
-                        <td>
-                            <div class="rounded-pill" style="background-color: #cbcbcb;text-align: center">{{ $shipment->status }}</div>
-                        </td>
-                        @endif
                         <td>
                             @if($shipment->seller_settled)
                                 <span class="badge badge-success">

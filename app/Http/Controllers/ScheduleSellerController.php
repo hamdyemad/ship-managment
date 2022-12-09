@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ScheduleSeller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,13 +16,23 @@ class ScheduleSellerController extends Controller
      */
     public function index()
     {
+        $sellers = [];
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
-            $schedules = ScheduleSeller::with('user')->latest()->get();
+            $schedules = ScheduleSeller::with('user')->latest();
+            $sellers = User::all();
         } else if(Auth::guard('user')->check()) {
-            $schedules = ScheduleSeller::with('user')->where('user_id', Auth::id())->latest()->get();
-
+            $schedules = ScheduleSeller::with('user')->where('user_id', Auth::id())->latest();
         }
-        return view('Dashboard.admin.accountseller.accountfile', ['schedules' => $schedules]);
+        if(request('schedule_id')) {
+            $schedules = $schedules->where('id', request('schedule_id'));
+        }
+        if(request('seller_id')) {
+            $schedules = $schedules->whereHas('user', function($user) {
+                return $user->where('id', request('seller_id'));
+            });
+        }
+        $schedules = $schedules->paginate(10);
+        return view('Dashboard.admin.accountseller.accountfile', ['schedules' => $schedules, 'sellers' => $sellers]);
     }
 
     /**

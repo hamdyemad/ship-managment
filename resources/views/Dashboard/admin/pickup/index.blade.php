@@ -193,7 +193,7 @@
                             </div>
                         <!--end::Input group-->
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12">
                         <!--begin::Input group-->
                             <div class="mb-10">
                                 <label class="form-label fs-6 fw-bold">{{__('site.seller_settled')}}:</label>
@@ -206,9 +206,10 @@
                             </div>
                         <!--end::Input group-->
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12">
                         <div class="mb-10 mt-5">
-                            <button class="btn btn-block w-100 btn-primary">{{ __('site.search') }}</button>
+                            <button class="btn btn-primary">{{ __('site.search') }}</button>
+                            <a href="{{ route('assignedpickup.index') }}" class="btn btn-danger">{{ __('site.reset') }}</a>
                         </div>
                     </div>
                 </div>

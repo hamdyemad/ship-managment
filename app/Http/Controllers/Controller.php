@@ -770,9 +770,37 @@ class Controller extends BaseController
     {
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
             $accounts = AccountSeller::latest();
-            if(request('keyword')) {
-                $accounts = $accounts->where('id', request('keyword'));
+
+            if(request('settled_id')) {
+                $accounts = $accounts->where('id', request('settled_id'));
             }
+            if(request('shippment_code')) {
+                $accounts =  $accounts->whereHas('shippment', function($shipment) {
+                    return $shipment->where('barcode', request('shippment_code'));
+                });
+            }
+
+            if(request('shippment_type')) {
+                $accounts =  $accounts->whereHas('shippment', function($shipment) {
+                    return $shipment->where('shippment_type', request('shippment_type'));
+                });
+            }
+
+            if(request('seller_settled')) {
+                $settled = 0;
+                if(request('seller_settled') == '2') {
+                    $settled = 1;
+                }
+                $accounts =  $accounts->whereHas('shippment', function($shipment) use($settled) {
+                    return $shipment->where('seller_settled', $settled);
+                });
+            }
+            if(request('shippment_status')) {
+                $accounts =  $accounts->whereHas('shippment', function($shipment) {
+                    return $shipment->where('status', request('shippment_status'));
+                });
+            }
+
             $accounts = $accounts->get();
             $drivers = Driver::latest()->get();
         } else if(Auth::guard('driver')->check()) {
@@ -784,20 +812,50 @@ class Controller extends BaseController
             ->where('driver_id', Auth::id())
             ->whereNull('shippment_id')
             ->pluck('pickup_id');
-            $accountsOfShippments = AccountSeller::latest()
+            $accountsOfShippments = AccountSeller::with('shippment')->latest()
             ->whereIn('shippment_id', $shippments);
-            $accountsOfPickups = AccountSeller::latest()
+            $accountsOfPickups = AccountSeller::with('pickup')->latest()
             ->whereIn('pickup_id', $pickups);
-            if(request('keyword')) {
-                $accountsOfShippments = $accountsOfShippments->where('id', request('keyword'));
-                $accountsOfPickups = $accountsOfPickups->where('id', request('keyword'));
+
+
+            if(request('settled_id')) {
+                $accountsOfShippments = $accountsOfShippments->where('id', request('settled_id'));
             }
+            if(request('shippment_code')) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) {
+                    return $shipment->where('barcode', request('shippment_code'));
+                });
+            }
+
+            if(request('shippment_type')) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) {
+                    return $shipment->where('shippment_type', request('shippment_type'));
+                });
+            }
+
+            if(request('driver_settled')) {
+                $settled = 0;
+                if(request('driver_settled') == '2') {
+                    $settled = 1;
+                }
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) use($settled) {
+                    return $shipment->where('driver_settled', $settled);
+                });
+            }
+            if(request('shippment_status')) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) {
+                    return $shipment->where('status', request('shippment_status'));
+                });
+            }
+
+
             $accountsOfShippments = $accountsOfShippments->get();
             $accountsOfPickups = $accountsOfPickups->get();
 
             $accounts =  $accountsOfShippments->merge($accountsOfPickups);
             $drivers = [];
         }
+        // return $accounts;
 
 
         return view('Dashboard.admin.accountdriver.accountdrivers', ['accounts' => $accounts, 'drivers' => $drivers]);

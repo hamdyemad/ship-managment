@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'admin_login' => 'admin login',
+    'employee_login' => 'employee login',
+    'seller_login' => 'seller login',
+    'driver_login' => 'driver login',
+    'paid_shippments' => 'paid shippments',
+    'sellers_should_to_pays' => 'sellers should to pays',
     'assign_shippments' => 'assign shippments',
     'balance' => 'balance',
     'settled_files' => 'settled files',

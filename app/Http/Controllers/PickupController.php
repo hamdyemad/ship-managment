@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\City;
+use App\Models\Delivery;
+use App\Models\Driver;
 use App\Models\Pickup;
 use App\Models\PickupHistory;
 use App\Models\Shippment;
@@ -25,8 +27,37 @@ class PickupController extends Controller
     public function index()
     {
         if(Auth::guard('user')->user()) {
-            $pickup = Pickup::where('user_id', auth()->user()->id)->orderBy('date', 'DESC')->get();
-            return view('Dashboard.user.pickup.index', ['pickup' => $pickup]);
+            $pickups = Pickup::where('user_id', auth()->user()->id)->orderBy('date', 'DESC')->get();
+            $drivers = Driver::all();
+            if(request('status')) {
+                $pickups = $pickups->where('status', request('status'));
+
+            }
+            if(request('driver_id')) {
+                $picks = Delivery::with('driver', 'pickup')->where('driver_id', request('driver_id'))->pluck('pickup_id');
+                $pickups = $pickups->whereIn('id', $picks);
+            }
+            if(request('seller_id')) {
+                $pickups = $pickups->where('user_id', request('seller_id'));
+            }
+            if(request('driver_settled')) {
+                if(request('driver_settled') == 2) {
+                    $driver_settled = 1;
+                } else {
+                    $driver_settled = 0;
+                }
+                $pickups = $pickups->where('driver_settled', $driver_settled);
+            }
+            if(request('seller_settled')) {
+                if(request('seller_settled') == 2) {
+                    $seller_settled = 1;
+                } else {
+                    $seller_settled = 0;
+                }
+                $pickups = $pickups->where('seller_settled', $seller_settled);
+            }
+
+            return view('Dashboard.user.pickup.index', ['pickups' => $pickups, 'drivers' => $drivers]);
         }
         else {
             return redirect()->back()->with('error', __('site.error'));

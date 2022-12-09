@@ -96,7 +96,7 @@
                     <div class="col-lg-12 fv-row">
                         <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipper-name')}}</label>
 
-                        <input type="text" id="shipper" name="shipper"
+                        <input type="text" id="shipper" name="shipper" @if(Auth::guard('user')->check()) value="{{ Auth::guard('user')->user()->name }}" @endif
                             class="form-control form-control-lg form-control-solid">
 
                     </div>

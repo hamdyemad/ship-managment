@@ -17,13 +17,22 @@ class ScheduledriverController extends Controller
     public function index()
     {
         if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
-            $schedules = Scheduledriver::with('driver')->latest()->get();
+            $schedules = Scheduledriver::with('driver')->latest();
             $drivers = Driver::all();
         } else if(Auth::guard('driver')->check()) {
-            $schedules = Scheduledriver::with('driver')->where('driver_id', Auth::id())->latest()->get();
+            $schedules = Scheduledriver::with('driver')->where('driver_id', Auth::id())->latest();
             $drivers = [];
         }
-        return view('Dashboard.admin.accountfiledriver', ['schedules' => $schedules, 'drivers' => $drivers]);
+        if(request('schedule_id')) {
+            $schedules = $schedules->where('id', request('schedule_id'));
+        }
+        if(request('driver_id')) {
+            $schedules = $schedules->whereHas('driver', function($driver) {
+                return $driver->where('id', request('driver_id'));
+            });
+        }
+        $schedules = $schedules->paginate(10);
+        return view('Dashboard.admin.accountdriver.accountfiledriver', ['schedules' => $schedules, 'drivers' => $drivers]);
     }
 
     /**

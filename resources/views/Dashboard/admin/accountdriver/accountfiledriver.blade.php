@@ -1,8 +1,8 @@
 @extends('Dashboard.app')
 
-@section('title',__('site.accountseller'))
+@section('title',__('site.accountdriver'))
 
-@section('page_name',__('site.accountseller'))
+@section('page_name',__('site.accountdriver'))
 
 @section('pages')
 
@@ -19,7 +19,7 @@
     <!--end::Item-->
     <!--begin::Item-->
     <li class="breadcrumb-item text-muted">
-        <a href="{{route('account.index')}}" class="text-muted text-hover-primary">{{__('site.accountseller')}}</a>
+        <a href="{{route('shipments_drivers')}}" class="text-muted text-hover-primary">{{__('site.accountdriver')}}</a>
     </li>
     <!--end::Item-->
 
@@ -96,8 +96,6 @@
 
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">
-        <!--begin::Card title-->
-
         <div class="card-title">
             <!--begin::Search-->
             <div class="d-flex align-items-center position-relative my-1">
@@ -119,7 +117,6 @@
             </div>
             <!--end::Search-->
         </div>
-        <!--begin::Card title-->
     </div>
     <!--end::Card header-->
     <!--begin::Card body-->
@@ -138,11 +135,11 @@
                             @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
                                 <div class="col-12 col-md-6">
                                     <div class="mb-10">
-                                        <label class="form-label fs-6 fw-bold">{{__('site.seller')}}:</label>
-                                        <select class="form-select form-select-solid fw-bolder" name="seller_id">
+                                        <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
+                                        <select class="form-select form-select-solid fw-bolder" name="driver_id">
                                             <option></option>
-                                            @foreach ($sellers as $seller)
-                                                <option value="{{ $seller->id }}" @if(request('seller_id') == $seller->id) selected @endif>{{ $seller->name }}</option>
+                                            @foreach ($drivers as $driver)
+                                                <option value="{{ $driver->id }}" @if(request('driver_id') == $driver->id) selected @endif>{{ $driver->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -151,7 +148,7 @@
                             <div class="col-12">
                                 <div class="mb-10">
                                     <button class="btn btn-primary">{{ __('site.search') }}</button>
-                                    <a href="{{ route('ScheduleSeller.index') }}" class="btn btn-danger">{{ __('site.reset') }}</a>
+                                    <a href="{{ route('Scheduledriver.index') }}" class="btn btn-danger">{{ __('site.reset') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -175,9 +172,8 @@
                     <th class="min-w-125px">{{__('site.name')}}</th>
                     <th class="min-w-125px">{{__('site.from')}}</th>
                     <th class="min-w-125px">{{__('site.to')}}</th>
-                    <th class="min-w-125px">{{__('site.price')}}</th>
-                    <th class="min-w-125px">{{__('site.additional_price')}}</th>
                     <th class="min-w-125px">{{__('site.cost')}}</th>
+                    <th class="min-w-125px">{{__('site.pickup_price')}}</th>
                     <th class="min-w-125px">{{__('site.pdf')}}</th>
                 </tr>
                 <!--end::Table row-->
@@ -199,20 +195,26 @@
 
                     <!--begin::User=-->
                     <td class="d-flex align-items-center">
-                        {{ $schedule->id }}
+                        <!--begin::User details-->
+                        <div class="d-flex flex-column">
+                            <a class="text-gray-800 text-hover-primary mb-1 view_data" id="{{$schedule->id}}"
+                                data-bs-toggle="modal" role="button">{{$schedule->id}}</a>
+
+
+                        </div>
+                        <!--begin::User details-->
                     </td>
                     <!--end::User=-->
-                    <td>{{$schedule->user->name ?? 'None'}}</td>
+                    <td>{{$schedule->driver->name}}</td>
                     <td>{{$schedule->from}}</td>
 
                     <td>{{$schedule->to}}</td>
-                    <td>{{$schedule->price}}</td>
-                    <td>{{$schedule->additional_price}}</td>
-                    <td>{{$schedule->costs}}</td>
+                    <td>{{$schedule->total_cost}}</td>
+                    <td>{{$schedule->total_delivery_commission}}</td>
                     <td>
                         {{-- <a href="" onclick="addseller()">pdf</a>
                         --}}
-                        <form action="{{route('Scheduleseller_pdf')}}" method="get" enctype="multipart/form-data">
+                        <form action="{{route('accountdriver_pdf')}}" method="get" enctype="multipart/form-data">
                             @csrf
                             <div style="display: none">
                                 <input type="text" name="schedule_id" value="{{$schedule->id}}">
@@ -225,14 +227,14 @@
                     <td></td>
 
                 </tr>
-                @endforeach
 
+                @endforeach
+                {{-- {{dd($shipment)}} --}}
 
             </tbody>
             <!--end::Table body-->
         </table>
         {{ $schedules->links() }}
-
         <!--end::Table-->
     </div>
     <!--end::Card body-->

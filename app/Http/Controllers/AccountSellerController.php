@@ -26,8 +26,34 @@ class AccountSellerController extends Controller
             $accounts = AccountSeller::with('shippment', 'pickup')->where('user_id', Auth::id())->latest();
             $sellers = [];
         }
-        if(request('keyword')) {
-            $accounts = $accounts->where('id', request('keyword'));
+        if(request('settled_id')) {
+            $accounts = $accounts->where('id', request('settled_id'));
+        }
+        if(request('shippment_code')) {
+            $accounts =  $accounts->whereHas('shippment', function($shipment) {
+                return $shipment->where('barcode', request('shippment_code'));
+            });
+        }
+
+        if(request('shippment_type')) {
+            $accounts =  $accounts->whereHas('shippment', function($shipment) {
+                return $shipment->where('shippment_type', request('shippment_type'));
+            });
+        }
+
+        if(request('seller_settled')) {
+            $settled = 0;
+            if(request('seller_settled') == '2') {
+                $settled = 1;
+            }
+            $accounts =  $accounts->whereHas('shippment', function($shipment) use($settled) {
+                return $shipment->where('seller_settled', $settled);
+            });
+        }
+        if(request('shippment_status')) {
+            $accounts =  $accounts->whereHas('shippment', function($shipment) {
+                return $shipment->where('status', request('shippment_status'));
+            });
         }
         $accounts = $accounts->paginate(10);
         return view('Dashboard.admin.accountseller.accountsellers', ['accounts' => $accounts, 'sellers' => $sellers]);

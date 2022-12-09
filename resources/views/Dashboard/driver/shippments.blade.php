@@ -114,7 +114,7 @@
         <div id="kt_view_search" class="collapse">
             <!--begin::Card toolbar-->
         <div class="card-toolbar">
-            <form action="{{ route('getshipment') }}" method="GET">
+            <form action="{{ route('driver.shippments') }}" method="GET">
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <!--begin::Input group-->
@@ -182,14 +182,14 @@
                                 <option></option>
                                 <option value="2" @if(request('driver_settled') == '2') selected @endif>{{ __('site.settled') }}</option>
                                 <option value="1" @if(request('driver_settled') == '1') selected @endif>{{ __('site.not_settled') }}</option>
-
                             </select>
                         </div>
                         <!--end::Input group-->
                     </div>
-                    <div class="col-12 col-md-6">
-                        <div class="mb-10 mt-5">
-                            <button class="btn btn-block w-100 btn-primary">{{ __('site.search') }}</button>
+                    <div class="col-12">
+                        <div class="mb-10">
+                            <button class="btn btn-primary">{{ __('site.search') }}</button>
+                            <a class="btn btn-danger" href="{{ route('driver.shippments') }}">{{ __('site.reset') }}</a>
                         </div>
                     </div>
                 </div>
@@ -313,51 +313,40 @@
                         <!--end::User=-->
 
 
-                        @if ($shipment->status == 'receiver at hub')
                         <td>
-                            <div class="rounded-pill" style="background-color: #94c1e2;text-align: center">
-                                {{$shipment->status}}</div>
+                            @if ($shipment->status == 'receiver at hub')
+                                <div class="rounded-pill p-2" style="background-color: #94c1e2;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'out_for_delivery')
+                                <div class="rounded-pill p-2" style="background-color: #7bc1f3;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'delivered')
+                                <div class="rounded-pill p-2" style="background-color: #52ec7b;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'OnHold')
+                                <div class="rounded-pill p-2" style="background-color: #b9bc7f;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'no_answer')
+                                <div class="rounded-pill p-2" style="background-color: #bec35f;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'rejected')
+                                <div class="rounded-pill p-2" style="background-color: #ee83a5;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'rejected_fees_paid')
+                                <div class="rounded-pill p-2" style="background-color: #fcc6c6;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @elseif($shipment->status == 'created')
+                                <div class="rounded-pill p-2" style="background-color: #b2cd94;text-align: center">
+                                    {{$shipment->status}}</div>
+                            @else
+                                <div class="rounded-pill p-2" style="background-color: #cbcbcb;text-align: center">{{ $shipment->status }}</div>
+                            @endif
+                            @if($shipment->rejected_fees_paid)
+                                <span class="badge badge-secondary mt-3 d-block">
+                                    {{ $shipment->rejected_fees_paid }}
+                                </span>
+                            @endif
                         </td>
-                        @elseif($shipment->status == 'out_for_delivery')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #7bc1f3;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'delivered')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #52ec7b;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'OnHold')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #b9bc7f;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'no_answer')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #bec35f;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'rejected')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #ee83a5;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'rejected_fees_paid')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #f16060;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @elseif($shipment->status == 'created')
-                        <td>
-                            <div class="rounded-pill" style="background-color: #b2cd94;text-align: center">
-                                {{$shipment->status}}</div>
-                        </td>
-                        @else
-                        <td>
-                            <div class="rounded-pill" style="background-color: #cbcbcb;text-align: center">{{ $shipment->status }}</div>
-                        </td>
-                        @endif
                         <td>
                             @if($shipment->driver_settled)
                                 <span class="badge badge-success">
