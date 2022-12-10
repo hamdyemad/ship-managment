@@ -1183,9 +1183,10 @@ class Controller extends BaseController
                 ],
             );
         } else {
-            $file = $request->file('file')->path();
+            $path1 = $request->file('file')->store('temp');
+            $path2=storage_path('app').'/'.$path1;
             $import = new ShippmentImport;
-            $import->import($file);
+            $import->import($path2);
 
             return redirect()->back()->with('success', __('site.create'));
 
