@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2022 at 03:07 PM
+-- Generation Time: Dec 10, 2022 at 10:21 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -41,6 +41,17 @@ CREATE TABLE `account_sellers` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `account_sellers`
+--
+
+INSERT INTO `account_sellers` (`id`, `user_id`, `shippment_id`, `pickup_id`, `cash`, `rate`, `cost`, `delivery_commission`, `seller_commission`, `created_at`, `updated_at`) VALUES
+(68, 25, 55, NULL, '100', '30', '70', '15', 0, '2022-12-02 11:40:10', '2022-12-02 11:40:10'),
+(69, 25, 56, NULL, '500', '90', '410', '15', 0, '2022-12-07 16:34:45', '2022-12-07 16:34:45'),
+(70, 25, 57, NULL, '90', '90', '0', '15', 0, '2022-12-07 16:40:37', '2022-12-07 16:40:37'),
+(71, 25, 58, NULL, '500', '90', '410', '15', 0, '2022-12-08 11:37:41', '2022-12-08 11:37:41'),
+(72, 25, 58, NULL, '90', '90', '0', '15', 0, '2022-12-09 10:19:04', '2022-12-09 10:19:04');
+
 -- --------------------------------------------------------
 
 --
@@ -69,7 +80,8 @@ CREATE TABLE `addresses` (
 
 INSERT INTO `addresses` (`id`, `address_line`, `building`, `floor`, `apartment`, `contact_name`, `contact_email`, `contact_phone`, `user_id`, `city_id`, `area_id`, `created_at`, `updated_at`) VALUES
 (4, '7st ahmed shbeb', 'q', 'qd', 'xc', 'asd', '1asdasdasdasd@asdas', '011452059120', 25, 2, 3, '2022-07-04 15:19:27', '2022-07-04 15:19:27'),
-(5, 'qqqqqqqqqqqqqqqqqqqqq', 'a', 'w', '7', 'asd', 'asdasdas', '04560456456', 26, 2, 3, '2022-07-05 10:46:13', '2022-07-05 10:46:13');
+(5, 'qqqqqqqqqqqqqqqqqqqqq', 'a', 'w', '7', 'asd', 'asdasdas', '04560456456', 26, 2, 3, '2022-07-05 10:46:13', '2022-07-05 10:46:13'),
+(6, 'asdasd', 'asfasf', 'asfas', 'fafass', 'شركة تابعة', 'asdasdasdasd', '01560456', 25, 2, 3, '2022-12-02 13:11:46', '2022-12-02 13:11:46');
 
 -- --------------------------------------------------------
 
@@ -189,6 +201,17 @@ CREATE TABLE `deliveries` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `deliveries`
+--
+
+INSERT INTO `deliveries` (`id`, `driver_id`, `shippment_id`, `pickup_id`, `created_at`, `updated_at`) VALUES
+(82, 9, NULL, 16, '2022-07-18 13:01:46', '2022-07-18 13:01:46'),
+(86, 10, 55, NULL, '2022-12-02 11:37:41', '2022-12-07 15:46:36'),
+(88, 9, 56, NULL, '2022-12-07 16:38:47', '2022-12-07 16:38:47'),
+(89, 9, 57, NULL, '2022-12-07 16:40:22', '2022-12-07 16:40:22'),
+(91, 9, 58, NULL, '2022-12-08 11:34:29', '2022-12-08 11:34:29');
+
 -- --------------------------------------------------------
 
 --
@@ -212,7 +235,7 @@ CREATE TABLE `drivers` (
 --
 
 INSERT INTO `drivers` (`id`, `name`, `email`, `phone`, `password`, `special_pickup`, `balance`, `created_at`, `updated_at`) VALUES
-(9, 'haha_driver', 'haha_driver@shipexeg.com', '05464564561', '$2y$10$SNvS4.XPx5wKOeKWvitLReF9qg9QafwGZn56E2.n1wukYURQZrWie', '15', 0, '2022-07-04 16:31:27', '2022-07-06 12:36:56'),
+(9, 'haha_driver', 'haha_driver@shipexeg.com', '05464564561', '$2y$10$edpDNkASNfXFWXcB4TG0puG3WOFnpYVLqHFFskKkvU/tUnh7Wo1EG', '15', 90, '2022-07-04 16:31:27', '2022-12-09 10:01:52'),
 (10, 'pppppppp_driver', 'pppppppp_driver@shipexeg.com', '01545645644', '$2y$10$j5QWSSbEP1apFwzf2wx2nOHMUDbC3V/I.eEY.sAZbscqC4zRXIwb6', '10', 0, '2022-07-04 16:55:48', '2022-07-04 16:55:48');
 
 -- --------------------------------------------------------
@@ -298,7 +321,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (23, '2022_06_23_180643_create_permission_tables', 1),
 (26, '2022_07_04_160753_create_shippments_histories_table', 2),
 (27, '2022_07_04_161450_create_pickups_histories_table', 3),
-(30, '2022_07_04_161825_create_roles_table', 4);
+(30, '2022_07_04_161825_create_roles_table', 4),
+(32, '2022_12_08_150000_create_shippments_views_table', 5);
 
 -- --------------------------------------------------------
 
@@ -333,12 +357,13 @@ CREATE TABLE `model_has_roles` (
 
 INSERT INTO `model_has_roles` (`id`, `model_id`, `role_id`, `model_type`, `created_at`, `updated_at`) VALUES
 (2, 25, 1, NULL, NULL, NULL),
-(3, 26, 1, NULL, NULL, NULL),
 (4, 6, 3, NULL, NULL, NULL),
 (5, 7, 3, NULL, NULL, NULL),
-(6, 9, 2, NULL, NULL, NULL),
 (7, 10, 2, NULL, NULL, NULL),
-(9, 11, 2, NULL, NULL, NULL);
+(9, 11, 2, NULL, NULL, NULL),
+(12, 26, 1, NULL, NULL, NULL),
+(14, 9, 2, NULL, NULL, NULL),
+(16, 28, 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -402,7 +427,9 @@ INSERT INTO `permissions` (`id`, `name`, `value`, `group_by`, `created_at`, `upd
 (72, 'show all employees', 'employees.index', 'employees', '2022-07-01 13:42:45', '2022-07-01 13:42:45'),
 (73, 'create employees', 'employees.create', 'employees', '2022-07-01 13:43:05', '2022-07-01 13:43:05'),
 (74, 'edit employees', 'employees.edit', 'employees', '2022-07-01 13:43:25', '2022-07-01 13:43:25'),
-(75, 'delete employees', 'employees.destroy', 'employees', '2022-07-01 13:43:39', '2022-07-01 13:43:39');
+(75, 'delete employees', 'employees.destroy', 'employees', '2022-07-01 13:43:39', '2022-07-01 13:43:39'),
+(76, 'accounts seller', 'accounts_seller.index', 'sellers', '2022-12-08 11:05:45', '2022-12-08 11:05:45'),
+(77, 'accounts driver', 'accounts_driver.index', 'drivers', '2022-12-08 11:07:24', '2022-12-08 11:07:24');
 
 -- --------------------------------------------------------
 
@@ -446,6 +473,16 @@ CREATE TABLE `pickups` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `pickups`
+--
+
+INSERT INTO `pickups` (`id`, `seller_settled`, `driver_settled`, `status`, `name`, `email`, `phone`, `time`, `date`, `note`, `package`, `user_id`, `address_id`, `created_at`, `updated_at`) VALUES
+(16, 1, 1, 'proccessing', 'asd', '1asdasdasdasd@asdas', '011452059120', '17:51:00', '2022-07-19', 'hellllooooo', 1, 25, 4, '2022-07-18 12:52:09', '2022-07-18 14:10:53'),
+(17, 0, 0, 'requested', 'asd', '1asdasdasdasd@asdas', '011452059120', '16:01:00', '2022-12-02', 'afasdfasdfs', 2, 25, 4, '2022-12-02 09:36:29', '2022-12-02 09:36:29'),
+(18, 0, 0, 'requested', 'asd', '1asdasdasdasd@asdas', '011452059120', '16:01:00', '2022-12-03', NULL, 1, 25, 4, '2022-12-02 09:40:04', '2022-12-02 09:40:04'),
+(19, 0, 0, 'requested', 'asd', '1asdasdasdasd@asdas', '011452059120', '20:07:00', '2022-12-08', 'asdasdasdasd', 1, 25, 4, '2022-12-07 16:08:07', '2022-12-07 16:08:07');
+
 -- --------------------------------------------------------
 
 --
@@ -460,6 +497,13 @@ CREATE TABLE `pickups_histories` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pickups_histories`
+--
+
+INSERT INTO `pickups_histories` (`id`, `user_id`, `pickup_id`, `status`, `created_at`, `updated_at`) VALUES
+(22, 1, 16, 'requested', '2022-07-18 13:01:46', '2022-07-18 13:01:46');
 
 -- --------------------------------------------------------
 
@@ -502,30 +546,35 @@ CREATE TABLE `role_has_permissions` (
 --
 
 INSERT INTO `role_has_permissions` (`id`, `role_id`, `permission_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 57, '2022-07-04 14:36:33', '2022-07-04 14:36:33'),
-(3, 3, 45, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(4, 3, 46, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(5, 3, 47, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(6, 3, 49, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(7, 3, 50, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(8, 3, 51, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(9, 3, 53, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(10, 3, 54, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(11, 3, 55, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(12, 3, 57, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(13, 3, 58, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(14, 3, 59, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(15, 3, 61, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(16, 3, 62, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(17, 3, 63, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(18, 3, 68, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(19, 3, 69, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(20, 3, 70, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(21, 3, 72, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(22, 3, 73, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(23, 3, 74, '2022-07-04 15:14:34', '2022-07-04 15:14:34'),
-(24, 2, 57, '2022-07-05 10:44:21', '2022-07-05 10:44:21'),
-(25, 2, 61, '2022-07-05 10:44:21', '2022-07-05 10:44:21');
+(101, 1, 76, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(102, 1, 57, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(103, 1, 58, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(104, 1, 59, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(105, 1, 60, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(106, 1, 61, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(107, 1, 62, '2022-12-08 11:25:30', '2022-12-08 11:25:30'),
+(108, 3, 45, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(109, 3, 46, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(110, 3, 49, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(111, 3, 50, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(112, 3, 53, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(113, 3, 54, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(114, 3, 76, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(115, 3, 57, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(116, 3, 58, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(117, 3, 59, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(118, 3, 61, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(119, 3, 62, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(120, 3, 63, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(121, 3, 68, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(122, 3, 69, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(123, 3, 72, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(124, 3, 73, '2022-12-08 12:58:49', '2022-12-08 12:58:49'),
+(125, 2, 57, '2022-12-09 10:35:02', '2022-12-09 10:35:02'),
+(126, 2, 61, '2022-12-09 10:35:02', '2022-12-09 10:35:02'),
+(127, 2, 62, '2022-12-09 10:35:02', '2022-12-09 10:35:02'),
+(128, 2, 63, '2022-12-09 10:35:02', '2022-12-09 10:35:02'),
+(129, 2, 77, '2022-12-09 10:35:02', '2022-12-09 10:35:02');
 
 -- --------------------------------------------------------
 
@@ -544,6 +593,15 @@ CREATE TABLE `scheduledrivers` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `scheduledrivers`
+--
+
+INSERT INTO `scheduledrivers` (`id`, `driver_id`, `from`, `to`, `total_cost`, `total_delivery_commission`, `created_at`, `updated_at`) VALUES
+(10, 9, '2022-07-18', '2022-07-18', '810', '30', '2022-07-18 14:10:53', '2022-07-18 14:10:53'),
+(11, 9, '2022-12-02', '2022-12-02', '70', '15', '2022-12-02 13:49:07', '2022-12-02 13:49:07'),
+(12, 9, '2022-12-07', '2022-12-07', '820', '45', '2022-12-09 10:01:52', '2022-12-09 10:01:52');
+
 -- --------------------------------------------------------
 
 --
@@ -561,6 +619,14 @@ CREATE TABLE `schedule_sellers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `schedule_sellers`
+--
+
+INSERT INTO `schedule_sellers` (`id`, `user_id`, `from`, `to`, `price`, `additional_price`, `costs`, `created_at`, `updated_at`) VALUES
+(13, 25, '2022-07-18', '2022-07-18', 780, 0, '780', '2022-07-18 13:14:58', '2022-07-18 13:14:58'),
+(14, 25, '2022-12-02', '2022-12-02', 70, 0, '70', '2022-12-09 09:13:09', '2022-12-09 09:13:09');
 
 -- --------------------------------------------------------
 
@@ -588,9 +654,24 @@ CREATE TABLE `shippments` (
   `on_hold` date DEFAULT NULL,
   `seller_settled` tinyint(1) NOT NULL DEFAULT 0,
   `driver_settled` tinyint(1) NOT NULL DEFAULT 0,
+  `rejected_fees_paid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_changed` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shippments`
+--
+
+INSERT INTO `shippments` (`id`, `shippment_type`, `business_referance`, `shipper`, `receiver_name`, `receiver_phone`, `address`, `allow_open`, `price`, `package_details`, `note`, `status`, `barcode`, `user_id`, `city_id`, `area_id`, `on_hold`, `seller_settled`, `driver_settled`, `rejected_fees_paid`, `driver_changed`, `created_at`, `updated_at`) VALUES
+(55, 'forward', 'asdfasdf', 'asdasdas', 'sdafsdfasd', '4564056406645', '6405', 'true', '100', NULL, 'sadasfasd', 'delivered', '601190', 25, 2, 4, NULL, 1, 1, NULL, 1, '2022-12-02 11:36:40', '2022-12-09 09:13:09'),
+(56, 'cash_collection', '456456456', 'ashdjkashjkdasjhkd', 'askldjaskldj', '015640560456456', 'asjdioasjidasjid', 'false', '500', 'sadas', 'asldkas;ldklas;l', 'delivered', '594094', 25, 2, 3, NULL, 0, 1, NULL, 1, '2022-12-07 16:04:01', '2022-12-09 10:01:52'),
+(57, 'forward', 'شسيكمشسنميك', 'متشسينمشس', 'شسيشس', '40564560456', 'asd4asd', 'true', '500', NULL, 'asdasdasdasdasdas', 'rejected_fees_paid', '110296', 25, 2, 3, NULL, 0, 1, '60', 1, '2022-12-07 16:40:14', '2022-12-09 10:01:52'),
+(58, 'forward', 'asdasd', 'new shippment from admin', 'asdasdas', '045640564056', 'asdfasdfasdf', 'true', '500', NULL, 'asfdasfasdfasd', 'rejected_fees_paid', '297622', 25, 2, 3, NULL, 0, 1, '5', 1, '2022-12-08 11:24:15', '2022-12-09 10:19:04'),
+(59, 'forward', 'asdasd', '123456789', 'zxczxcz', '01152059120', 'zxczxdasdasd', 'true', '500', 'zxdcasdasdasdasdasdasd', 'asdqweqwe', 'created', '898799', 25, 2, 4, NULL, 0, 0, NULL, 0, '2022-12-09 11:26:13', '2022-12-09 11:26:13'),
+(60, 'forward', '456as', 'asdasfa', 'asdqwe', '01152059120', 'asdafa', 'true', '500', 'asdasda', 'asdafasdfasdfsd', 'created', '573431', 28, 2, 3, NULL, 0, 0, NULL, 0, '2022-12-09 18:31:51', '2022-12-09 18:31:51'),
+(61, 'forward', '456as', 'asdasfa', 'asdqwe', '01152059120', 'asdafa', 'true', '500', 'asdasda', 'asdafasdfasdfsd', 'created', '156436', 25, 2, 3, NULL, 0, 0, NULL, 0, '2022-12-09 18:34:22', '2022-12-09 18:34:22');
 
 -- --------------------------------------------------------
 
@@ -606,6 +687,72 @@ CREATE TABLE `shippments_histories` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shippments_histories`
+--
+
+INSERT INTO `shippments_histories` (`id`, `user_id`, `shippment_id`, `status`, `created_at`, `updated_at`) VALUES
+(81, 1, 54, 'out_for_delivery', '2022-12-02 11:17:50', '2022-12-02 11:17:50'),
+(82, 1, 54, 'receiver_at_hub', '2022-12-02 11:21:13', '2022-12-02 11:21:13'),
+(83, 1, 54, 'no_answer', '2022-12-02 11:21:19', '2022-12-02 11:21:19'),
+(84, 1, 54, 'no_answer', '2022-12-02 11:21:23', '2022-12-02 11:21:23'),
+(85, 1, 54, 'no_answer', '2022-12-02 11:21:49', '2022-12-02 11:21:49'),
+(86, 1, 54, 'rejected', '2022-12-02 11:21:55', '2022-12-02 11:21:55'),
+(87, 1, 54, 'rejected_fees_paid', '2022-12-02 11:24:20', '2022-12-02 11:24:20'),
+(88, 1, 54, 'rejected_fees_paid', '2022-12-02 11:24:41', '2022-12-02 11:24:41'),
+(89, 1, 54, 'rejected_fees_paid', '2022-12-02 11:25:03', '2022-12-02 11:25:03'),
+(90, 1, 54, 'rejected_fees_paid', '2022-12-02 11:25:07', '2022-12-02 11:25:07'),
+(91, 1, 54, 'rejected_fees_paid', '2022-12-02 11:25:18', '2022-12-02 11:25:18'),
+(92, 1, 54, 'rejected_fees_paid', '2022-12-02 11:25:22', '2022-12-02 11:25:22'),
+(93, 1, 54, 'rejected_fees_paid', '2022-12-02 11:25:34', '2022-12-02 11:25:34'),
+(94, 1, 54, 'rejected_fees_paid', '2022-12-02 11:25:55', '2022-12-02 11:25:55'),
+(95, 25, 54, 'receiver_at_hub', '2022-12-02 11:29:40', '2022-12-02 11:29:40'),
+(96, 25, 54, 'delivered', '2022-12-02 11:29:48', '2022-12-02 11:29:48'),
+(97, 25, 54, 'rejected', '2022-12-02 11:29:53', '2022-12-02 11:29:53'),
+(98, 25, 55, 'receiver_at_hub', '2022-12-02 11:37:09', '2022-12-02 11:37:09'),
+(99, 1, 55, 'receiver_at_hub', '2022-12-02 11:38:58', '2022-12-02 11:38:58'),
+(100, 9, 55, 'delivered', '2022-12-02 11:40:10', '2022-12-02 11:40:10'),
+(101, 9, 56, 'delivered', '2022-12-07 16:34:45', '2022-12-07 16:34:45'),
+(102, 9, 56, 'no_answer', '2022-12-07 16:34:51', '2022-12-07 16:34:51'),
+(103, 9, 56, 'delivered', '2022-12-07 16:34:54', '2022-12-07 16:34:54'),
+(104, 9, 57, 'rejected_fees_paid', '2022-12-07 16:40:37', '2022-12-07 16:40:37'),
+(105, 25, 58, 'receiver_at_hub', '2022-12-08 11:26:34', '2022-12-08 11:26:34'),
+(106, 9, 58, 'no_answer', '2022-12-08 11:32:49', '2022-12-08 11:32:49'),
+(107, 25, 58, 'receiver_at_hub', '2022-12-08 11:33:41', '2022-12-08 11:33:41'),
+(108, 9, 58, 'delivered', '2022-12-08 11:37:41', '2022-12-08 11:37:41'),
+(109, 1, 58, 'rejected_fees_paid', '2022-12-09 10:19:04', '2022-12-09 10:19:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shippments_view`
+--
+
+CREATE TABLE `shippments_view` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `shippment_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `user_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shippments_view`
+--
+
+INSERT INTO `shippments_view` (`id`, `shippment_id`, `user_id`, `user_type`, `created_at`, `updated_at`) VALUES
+(1, 55, 6, 'employee', NULL, NULL),
+(2, 56, 6, 'employee', '2022-12-08 13:42:17', '2022-12-08 13:42:17'),
+(3, 57, 6, 'employee', '2022-12-08 13:43:54', '2022-12-08 13:43:54'),
+(4, 58, 6, 'employee', '2022-12-08 13:43:58', '2022-12-08 13:43:58'),
+(5, 55, 1, 'admin', '2022-12-08 13:44:13', '2022-12-08 13:44:13'),
+(6, 55, 25, 'user', '2022-12-08 13:45:52', '2022-12-08 13:45:52'),
+(7, 56, 9, 'driver', '2022-12-08 13:49:50', '2022-12-08 13:49:50'),
+(8, 57, 9, 'driver', '2022-12-09 09:31:05', '2022-12-09 09:31:05'),
+(9, 58, 1, 'admin', '2022-12-09 10:18:58', '2022-12-09 10:18:58'),
+(10, 60, 1, 'admin', '2022-12-09 18:31:56', '2022-12-09 18:31:56');
 
 -- --------------------------------------------------------
 
@@ -640,10 +787,34 @@ INSERT INTO `specialprices` (`id`, `user_id`, `city_id`, `area_id`, `special_pri
 CREATE TABLE `trackings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `shippment_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `user_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `trackings`
+--
+
+INSERT INTO `trackings` (`id`, `shippment_id`, `user_id`, `user_type`, `status`, `created_at`, `updated_at`) VALUES
+(72, 55, 1, 'admin', 'created', '2022-12-02 11:36:40', '2022-12-02 11:36:40'),
+(73, 55, 25, 'user', 'receiver_at_hub', '2022-12-02 11:37:09', '2022-12-02 11:37:09'),
+(74, 55, 1, 'admin', 'receiver_at_hub', '2022-12-02 11:38:58', '2022-12-02 11:38:58'),
+(75, 55, 9, 'driver', 'delivered', '2022-12-02 11:40:10', '2022-12-02 11:40:10'),
+(76, 56, 9, 'driver', 'delivered', '2022-12-07 16:34:45', '2022-12-07 16:34:45'),
+(77, 56, 9, 'driver', 'no_answer', '2022-12-07 16:34:51', '2022-12-07 16:34:51'),
+(78, 56, 9, 'driver', 'delivered', '2022-12-07 16:34:54', '2022-12-07 16:34:54'),
+(79, 57, 1, 'admin', 'created', '2022-12-07 16:40:14', '2022-12-07 16:40:14'),
+(80, 57, 9, 'driver', 'rejected_fees_paid', '2022-12-07 16:40:37', '2022-12-07 16:40:37'),
+(81, 58, 1, 'admin', 'created', '2022-12-08 11:24:15', '2022-12-08 11:24:15'),
+(82, 58, 25, 'user', 'receiver_at_hub', '2022-12-08 11:26:34', '2022-12-08 11:26:34'),
+(83, 58, 9, 'driver', 'no_answer', '2022-12-08 11:32:49', '2022-12-08 11:32:49'),
+(84, 58, 25, 'user', 'receiver_at_hub', '2022-12-08 11:33:41', '2022-12-08 11:33:41'),
+(85, 58, 9, 'driver', 'delivered', '2022-12-08 11:37:41', '2022-12-08 11:37:41'),
+(86, 58, 1, 'admin', 'rejected_fees_paid', '2022-12-09 10:19:04', '2022-12-09 10:19:04'),
+(87, 59, 25, 'user', 'created', '2022-12-09 11:26:13', '2022-12-09 11:26:13');
 
 -- --------------------------------------------------------
 
@@ -670,8 +841,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `avatar`, `email`, `phone`, `password`, `special_pickup`, `balance`, `remember_token`, `created_at`, `updated_at`) VALUES
-(25, 'moza_seller', NULL, 'moza_seller@shipexeg.com', '01152059120', '$2y$10$F0QMh/ZJzR878R9qRsKpK.3hJhLWOxJlrNCcmqOVjrQJISa2sMIzW', '30', 0, NULL, '2022-07-04 15:12:44', '2022-07-06 09:20:52'),
-(26, 'kareem_seller', NULL, 'kareem_seller@shipexeg.com', '01551720391', '$2y$10$z6WQ3tw2OotYA2TM2OEGqeFCTc20mAdcAaqCLblAQHf4/P0K6SNeW', '20', 0, NULL, '2022-07-04 15:13:04', '2022-07-04 15:13:04');
+(25, 'moza_seller', NULL, 'moza_seller@shipexeg.com', '01152059120', '$2y$10$F0QMh/ZJzR878R9qRsKpK.3hJhLWOxJlrNCcmqOVjrQJISa2sMIzW', '30', 850, NULL, '2022-07-04 15:12:44', '2022-12-09 09:13:09'),
+(26, 'kareem_selle', NULL, 'kareem_seller@shipexeg.com', '01551720391', '$2y$10$rok0bumFu3sTaVkc3XiU4OpwI.3UNGetXtXVusTVV4vCvyUMIzYS.', '20', 0, NULL, '2022-07-04 15:13:04', '2022-07-18 17:39:35'),
+(28, 'test', NULL, 'test@shipexeg.com', '05640564066', '$2y$10$SryQzJonrxqXDD2.mql.F.jIM6Ahl//8xqrZ3JijJazHZFK/xgwyu', '0', 0, NULL, '2022-12-02 12:58:20', '2022-12-02 12:58:37');
 
 --
 -- Indexes for dumped tables
@@ -853,6 +1025,12 @@ ALTER TABLE `shippments_histories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `shippments_view`
+--
+ALTER TABLE `shippments_view`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `specialprices`
 --
 ALTER TABLE `specialprices`
@@ -882,13 +1060,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `account_sellers`
 --
 ALTER TABLE `account_sellers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `admins`
@@ -924,7 +1102,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `deliveries`
 --
 ALTER TABLE `deliveries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `drivers`
@@ -948,19 +1126,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `model_has_roles`
 --
 ALTER TABLE `model_has_roles`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -972,13 +1150,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `pickups`
 --
 ALTER TABLE `pickups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `pickups_histories`
 --
 ALTER TABLE `pickups_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -990,49 +1168,55 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `role_has_permissions`
 --
 ALTER TABLE `role_has_permissions`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `scheduledrivers`
 --
 ALTER TABLE `scheduledrivers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `schedule_sellers`
 --
 ALTER TABLE `schedule_sellers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `shippments`
 --
 ALTER TABLE `shippments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `shippments_histories`
 --
 ALTER TABLE `shippments_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+
+--
+-- AUTO_INCREMENT for table `shippments_view`
+--
+ALTER TABLE `shippments_view`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `specialprices`
 --
 ALTER TABLE `specialprices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `trackings`
 --
 ALTER TABLE `trackings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
