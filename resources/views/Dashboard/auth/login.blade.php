@@ -85,8 +85,8 @@ License: For each use you must have a valid license purchased only from above li
                                 <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
                                 <!--end::Label-->
                                 <!--begin::Link-->
-                                <a href="../../demo1/dist/authentication/flows/basic/password-reset.html"
-                                    class="link-primary fs-6 fw-bolder">Forgot Password ?</a>
+                                {{-- <a href="../../demo1/dist/authentication/flows/basic/password-reset.html"
+                                    class="link-primary fs-6 fw-bolder">Forgot Password ?</a> --}}
                                 <!--end::Link-->
                             </div>
                             <!--end::Wrapper-->
@@ -114,16 +114,6 @@ License: For each use you must have a valid license purchased only from above li
                 <!--end::Wrapper-->
             </div>
             <!--end::Content-->
-            <!--begin::Footer-->
-            <div class="d-flex flex-center flex-column-auto p-10">
-                <!--begin::Links-->
-                <div class="d-flex align-items-center fw-bold fs-6">
-                    <a href="https://keenthemes.com" class="text-muted text-hover-primary px-2">About</a>
-                    <a href="mailto:support@keenthemes.com" class="text-muted text-hover-primary px-2">Contact</a>
-                    <a href="https://1.envato.market/EA4JP" class="text-muted text-hover-primary px-2">Contact Us</a>
-                </div>
-                <!--end::Links-->
-            </div>
             <!--end::Footer-->
         </div>
         <!--end::Authentication - Sign-in-->
