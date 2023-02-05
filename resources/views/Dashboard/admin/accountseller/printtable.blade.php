@@ -90,12 +90,11 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>
-                        <span class="text-muted">Additional Price</span>
-                    </td>
-                    <td colspan="2">
+
+                    <td colspan="4">
                         <form class="d-flex" action="{{ route('settlement_sellers') }}" method="POST">
                             @csrf
+                            <input  type="text" name="description" placeholder="Description">
                             <input type="hidden" name="seller_id" value="{{ request('seller_id') }}">
                             <input type="hidden" name="from" value="{{ request('from') }}">
                             <input type="hidden" name="to" value="{{ request('to') }}">
@@ -139,7 +138,7 @@
     $(document).ready(function() {
             var table = $('#example').DataTable( {
             lengthChange: false,
-            scrollX: true,
+            scrollX: true,0
             buttons: [  'excel', 'pdf', 'print' ]
         } );
 
@@ -156,3 +155,4 @@
 </script>
 
 @endpush
+0000

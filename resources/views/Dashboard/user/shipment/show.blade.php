@@ -70,6 +70,51 @@
 
         {{-- //export link --}}
         <div class="card-toolbar">
+            @if(Auth::guard('driver')->user() && !$shippment->driver_changed
+            || $shippment->status != 'no_answer'
+          /*  ||Auth::guard('user')->check()*/
+            ||Auth::guard('admin')->check()
+            ||Auth::guard('employee')->check()
+            )
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        {{__('site.status')}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                        @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                            <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',{{$shippment->id}})"><i
+                                        class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                            </li>
+                            <hr>
+                            <li><a class="dropdown-item" onclick="addshipment('out_for_delivery',{{$shippment->id}})"><i
+                                        class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
+                            </li>
+                        @endif
+                        <li><a class="dropdown-item" onclick="addshipment('delivered',{{$shippment->id}})"><i
+                                    class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                        </li>
+                        <hr>
+                        <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                               data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
+                                    class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
+                        </li>
+
+                        <li><a class="dropdown-item" onclick="addshipment('no_answer',{{$shippment->id}})"><i
+                                    class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
+                        </li>
+                        <hr>
+                        <li><a class="dropdown-item" onclick="addshipment('rejected',{{$shippment->id}})"><i
+                                    class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
+                        </li>
+                        <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                               data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo"><i
+                                    class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
+                        </li>
+
+                    </ul>
+                </div>
+            @endif
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                 <a href="{{route('tracking.show',$shippment->id)}}" class="btn btn-light-primary me-3">
                     <i class="fa fa-truck"></i>
@@ -83,6 +128,7 @@
                     {{__('site.print')}}
                 </a>
             </div>
+
         </div>
 
     </div>

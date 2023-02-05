@@ -26,7 +26,17 @@
     <div style="text-align: center;" id="printpdf">
         <table class="table">
             <thead style="background-color: rgb(191, 189, 189)">
+            <tr>
+                <td>
+                    <a>
+                        <img alt="Logo" src="/shippment-logo.png" class="logo" />
+                    </a></td>
+                <td>
+                    No: {{ $seller->id }}
+                </td>
+            </tr>
                 <tr>
+
                     <td colspan="3">Seller Name</td>
                     <td colspan="8">{{ $seller->name }}</td>
                 </tr>
@@ -87,7 +97,7 @@
                 </tr>
                 <tr>
                     <td colspan="10">
-                        <center>Additional Price</center>
+                        <center>{{ $schedule->description }}</center>
                     </td>
                     <td>{{ $schedule->additional_price }}</td>
                 </tr>

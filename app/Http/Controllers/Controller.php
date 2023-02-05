@@ -225,6 +225,7 @@ class Controller extends BaseController
                     'to' => $request->to,
                     'price' => (array_sum($totalcost) - array_sum($seller_commission)),
                     'additional_price' => $request->additional,
+                    'description' => $request ->description,
                     'costs' => $total
                 ]);
                 $seller = User::find($user_id_req);
@@ -508,6 +509,7 @@ class Controller extends BaseController
     {
         $shippment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
         if(Auth::guard('driver')->user()) {
+
             if($shippment->driver_changed == 0) {
                 $shippment->driver_changed = 1;
             } else {
@@ -518,6 +520,7 @@ class Controller extends BaseController
                     Response::HTTP_BAD_REQUEST
                 );
             }
+
         }
         $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
         if($shippment->user) {
@@ -661,11 +664,14 @@ class Controller extends BaseController
                 $accounts->save();
             }
 
-        } elseif ($request->status == 'no_answer') {
+        }
+
+/*        elseif ($request->status == 'no_answer') {
             if($delivery) {
                 $delivery->delete();
             }
-        } elseif ($shippment->shippment_type == 'return_pickup') {
+        }*/
+        elseif ($shippment->shippment_type == 'return_pickup') {
             if($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
@@ -701,6 +707,207 @@ class Controller extends BaseController
         );
     }
 
+    function changestatuemany(Request $request)
+    {
+        $shippment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
+        if(Auth::guard('driver')->user()) {
+
+            if($shippment->driver_changed == 0) {
+                $shippment->driver_changed = 1;
+            } else {
+                return response()->json(
+                    [
+                        'message' => __('site.can_not_change_staus_again')
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+        }
+        $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
+        if($shippment->user) {
+            $price = Specialprice::where('user_id', $shippment->user->id)->get();
+        } else {
+            $price = [];
+        }
+        $shippment->status = $request->status;
+        if($request->status == 'onhold') {
+            $shippment->on_hold =  $request->date;
+            $shippment->note =  $request->note;
+        }
+
+        $tracking = new Tracking();
+        $tracking->shippment_id = $shippment->id;
+        $tracking->user_id = Auth::id();
+        if(Auth::guard('admin')->check()) {
+            $tracking->user_type = 'admin';
+        } else if(Auth::guard('employee')->check()) {
+            $tracking->user_type = 'employee';
+
+        } elseif(Auth::guard('user')->check()) {
+            $tracking->user_type = 'user';
+
+        } elseif(Auth::guard('driver')->check()) {
+            $tracking->user_type = 'driver';
+        }
+        $tracking->status = $shippment->status;
+
+        ShippmentHistory::create([
+            'user_id' => Auth::id(),
+            'shippment_id' => $shippment->id,
+            'status' => $request->status
+        ]);
+
+        if ($request->status == 'delivered') {
+            if($shippment->user && $delivery) {
+                $accounts = new AccountSeller();
+                $accounts->shippment_id = $delivery->shippment->id;
+                $accounts->user_id = $shippment->user->id;
+                $accounts->cash = $delivery->shippment->price;
+                $accounts->delivery_commission = $delivery->driver->special_pickup;
+                //cost
+                if ($price->isEmpty()) {
+                    $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
+                    $accounts->rate = $delivery->shippment->area->rate;
+                } else {
+                    foreach ($price as $val) {
+                        if ($delivery->shippment->city->id == $val->city_id && $delivery->shippment->area->id == $val->area_id) {
+                            $accounts->cost = $delivery->shippment->price - $val->special_price;
+                            $accounts->rate = $val->special_price;
+
+                        } else {
+                            $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
+                            $accounts->rate = $delivery->shippment->area->rate;
+                        }
+                    }
+                }
+                //end cost
+                $accounts->save();
+            }
+
+        } elseif ($request->status == 'delivered' && $delivery->shippment->shippment_type == 'exchange') {
+            if($shippment->user && $delivery) {
+                $accounts = new AccountSeller();
+                $accounts->shippment_id = $shippment->id;
+                $accounts->user_id = $shippment->user->id;
+                $accounts->cash = 0;
+                $accounts->delivery_commission = $delivery->driver->special_pickup;
+
+                if ($price->isEmpty()) {
+                    $accounts->cost = 0 - $shippment->area->rate;
+                    $accounts->rate = $shippment->area->rate;
+                } else {
+                    foreach ($price as $val) {
+                        if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
+                            $accounts->cost = 0 - $val->special_price;
+                            $accounts->rate = $val->special_price;
+                        } else {
+                            $accounts->cost = 0 - $shippment->area->rate;
+                            $accounts->rate = $shippment->area->rate;
+
+                        }
+                    }
+                }
+                $accounts->save();
+            }
+        } elseif ($request->status == 'rejected') {
+            if($shippment->user) {
+                $accounts = new AccountSeller();
+                $accounts->shippment_id = $shippment->id;
+                $accounts->user_id = $shippment->user->id;
+                $accounts->cash = 0;
+
+                if ($price->isEmpty()) {
+                    $accounts->cost = 0 - $shippment->area->rate;
+                    $accounts->rate = $shippment->area->rate;
+                } else {
+                    foreach ($price as $val) {
+                        if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
+                            $accounts->cost = 0 - $val->special_price;
+                            $accounts->rate = $val->special_price;
+                        } else {
+                            $accounts->cost = 0 - $shippment->area->rate;
+                            $accounts->rate = $shippment->area->rate;
+                        }
+                    }
+                }
+                $accounts->save();
+            }
+
+        } elseif ($request->status == 'rejected_fees_paid') {
+            $shippment->rejected_fees_paid =  $request->rejected_fees_paid;
+            if($shippment->user && $delivery) {
+                $accounts = new AccountSeller();
+                $accounts->shippment_id = $shippment->id;
+                $accounts->user_id = $shippment->user->id;
+                if($delivery->driver) {
+                    $accounts->delivery_commission = $delivery->driver->special_pickup;
+                }
+
+                if (count($price) == 0) {
+                    $accounts->cash = $shippment->area->rate;
+                    $accounts->cost = $accounts->cash - $shippment->area->rate;
+                    $accounts->rate = $shippment->area->rate;
+
+                } else {
+                    foreach ($price as $val) {
+                        if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
+                            $accounts->cash = $val->special_price;
+                            $accounts->cost = $accounts->cash - $val->special_price;
+                            $accounts->rate = $val->special_price;
+
+                        } else {
+                            $accounts->cash = $shippment->area->rate;
+                            $accounts->cost = $accounts->cash - $shippment->area->rate;
+                            $accounts->rate = $shippment->area->rate;
+                        }
+                    }
+                }
+                $accounts->save();
+            }
+
+        }
+
+        /*        elseif ($request->status == 'no_answer') {
+                    if($delivery) {
+                        $delivery->delete();
+                    }
+                }*/
+        elseif ($shippment->shippment_type == 'return_pickup') {
+            if($shippment->user && $delivery) {
+                $accounts = new AccountSeller();
+                $accounts->shippment_id = $shippment->id;
+                $accounts->cash = -$shippment->price;
+                $accounts->user_id = $shippment->user->id;
+                $accounts->delivery_commission = $delivery->driver->special_pickup;
+
+
+                if ($price->isEmpty()) {
+                    $accounts->cost = -$shippment->price - $shippment->area->rate;
+                    $accounts->rate = $delivery->shippment->area->rate;
+                } else {
+                    foreach ($price as $val) {
+                        if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
+                            $accounts->cost = -$shippment->price - $val->special_price;
+                            $accounts->rate = $val->special_price;
+                        } else {
+                            $accounts->cost = -$shippment->price - $shippment->area->rate;
+                            $accounts->rate = $delivery->shippment->area->rate;
+                        }
+                    }
+                }
+                $accounts->save();
+            }
+        }
+        $Saved = $tracking->save();
+        $isSaved = $shippment->save();
+        return response()->json(
+            [
+                'message' => $isSaved ? 'Status was successfully' : 'change status failed!'
+            ],
+            $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
+        );
+    }
 
     //show shippments without created and requested status in driver
     function driverpickups()
@@ -728,8 +935,11 @@ class Controller extends BaseController
 
     function drivershippments() {
         $this->authorize('shippments.index');
-        $assignedShippments = Delivery::with('shippment')->where('shippment_id', '!=', null)->where('driver_id', auth()->user()->id)->pluck('shippment_id');
-        $shipments = Shippment::whereIn('id', $assignedShippments)->latest();
+        $assignedShippments = Delivery::with('shippment')
+            ->where('shippment_id', '!=', null)
+            ->where('driver_id', auth()->user()->id)
+            ->pluck('shippment_id');
+        $shipments = Shippment::whereIn('id', $assignedShippments)->where('driver_settled' , 0 )->latest();
         $drivers = [];
 
         if(request('barcode')) {
@@ -761,7 +971,7 @@ class Controller extends BaseController
             $shipments = $shipments->where('driver_settled', $driver_settled);
         }
 
-        $shipments = $shipments->paginate(10);
+        $shipments = $shipments->paginate(20);
         return view('Dashboard.driver.shippments', ['shipments' => $shipments, 'drivers' => $drivers]);
     }
 
@@ -898,11 +1108,13 @@ class Controller extends BaseController
                 'from' => $req->from,
                 'to' => $req->to,
             ])->first();
+
             if(!$scheduledriver) {
                 $totalcost = [];
                 $totalcommisson = [];
                 $pickup = [];
                 $shippment = [];
+                $scheduledriverId =0;
                 $from =  Carbon::parse($req->input('from'));
                 $to   = Carbon::parse($req->input('to'));
                 //get data
@@ -910,7 +1122,9 @@ class Controller extends BaseController
 
                 foreach ($delivery as $val) {
                     if ($val->shippment_id == null && $val->pickup_id != null) {
+
                         array_push($pickup, $val->pickup_id);
+
                     } elseif ($val->pickup_id == null && $val->shippment_id != null) {
                         array_push($shippment, $val->shippment_id);
                     }
@@ -951,11 +1165,29 @@ class Controller extends BaseController
                         'total_cost' => $total,
                         'total_delivery_commission' => $totaldrivercommission,
                     ]);
+                    $scheduledriverId = $scheduledriver->id;
                 } else {
                     $show = [];
                     $total = 0;
                     $totaldrivercommission = 0;
                 }
+                $scheduledriverUp = Scheduledriver::find( $scheduledriverId);
+                foreach ($show as $value) {
+                    if($value->shippment) {
+
+                        Delivery::where("shippment_id", $value->shippment->id)
+                            ->update(["scheduledrivers_id" => $scheduledriverUp->id]);
+                    } else if($value->pickup) {
+
+                        Delivery::where("pickup_id", $value->pickup->id)
+                            ->update(["scheduledrivers_id" => $scheduledriverUp->id]);
+                    }
+
+                }
+
+//                $deliveryUp = Delivery::where('driver_id', $driver_id);
+/*                   Delivery::where("shippment_id", $shippment->id)
+                    ->update(["scheduledrivers_id" => $scheduledriverUp->id]);*/
 
 
             } else {
@@ -978,7 +1210,7 @@ class Controller extends BaseController
         $schedule = Scheduledriver::find($req->schedule_id);
         if($schedule) {
             //get data
-            $delivery = Delivery::where('driver_id', $schedule->driver_id)->get();
+            $delivery = Delivery::where('driver_id', $schedule->driver_id)->where('scheduledrivers_id', $schedule->id)->get();
             $pickup = [];
             $shippment = [];
             foreach ($delivery as $val) {
@@ -998,7 +1230,7 @@ class Controller extends BaseController
             ], [
                 'orientation' => 'L'
             ]);
-            return $pdf->stream('/pdfs/document.pdf');
+            return $pdf->stream('/pdfs/document1.pdf');
         } else {
             return redirect()->back();
         }

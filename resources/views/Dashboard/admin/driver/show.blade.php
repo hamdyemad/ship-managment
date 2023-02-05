@@ -113,6 +113,9 @@
         <div class="card-title m-0">
             <h3 class="fw-bolder m-0">{{__('site.shipment') . '-' . $shippment->barcode }}</h3>
         </div>
+        <div class="card-title m-0">
+            <h3 class="fw-bolder m-0">{{__('site.status')}}: {{$shippment->status }}</h3>
+        </div>
         <!--end::Card title-->
 
 
@@ -121,7 +124,8 @@
         <div class="card-toolbar">
             {{-- status dropdown --}}
             @if(Auth::guard('driver')->user() && !$shippment->driver_changed
-            ||Auth::guard('user')->check()
+            || $shippment->status != 'no_answer'
+          /*  ||Auth::guard('user')->check()*/
             ||Auth::guard('admin')->check()
             ||Auth::guard('employee')->check()
             )
@@ -130,7 +134,7 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                         {{__('site.status')}}
                     </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
                                 <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',{{$shippment->id}})"><i
                                             class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
@@ -170,7 +174,12 @@
                 <i class="fa fa-print"></i>
                 {{__('site.print')}}
             </a>
-
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                <a href="{{route('tracking.show',$shippment->id)}}" class="btn btn-light-primary me-3">
+                    <i class="fa fa-truck"></i>
+                    {{__('site.tracking')}}
+                </a>
+            </div>&nbsp;
         </div>
 
     </div>

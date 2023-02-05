@@ -105,13 +105,22 @@ class PickupController extends Controller
         ]);
         $shipment = Shippment::where('user_id', auth()->user()->id)->where('status', 'created')->get();
         if (!$validator->fails()) {
-            foreach ($shipment as $shipment) {
+        /*    foreach ($shipment as $shipment) {
                 if ($shipment->status == 'created') {
                     $shipment->status = 'requested';
                     $updated = $shipment->save();
                 }
-            }
+            }*/
+
             $pickup = new Pickup();
+
+            $code =Pickup::latest()->first()->id +1;
+
+            if ($code < 1000 ){
+                $pickup->id = 1001;
+                $code = 1001;
+            }
+
             $pickup->name = $request->input('name');
             $pickup->status = 'requested';
             $pickup->email = $request->input('email');

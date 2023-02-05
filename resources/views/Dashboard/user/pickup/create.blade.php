@@ -129,7 +129,9 @@
                             <!--begin::time-->
                             <div class="col-lg-4 fv-row">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.time')}}</label>
-                                <select data-dependent="time" name="time" id="time" aria-label="Select a Timezone"
+                                <input type="time" id="time" name="time"
+                                       class="form-control form-control-lg form-control-solid">
+{{--                                <select data-dependent="time" name="time" id="time" aria-label="Select a Timezone"
                                 data-control="select2" data-placeholder="date_period"
                                 class="form-select form-select-sm form-select-solid">
                                     <option value="10">10</option>
@@ -139,7 +141,7 @@
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
-                                </select>
+                                </select>--}}
                             </div>
                             <!--end::time-->
 

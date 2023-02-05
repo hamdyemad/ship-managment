@@ -101,6 +101,44 @@
                                 </select>
                             </div>
                         </form>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                {{__('site.status')}}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                                @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                                    <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',)"><i
+                                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                                    </li>
+                                    <hr>
+                                    <li><a class="dropdown-item" onclick="addshipment('out_for_delivery',)"><i
+                                                class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
+                                    </li>
+                                @endif
+                                <li><a class="dropdown-item" onclick="addshipment('delivered',)"><i
+                                            class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                                </li>
+                                <hr>
+                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                       data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
+                                            class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
+                                </li>
+
+                                <li><a class="dropdown-item" onclick="addshipment('no_answer',)"><i
+                                            class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
+                                </li>
+                                <hr>
+                                <li><a class="dropdown-item" onclick="addshipment('rejected',)"><i
+                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
+                                </li>
+                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                       data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo"><i
+                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
+                                </li>
+
+                            </ul>
+                        </div>
                     @endif
                     <form id="pdf" action="{{ route('pdf') }}" method="POST">
                         @csrf
@@ -183,19 +221,51 @@
                             <div class="col-12 col-md-6">
                                 <!--begin::Input group-->
                                 <div class="mb-10">
-                                    <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
-                                    <select class="form-select form-select-solid fw-bolder" name="status">
-                                        <option></option>
-                                        <option value="created" @if(request('status') == 'created') selected @endif> created</option>
-                                        <option value="receiver_at_hub" @if(request('status') == 'receiver_at_hub') selected @endif>receiver at hub</option>
-                                        <option value="out_for_delivery" @if(request('status') == 'out_for_delivery') selected @endif>out for delivery</option>
-                                        <option value="delivered" @if(request('status') == 'delivered') selected @endif>delivered</option>
-                                        <option value="onhold" @if(request('status') == 'onhold') selected @endif>on hold</option>
-                                        <option value="no_answer" @if(request('status') == 'no_answer') selected @endif>no_answer</option>
-                                        <option value="rejected" @if(request('status') == 'rejected') selected @endif>rejected</option>
-                                        <option value="rejected_fees_paid" @if(request('status') == 'rejected_fees_paid') selected @endif>rejected fees paid</option>
+                                    @if(Auth::guard('driver')->user() && !$shippment->driver_changed
+                                               && $shippment->status == 'no_answer'
+                                             /*  ||Auth::guard('user')->check()*/
+                                               ||Auth::guard('admin')->check()
+                                               ||Auth::guard('employee')->check()
+                                               )
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{__('site.status')}}
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                                                    <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub')"><i
+                                                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                                                    </li>
+                                                    <hr>
+                                                    <li><a class="dropdown-item" onclick="addshipment('out_for_delivery')"><i
+                                                                class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
+                                                    </li>
+                                                @endif
+                                                <li><a class="dropdown-item" onclick="addshipment('delivered')"><i
+                                                            class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                                                </li>
+                                                <hr>
+                                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                                       data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
+                                                            class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
+                                                </li>
 
-                                    </select>
+                                                <li><a class="dropdown-item" onclick="addshipment('no_answer')"><i
+                                                            class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
+                                                </li>
+                                                <hr>
+                                                <li><a class="dropdown-item" onclick="addshipment('rejected')"><i
+                                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
+                                                </li>
+                                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                                       data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo"><i
+                                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    @endif
                                 </div>
                                 <!--end::Input group-->
                             </div>
@@ -204,13 +274,14 @@
                                     <!--begin::Input group-->
                                         <div class="mb-10">
                                             <label class="form-label fs-6 fw-bold">{{__('site.driver')}}:</label>
-                                            <select class="form-select form-select-solid fw-bolder" name="driver_id">
+                                            <select class="  form-select form-select-solid fw-bolder" name="driver_id" >
                                                 <option></option>
                                                 @foreach ($drivers as $driver)
                                                     <option value="{{ $driver->id }}" @if(request('driver_id') == $driver->id) selected @endif>{{ $driver->name }}</option>
                                                 @endforeach
 
                                             </select>
+
                                         </div>
                                     <!--end::Input group-->
                                 </div>
@@ -623,6 +694,7 @@
 <script>
     $(".all_check").on('click', function() {
         $("input[name='shippment[]']").click();
+
     });
 
     $(".delete_btn").on('click', function() {
@@ -638,6 +710,142 @@
 
 
 </script>
+<script>
+
+    var input = document.querySelector('input[name=driver_id]'),
+        // init Tagify script on the above inputs
+        tagify = new Tagify(input, {
+            whitelist : [
+                @foreach ($drivers as $driver)
+                    "{{$driver->name}}",
+                @endforeach
+            ],
+            dropdown: {
+                closeOnSelect: false,
+                maxItems: Infinity,
+                enabled: 0,
+                classname: "customSuggestionsList",
+
+            },
+            templates: {
+                dropdownItemNoMatch() {
+                    return `<div class='empty'>Nothing Found</div>`;
+                }
+            },
+            enforceWhitelist: true
+        })
+
+    tagify.on("dropdown:show", onSuggestionsListUpdate)
+        .on("dropdown:hide", onSuggestionsListHide)
+        .on('dropdown:scroll', onDropdownScroll)
+
+    renderSuggestionsList()  // defined down below
+
+    // ES2015 argument destructuring
+    function onSuggestionsListUpdate({ detail:suggestionsElm }){
+        console.log(  suggestionsElm  )
+    }
+
+    function onSuggestionsListHide(){
+        console.log("hide dropdown")
+    }
+
+    function onDropdownScroll(e){
+        console.log(e.detail)
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+    function renderSuggestionsList(){
+        tagify.dropdown.show() // load the list
+        tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+    }
+</script>
+<script>
+    // //update the status shipment details
+    function addshipment(statusofshipment) {
+        let obj = {
+            status: statusofshipment,
+            shipment_id: id,
+        };
+        if(statusofshipment == 'rejected_fees_paid') {
+            obj.rejected_fees_paid = document.getElementById('rejected_fees_paid').value
+        }
+        if(statusofshipment == 'onhole') {
+            obj.date = document.getElementById('date').value,
+                obj.note = document.getElementById('note').value
+        }
+        axios.post('/dashboard/driver/shipment/status', obj)
+            .then(function (response) {
+                console.log(response.data);
+                //2xx
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                document.getElementById('kt_account_profile_details_form').reset();
+
+            })
+            .catch(function (error) {
+                //4xx - 5xx
+                console.log(error.response.data.message);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            });
+    }
+
+    // update status to on hold
+    function updatestatusshipment(status, url) {
+        // onhold
+        if(status == 'onhold') {
+            let obj = {
+                status: status,
+                shipment_id: '',
+                date:document.getElementById('date').value,
+                note:document.getElementById('note').value,
+            };
+        } else if(status == 'rejected_fees_paid') {
+            let obj = {
+                status: status,
+                shipment_id: '',
+                rejected_fees_paid:document.getElementById('rejected_fees_paid').value,
+            }
+        }
+        axios.post(url, obj)
+            .then(function (response) {
+                //2xx
+                console.log(response);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
 
 
+            })
+            .catch(function (error) {
+                //4xx - 5xx
+                console.log(error.response.data.message);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            });
+    }
+
+</script>
 @endpush

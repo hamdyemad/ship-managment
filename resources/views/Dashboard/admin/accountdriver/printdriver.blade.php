@@ -26,6 +26,15 @@
     <div style="text-align: center;" id="printpdf">
         <table class="table">
             <thead style="background-color: rgb(191, 189, 189)">
+            <tr>
+                <td>
+                    <a>
+                        <img alt="Logo" src="/shippment-logo.png" class="logo" />
+                    </a></td>
+                <td>
+                    No: {{ $schedule->id }}
+                </td>
+            </tr>
                 <tr>
                     <td colspan="3">Driver Name</td>
                     <td colspan="9">{{ $driver->name }}</td>

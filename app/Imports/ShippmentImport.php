@@ -45,14 +45,22 @@ class ShippmentImport implements
 
     public function model(array $row)
     {
-
+        $code =Shippment::latest()->first()->id +1;
+        $shipment = new Shippment();
+        if ($code < 5000 ){
+            $shipment->id = 5001;
+            $code = 5001;
+        }
         $city = City::where('city', 'like', '%'. $row['city'] . '%')->first();
 
         $area = Area::where('area', 'like', '%' . $row['area'] . '%')->first();
-        $seller = User::where('name', 'like', '%' . $row['seller_name'] . '%')->first();
+
+
 
         if(Auth::guard('user')->check()) {
             $seller = Auth::guard('user')->user();
+        }else{
+            $seller = User::where('name', 'like', '%' . $row['seller_name'] . '%')->first();
         }
 
         $shippment = new Shippment();
@@ -69,7 +77,7 @@ class ShippmentImport implements
         $shippment->package_details = $row['package_details'];
         $shippment->address = $row['address'];
         $shippment->note = $row['note'];
-        $shippment->barcode = random_int(100000, 999999);
+        $shippment->barcode = $code;
         $isSaved = $shippment->save();
         return  $shippment;
     }
@@ -77,7 +85,8 @@ class ShippmentImport implements
     {
         return [
             '*.shippment_type' => 'required|in:forward,exchange,cash_collection,return_pickup',
-            '*.seller_name' => 'required|exists:users,name',
+
+          //  '*.seller_name' => 'required|exists:users,name',
             '*.shipper_name' => 'required',
             '*.area' => 'required|exists:areas,area',
             '*.city' => 'required|exists:cities,city',

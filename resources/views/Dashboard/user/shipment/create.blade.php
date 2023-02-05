@@ -58,7 +58,7 @@
     <!--begin::Content-->
     <div id="kt_account_profile_details" class="collapse show">
         <!--begin::Form-->
-        <form id="kt_account_profile_details_form" class="form">
+        <form id="kt_account_profile_details_form "  class="form">
             @csrf
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
@@ -116,7 +116,7 @@
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.shipment_type')}}</label>
                                 <select name="shipment_type" id="shipment_type" data-placeholder="date_period"
-                                    class="form-control form-control-lg form-control-solid mb-3 mb-lg-0">
+                                    class="form-control form-control-lg form-control-solid mb-3 mb-lg-0 ">
                                     <option value="" disabled selected>Select one ..
                                     </option>
                                     <option value="forward">Forward </option>
@@ -133,7 +133,7 @@
                                 <label
                                     class="col-lg-4 col-form-label required fw-bold fs-6">{{__('site.business')}}</label>
                                 <input type="text" id="business" name="business"
-                                    class="form-control form-control-lg form-control-solid">
+                                    class="form-control form-control-lg form-control-solid" >
                             </div>
                             <!--end::Col-->
                         </div>
@@ -391,7 +391,39 @@
             })
             .catch(function (error) {
                 //4xx - 5xx
-                console.log(error.response.data.message);
+                document.getElementById('business').style.borderColor = "#f5f8fa";
+                document.getElementById('shipment_type').style.borderColor = "#f5f8fa";
+                document.getElementById('shipper').style.borderColor = "#f5f8fa";
+                document.getElementById('receiver_name').style.borderColor = "#f5f8fa";
+                document.getElementById('receiver_phone').style.borderColor = "#f5f8fa";
+                document.getElementById('address').style.borderColor = "#f5f8fa";
+                document.getElementById('city').style.borderColor = "#f5f8fa";
+                document.getElementById('area').style.borderColor = "#f5f8fa";
+                if (error.response.data.errors['business']){
+                    document.getElementById('business').style.borderColor = "red";
+                }
+                if (error.response.data.errors['shipment_type']){
+                    document.getElementById('shipment_type').style.borderColor = "red";
+                }
+                if (error.response.data.errors['shipper']){
+                    document.getElementById('shipper').style.borderColor = "red";
+                }
+                if (error.response.data.errors['receiver_name']){
+                    document.getElementById('receiver_name').style.borderColor = "red";
+                }
+                if (error.response.data.errors['receiver_phone']){
+                    document.getElementById('receiver_phone').style.borderColor = "red";
+                }
+                if (error.response.data.errors['address']){
+                    document.getElementById('address').style.borderColor = "red";
+                }
+                if (error.response.data.errors['city']){
+                    document.getElementById('city').style.borderColor = "red";
+                }
+                if (error.response.data.errors['area']){
+                    document.getElementById('area').style.borderColor = "red";
+                }
+                console.log(error.response.data.errors);
                 Swal.fire({
                 position: 'top-end',
                 icon: 'error',

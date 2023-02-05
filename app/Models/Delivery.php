@@ -11,7 +11,7 @@ class Delivery extends Model
 
     protected $fillable = [
         'id',
-        'driver_id', 'shippment_id',
+        'driver_id', 'shippment_id','scheduledrivers_id'
     ];
 
     public function driver()
@@ -29,5 +29,9 @@ class Delivery extends Model
     public function pickup()
     {
         return $this->belongsTo(Pickup::class);
+    }
+    public function scheduledrivers()
+    {
+        return $this->belongsTo(Scheduledriver::class);
     }
 }

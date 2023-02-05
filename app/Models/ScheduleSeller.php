@@ -21,6 +21,7 @@ class ScheduleSeller extends Model
         'to',
         'price',
         'additional_price',
+        'description',
         'costs'
     ];
 }

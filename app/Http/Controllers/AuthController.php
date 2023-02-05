@@ -12,6 +12,7 @@ class AuthController extends Controller
 
     public function showLogin(Request $request)
     {
+
         $request->merge(["guard" => $request->guard]);
         $validator = Validator($request->all(), [
             'guard' => 'required|string|in:admin,user,employee,driver'
@@ -26,6 +27,7 @@ class AuthController extends Controller
     //login
     public function login(Request $request)
     {
+
         $validator = Validator($request->all(), [
             'email' => "required|email",
             'password' => 'required',

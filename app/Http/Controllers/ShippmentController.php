@@ -75,7 +75,7 @@ class ShippmentController extends Controller
             }
             $shipments = $shipments->where('driver_settled', $driver_settled);
         }
-        $shipments = $shipments->paginate(10);
+        $shipments = $shipments->paginate(20);
         return view('Dashboard.user.shipment.index1', ['shipments' => $shipments, 'sellers' => $sellers,'drivers' => $drivers]);
     }
 
@@ -115,9 +115,18 @@ class ShippmentController extends Controller
             'price' => 'required|numeric',
             'note' => 'max:150',
         ]);
-        $code = random_int(100000, 999999);
+//        $shap_count = Shippment::all()->count();
+//        $code = random_int(100000, 999999);
+
+
+
         if (!$validator->fails()) {
+            $code =Shippment::latest()->first()->id +1;
             $shipment = new Shippment();
+            if ($code < 5000 ){
+                $shipment->id = 5001;
+                $code = 5001;
+            }
             if ($request->active == 1) {
                 $shipment->allow_open = 'true';
             } elseif ($request->active == 0) {
@@ -141,7 +150,7 @@ class ShippmentController extends Controller
             $shipment->address = $request->input('address');
             $shipment->note = $request->input('note');
             $shipment->status = 'created';
-            $shipment->barcode = random_int(100000, 999999);
+            $shipment->barcode = $code;
             $isSaved = $shipment->save();
 
             if(Auth::guard('employee')->check()) {
@@ -175,7 +184,7 @@ class ShippmentController extends Controller
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             );
         } else {
-            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message' => $validator->getMessageBag()->first(),'errors' => $validator->errors() ], Response::HTTP_BAD_REQUEST);
         }
     }
 

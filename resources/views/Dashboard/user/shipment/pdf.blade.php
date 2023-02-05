@@ -85,9 +85,9 @@
 
 
         td {
-            padding: 16px;
+            padding: 8px;
             border: 1px solid;
-            height: 50px !important;
+            height: 20px !important;
         }
 
         #container_content2 {
@@ -102,7 +102,7 @@
     <center>
         <table id="container_content2" class="main" cellpadding="0" cellspacing="0">
             <tr>
-                <td rowspan="2"><img src="{{asset('/shippment-logo.png')}}" alt=""></td>
+                <td rowspan="2"><img src="{{public_path('/shippment-logo.png')}}" alt=""></td>
                 <td style="font-weight: bold;font-size: 18px;">city</td>
                 <td style="font-weight: bold;font-size: 18px;">{{$show->city->city}}</td>
                 <td style="font-weight: bold;font-size: 18px; width:30%">Allow to open</td>
@@ -127,7 +127,7 @@
                     @php
                         \Storage::disk('public')->put('barcodes/' . $show->barcode . '.png',base64_decode(DNS1D::getBarcodePNG($show->barcode, 'C128')));
                     @endphp
-                    <img class="barcode" src="{{ asset('barcodes/' . $show->barcode . '.png') }}" alt="">
+                    <img class="barcode" src="{{ public_path('barcodes/' . $show->barcode . '.png') }}" alt="">
                     <br>
                     <br>
                     {{ $show->barcode }}

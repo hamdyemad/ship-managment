@@ -200,12 +200,12 @@
             // label: '# of Votes',
             data: [{{ $created }} ,{{ $delivered }}, {{ $out_for_delivery }}, {{ $rejected }}, {{ $rejected_fees_paid }}, {{ $receiver_at_hub }}],
             backgroundColor: [
-                '#80c5f1',
-                '#6cda6c',
-                '#dab46c',
-                '#ac1f1f',
-                '#681010',
-                '#c1a11f',
+                '#031b89',
+                '#6196ff',
+                '#a9b5ff',
+                '#fb7a8e',
+                '#faa7b7',
+                '#bb485b',
             ],
             // borderColor: [
             //     'rgba(255, 99, 132, 1)',
