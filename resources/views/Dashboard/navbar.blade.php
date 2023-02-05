@@ -57,7 +57,7 @@
                         <span class="menu-arrow d-lg-none"></span>
                     </span>
                     <div id="navmenu"
-                        class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
+                        class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4">
                         <div class="menu-item">
                             <a class="menu-link py-3" href="{{route('open.scan')}}" title="using scan to show shippment"
                                 data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"

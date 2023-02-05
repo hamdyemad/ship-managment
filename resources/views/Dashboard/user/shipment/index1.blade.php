@@ -32,6 +32,62 @@
 
 @section('content')
 
+<!-- On Hold Modal -->
+<div class="modal fade" id="onHoldModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">On Hold</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="from" class="col-form-label">{{__('site.date')}}</label>
+                            <input type="date" class="form-control input-sm" form="pdf" name="date">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">{{__('site.note')}}</label>
+                            <textarea class="form-control form-control-lg form-control-solid" name="note" form="pdf"
+                                style="height: 100px"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary mt-2 status" data-status="onhold">{{ __('site.save_changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- fees paid modal -->
+<div class="modal fade" id="feesPaidModal" tabindex="-1" aria-labelledby="feesPaidModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feesPaidModalLabel">rejected fees paid</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="from" class="col-form-label">{{__('site.paid')}}</label>
+                            <input type="text" class="form-control input-sm" name="rejected_fees_paid"  form="pdf">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary mt-2 status" data-status="rejected_fees_paid">{{ __('site.save_changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- export by date modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -88,6 +144,32 @@
                     </span>
                 </div>
                 <div class="d-block d-md-flex align-items-end">
+                    <form id="pdf" action="{{ route('pdf') }}" method="POST">
+                        @csrf
+                    </form>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="buttin" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ __('site.optional') }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <button type="submit" class="dropdown-item print" form="pdf">
+                                    {{ __('site.print') }}
+                                </button>
+                            </li>
+                            <li>
+                                <button type="submit" class="dropdown-item export_by_choose" form="pdf">
+                                    {{ __('site.export_by_choose') }}
+                                </button>
+                            </li>
+                            <li>
+                                <button type="submit" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    {{ __('site.export_by_date') }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                     @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
                         <form id="assign_shippments" action="{{ route('driver.assign_shippments') }}" method="POST">
                             @csrf
@@ -108,53 +190,52 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
                                 @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
-                                    <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub',)"><i
-                                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
+                                    <li>
+                                        <button class="dropdown-item status" data-status="receiver_at_hub">
+                                            <i class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub
+                                        </button>
                                     </li>
-                                    <hr>
-                                    <li><a class="dropdown-item" onclick="addshipment('out_for_delivery',)"><i
-                                                class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
+                                    <li>
+                                        <button class="dropdown-item status" data-status="out_for_delivery">
+                                            <i class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery
+                                        </button>
                                     </li>
                                 @endif
-                                <li><a class="dropdown-item" onclick="addshipment('delivered',)"><i
-                                            class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                                <li>
+                                    <button class="dropdown-item status" data-status="delivered">
+                                        <i class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                                    </button>
                                 </li>
                                 <hr>
-                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                                       data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
-                                            class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
+                                <li>
+                                    <button class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                        data-bs-toggle="modal" data-bs-target="#onHoldModal" data-bs-whatever="@mdo">
+                                        <i class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold
+                                    </button>
                                 </li>
 
-                                <li><a class="dropdown-item" onclick="addshipment('no_answer',)"><i
-                                            class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
+                                <li>
+                                    <button class="dropdown-item status" data-status="no_answer">
+                                        <i class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer
+                                    </button>
                                 </li>
                                 <hr>
-                                <li><a class="dropdown-item" onclick="addshipment('rejected',)"><i
-                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
+                                <li>
+                                    <button class="dropdown-item status" data-status="rejected">
+                                        <i
+                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected
+                                    </button>
                                 </li>
-                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                                       data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo"><i
-                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
+                                <li>
+                                    <button class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                    data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo">
+                                        <i class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid
+                                    </button>
                                 </li>
 
                             </ul>
                         </div>
                     @endif
-                    <form id="pdf" action="{{ route('pdf') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="export_by_choose" value="1">
-                        <button type="submit" class="btn btn-light-primary me-3">
-                            <!--end::Svg Icon-->{{ __('site.export_by_choose') }}
-                        </button>
-                    </form>
-                    <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
-                        data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        data-bs-whatever="@mdo">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                        <span class="svg-icon svg-icon-2">
-                        </span>
-                        <!--end::Svg Icon-->{{ __('site.export_by_date') }}
-                    </button>
                     @can('shippments.create')
                         <!--begin::Add shipment-->
                         <a href="{{route('shipment.create')}}" class="btn btn-primary">
@@ -218,57 +299,6 @@
                                 </div>
                                 <!--end::Input group-->
                             </div>
-                            <div class="col-12 col-md-6">
-                                <!--begin::Input group-->
-                                <div class="mb-10">
-                                    @if(Auth::guard('driver')->user() && !$shippment->driver_changed
-                                               && $shippment->status == 'no_answer'
-                                             /*  ||Auth::guard('user')->check()*/
-                                               ||Auth::guard('admin')->check()
-                                               ||Auth::guard('employee')->check()
-                                               )
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                {{__('site.status')}}
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
-                                                    <li><a class="dropdown-item" onclick="addshipment('receiver_at_hub')"><i
-                                                                class="fa fa-circle" style="color: #94c1e2"></i>&nbsp;received at hub</a>
-                                                    </li>
-                                                    <hr>
-                                                    <li><a class="dropdown-item" onclick="addshipment('out_for_delivery')"><i
-                                                                class="fa fa-circle" style="color: #7bc1f3"></i>&nbsp;Out For Delivery</a>
-                                                    </li>
-                                                @endif
-                                                <li><a class="dropdown-item" onclick="addshipment('delivered')"><i
-                                                            class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
-                                                </li>
-                                                <hr>
-                                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                                                       data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i
-                                                            class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold</a>
-                                                </li>
-
-                                                <li><a class="dropdown-item" onclick="addshipment('no_answer')"><i
-                                                            class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer</a>
-                                                </li>
-                                                <hr>
-                                                <li><a class="dropdown-item" onclick="addshipment('rejected')"><i
-                                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected</a>
-                                                </li>
-                                                <li><a class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                                                       data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo"><i
-                                                            class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid</a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                    @endif
-                                </div>
-                                <!--end::Input group-->
-                            </div>
                             @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
                                 <div class="col-12 col-md-6">
                                     <!--begin::Input group-->
@@ -310,6 +340,27 @@
                                         <option value="exchange" @if(request('shippment_type') == 'exchange') selected @endif>exchange</option>
                                         <option value="cash_collection" @if(request('shippment_type') == 'cash_collection') selected @endif>cash_collection</option>
                                         <option value="return_pickup" @if(request('shippment_type') == 'return_pickup') selected @endif>return_pickup</option>
+
+                                    </select>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <!--begin::Input group-->
+                                <div class="mb-10">
+                                    <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
+                                    <select class="form-select form-select-solid fw-bolder" name="status">
+                                        <option></option>
+                                @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                                <option value="receiver_at_hub" @if(request('status') == 'receiver_at_hub') selected @endif>receiver_at_hub</option>
+                                <option value="out_for_delivery" @if(request('status') == 'out_for_delivery') selected @endif>Out For Delivery</option>
+
+                                @endif
+                                        <option value="delivered" @if(request('status') == 'delivered') selected @endif>Delivered</option>
+                                        <option value="onhold" @if(request('status') == 'onhold') selected @endif>OnHold</option>
+                                        <option value="no_answer" @if(request('status') == 'no_answer') selected @endif>No Answer</option>
+                                        <option value="rejected" @if(request('status') == 'rejected') selected @endif>Rejected</option>
+                                        <option value="rejected_fees_paid" @if(request('status') == 'rejected_fees_paid') selected @endif>Rejected Fees Paid</option>
 
                                     </select>
                                 </div>
@@ -708,9 +759,18 @@
         $(this).parent().parent().submit();
     });
 
+    $(".status").on('click', function() {
+        $("#pdf").append(`<input type='hidden' name='status' value='${$(this).data('status')}'>`)
+        $("#pdf").submit();
+    });
+
 
 </script>
 <script>
+
+    $(".print").on('click', function() {
+        $("#pdf").append('<input type="hidden" name="print" value="1">')
+    });
 
     var input = document.querySelector('input[name=driver_id]'),
         // init Tagify script on the above inputs

@@ -22,6 +22,7 @@ use App\Models\ShippmentView;
 
 use App\Models\Tracking;
 use App\Models\User;
+use App\Traits\Res;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +43,7 @@ use PDF;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Res;
 
     function index()
     {
@@ -118,7 +119,6 @@ class Controller extends BaseController
     //download pdf for all shippments and pick up
     function index1(Request $req)
     {
-        // return $req;
         if($req->export_by_date) {
             $from = $req->input('from');
             $to   = $req->input('to');
@@ -147,6 +147,59 @@ class Controller extends BaseController
                     ['withErrors' => 'error in form'],
                     Response::HTTP_BAD_REQUEST
                 );
+            }
+        } else if($req->print) {
+            $validator = Validator($req->all(), [
+                'shippment' => 'required'
+            ]);
+            if (!$validator->fails()) {
+                if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+                    $shippments = Shippment::whereIn('id',$req->shippment)->latest()->get();
+                } else if(Auth::guard('driver')->check()) {
+                    $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
+                    $sshippmentshow = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
+                } else if(Auth::guard('user')->check()) {
+                    $shippments = Shippment::whereIn('id', $req->shippment)
+                    ->where('user_id', Auth::guard('user')->user()->id)
+                    ->latest()->get();
+
+                }
+                $mpdf = new Mpdf();
+                $mpdf->autoScriptToLang = true;
+                $mpdf->autoLangToFont = true;
+                foreach($shippments as $show) {
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML(view('Dashboard.user.shipment.pdf', compact('show'))->render());
+                }
+                return $mpdf->Output();
+            } else {
+                return redirect()->back()->with('error', 'you should choose shippments');
+            }
+        } else if($req->status) {
+            $validator = Validator($req->all(), [
+                'shippment' => 'required'
+            ]);
+            if (!$validator->fails()) {
+                if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+                    $shippments = Shippment::whereIn('id',$req->shippment)->latest()->get();
+                } else if(Auth::guard('driver')->check()) {
+                    $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
+                    $sshippmentshow = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
+                } else if(Auth::guard('user')->check()) {
+                    $shippments = Shippment::whereIn('id', $req->shippment)
+                    ->where('user_id', Auth::guard('user')->user()->id)
+                    ->latest()->get();
+
+                }
+                // return $shippments;
+                foreach($shippments as $shippment) {
+                    $req['shipment_id'] = $shippment->id;
+                    $this->status_flow($req);
+                }
+                return redirect()->back()->with('success', 'done !');
+
+            } else {
+                return redirect()->back()->with('error', 'you should choose shippments');
             }
         } else {
             $validator = Validator($req->all(), [
@@ -368,7 +421,6 @@ class Controller extends BaseController
                 'user_type' => $user_type,
             ]);
         }
-
         if ($shippment != null) {
             return view('Dashboard.admin.driver.show', ['shippment' => $shippment]);
         } else {
@@ -666,11 +718,6 @@ class Controller extends BaseController
 
         }
 
-/*        elseif ($request->status == 'no_answer') {
-            if($delivery) {
-                $delivery->delete();
-            }
-        }*/
         elseif ($shippment->shippment_type == 'return_pickup') {
             if($shippment->user && $delivery) {
                 $accounts = new AccountSeller();

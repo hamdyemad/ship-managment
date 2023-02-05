@@ -5,11 +5,8 @@
   height: 10px;
 }
 .header-fixed .header{
-    background-color: #0d72b9!important;
+    box-shadow: 0px 0px 6px 2px #bfbfbf;
 
-}
-.menu-title-gray-700 .menu-item .menu-link .menu-title{
-    color: #ffffff!important;
 }
 .toolbar{
     background-color: #f1faff!important;
