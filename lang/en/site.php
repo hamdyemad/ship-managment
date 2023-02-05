@@ -154,7 +154,8 @@ return [
 
     'export_by_choose' => 'export by choose',
     'export_by_date' => 'export by date',
-
+    'shippments' => 'shippments',
+    'pickups' => 'pickups',
     'assign_shippment' => 'assign shipment',
     'advanced_search' => 'advanced search',
     'change_shippment_status' => 'change shippment status',

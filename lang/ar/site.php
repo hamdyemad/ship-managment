@@ -200,6 +200,8 @@ return [
 
     'export_by_choose' => 'استخراج عن طريق الأختيار',
     'export_by_date' => 'استخراج بالتاريخ',
+    'shippments' => 'الشحنات',
+    'pickups' => 'نقاط الأستلام',
     'advanced_search' => 'بحث متقدم',
     'assign_shippment' => 'تعيين شحنة',
     'change_shippment_status' => 'تغيير حالة الشحنة',

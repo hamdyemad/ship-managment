@@ -147,7 +147,7 @@
                     <form id="pdf" action="{{ route('pdf') }}" method="POST">
                         @csrf
                     </form>
-                    <div class="dropdown">
+                    <div class="dropdown" style="padding-inline-start: 10px; padding-inline-end: 10px">
                         <button class="btn btn-secondary dropdown-toggle" type="buttin" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             {{ __('site.optional') }}
@@ -183,7 +183,7 @@
                                 </select>
                             </div>
                         </form>
-                        <div class="dropdown">
+                        <div class="dropdown" style="padding-inline-start: 10px; padding-inline-end: 10px">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 {{__('site.status')}}
@@ -351,12 +351,11 @@
                                     <label class="form-label fs-6 fw-bold">{{__('site.status')}}:</label>
                                     <select class="form-select form-select-solid fw-bolder" name="status">
                                         <option></option>
-                                @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
-                                <option value="receiver_at_hub" @if(request('status') == 'receiver_at_hub') selected @endif>receiver_at_hub</option>
-                                <option value="out_for_delivery" @if(request('status') == 'out_for_delivery') selected @endif>Out For Delivery</option>
-
-                                @endif
-                                        <option value="delivered" @if(request('status') == 'delivered') selected @endif>Delivered</option>
+                                        @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                                            <option value="receiver_at_hub" @if(request('status') == 'receiver_at_hub') selected @endif>receiver_at_hub</option>
+                                            <option value="out_for_delivery" @if(request('status') == 'out_for_delivery') selected @endif>Out For Delivery</option>
+                                        @endif
+                                                <option value="delivered" @if(request('status') == 'delivered') selected @endif>Delivered</option>
                                         <option value="onhold" @if(request('status') == 'onhold') selected @endif>OnHold</option>
                                         <option value="no_answer" @if(request('status') == 'no_answer') selected @endif>No Answer</option>
                                         <option value="rejected" @if(request('status') == 'rejected') selected @endif>Rejected</option>
@@ -759,6 +758,11 @@
         $(this).parent().parent().submit();
     });
 
+
+    $(".print").on('click', function() {
+        $("#pdf").append('<input type="hidden" name="print" value="1">')
+    });
+
     $(".status").on('click', function() {
         $("#pdf").append(`<input type='hidden' name='status' value='${$(this).data('status')}'>`)
         $("#pdf").submit();
@@ -768,9 +772,6 @@
 </script>
 <script>
 
-    $(".print").on('click', function() {
-        $("#pdf").append('<input type="hidden" name="print" value="1">')
-    });
 
     var input = document.querySelector('input[name=driver_id]'),
         // init Tagify script on the above inputs

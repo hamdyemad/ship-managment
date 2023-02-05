@@ -32,6 +32,62 @@
 
 @section('content')
 
+<!-- On Hold Modal -->
+<div class="modal fade" id="onHoldModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">On Hold</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="from" class="col-form-label">{{__('site.date')}}</label>
+                            <input type="date" class="form-control input-sm" form="pdf" name="date">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">{{__('site.note')}}</label>
+                            <textarea class="form-control form-control-lg form-control-solid" name="note" form="pdf"
+                                style="height: 100px"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary mt-2 status" data-status="onhold">{{ __('site.save_changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- fees paid modal -->
+<div class="modal fade" id="feesPaidModal" tabindex="-1" aria-labelledby="feesPaidModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feesPaidModalLabel">rejected fees paid</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="from" class="col-form-label">{{__('site.paid')}}</label>
+                            <input type="text" class="form-control input-sm" name="rejected_fees_paid"  form="pdf">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary mt-2 status" data-status="rejected_fees_paid">{{ __('site.save_changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- export by date modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -90,19 +146,71 @@
                 <div class="d-block d-md-flex">
                     <form id="pdf" action="{{ route('pdf') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="export_by_choose" value="1">
-                        <button type="submit" class="btn btn-light-primary me-3">
-                            <!--end::Svg Icon-->{{ __('site.export_by_choose') }}
-                        </button>
                     </form>
-                    <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
-                        data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        data-bs-whatever="@mdo">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                        <span class="svg-icon svg-icon-2">
-                        </span>
-                        <!--end::Svg Icon-->{{ __('site.export_by_date') }}
-                    </button>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="buttin" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ __('site.optional') }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <button type="submit" class="dropdown-item print" form="pdf">
+                                    {{ __('site.print') }}
+                                </button>
+                            </li>
+                            <li>
+                                <button type="submit" class="dropdown-item export_by_choose" form="pdf">
+                                    {{ __('site.export_by_choose') }}
+                                </button>
+                            </li>
+                            <li>
+                                <button type="submit" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    {{ __('site.export_by_date') }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown" style="padding-inline-start: 10px">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            {{__('site.status')}}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <button class="dropdown-item status" data-status="delivered">
+                                    <i class="fa fa-circle" style="color: #52ec7b"></i>&nbsp;Delivered</a>
+                                </button>
+                            </li>
+                            <hr>
+                            <li>
+                                <button class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                    data-bs-toggle="modal" data-bs-target="#onHoldModal" data-bs-whatever="@mdo">
+                                    <i class="fa fa-circle" style="color: #b9bc7f"></i>&nbsp;OnHold
+                                </button>
+                            </li>
+
+                            <li>
+                                <button class="dropdown-item status" data-status="no_answer">
+                                    <i class="fa fa-circle" style="color: #bec35f"></i>&nbsp;No Answer
+                                </button>
+                            </li>
+                            <hr>
+                            <li>
+                                <button class="dropdown-item status" data-status="rejected">
+                                    <i
+                                        class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                data-bs-toggle="modal" data-bs-target="#feesPaidModal" data-bs-whatever="@mdo">
+                                    <i class="fa fa-circle" style="color: #ee83a5"></i>&nbsp;Rejected Fees Paid
+                                </button>
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
 
             </div>
@@ -487,6 +595,19 @@
         $("#delete_shipping").modal('show');
         $("#delete_shipping").find('form').attr('action', '/dashboard/shipment/' + $(this).data('id'));
     });
+
+
+
+    $(".print").on('click', function() {
+        $("#pdf").append('<input type="hidden" name="print" value="1">')
+    });
+
+    $(".status").on('click', function() {
+        $("#pdf").append(`<input type='hidden' name='status' value='${$(this).data('status')}'>`)
+        $("#pdf").submit();
+    });
+
+
 
 
 </script>

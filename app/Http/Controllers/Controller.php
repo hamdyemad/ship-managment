@@ -157,7 +157,7 @@ class Controller extends BaseController
                     $shippments = Shippment::whereIn('id',$req->shippment)->latest()->get();
                 } else if(Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
-                    $sshippmentshow = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
+                    $shippments = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
                 } else if(Auth::guard('user')->check()) {
                     $shippments = Shippment::whereIn('id', $req->shippment)
                     ->where('user_id', Auth::guard('user')->user()->id)
@@ -184,7 +184,7 @@ class Controller extends BaseController
                     $shippments = Shippment::whereIn('id',$req->shippment)->latest()->get();
                 } else if(Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
-                    $sshippmentshow = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
+                    $shippments = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
                 } else if(Auth::guard('user')->check()) {
                     $shippments = Shippment::whereIn('id', $req->shippment)
                     ->where('user_id', Auth::guard('user')->user()->id)
