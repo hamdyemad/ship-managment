@@ -53,7 +53,7 @@ return [
     'export' => 'اكسل',
     'showshipment' => 'بيانات الشحن',
     'edit' => 'تعديل',
-    'pickup' => 'شحن المنتجات ',
+    'pickup' => 'نقطة الأستلام',
     'location' => 'العنوان',
     'time' => 'الوقت',
     'date' => 'التاريخ',
@@ -206,6 +206,9 @@ return [
     'assign_shippment' => 'تعيين شحنة',
     'change_shippment_status' => 'تغيير حالة الشحنة',
 
+    'shippment' => 'شحنة',
+    'shipment.seller' => 'البائع',
+    'choose_seller' => 'أختر البائع',
 
 
 ];

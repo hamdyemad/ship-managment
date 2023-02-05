@@ -159,6 +159,10 @@ return [
     'assign_shippment' => 'assign shipment',
     'advanced_search' => 'advanced search',
     'change_shippment_status' => 'change shippment status',
+    'shippment' => 'shippment',
+    'shipment.seller' => 'seller',
+    'choose_seller' => 'choose seller',
+
 
 
 

@@ -95,6 +95,9 @@
                         <form class="d-flex" action="{{ route('settlement_sellers') }}" method="POST">
                             @csrf
                             <input  type="text" name="description" placeholder="Description">
+                            <input type="hidden" name="type" value="{{ request('type') }}">
+                            <input type="hidden" name="shippment" value="{{ json_encode(request('shippment')) }}">
+                            <input type="hidden" name="pickup" value="{{ json_encode(request('pickup')) }}">
                             <input type="hidden" name="seller_id" value="{{ request('seller_id') }}">
                             <input type="hidden" name="from" value="{{ request('from') }}">
                             <input type="hidden" name="to" value="{{ request('to') }}">
@@ -135,17 +138,8 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function() {
-            var table = $('#example').DataTable( {
-            lengthChange: false,
-            scrollX: true,0
-            buttons: [  'excel', 'pdf', 'print' ]
-        } );
 
-        // Insert at the top left of the table
-        table.buttons().container()
-        .appendTo( $('div.column.is-half', table.table().container()).eq(0) );
-    } );
+
     let total = parseInt($('.total').text());
     $(".additional").on('change keyup', function() {
         $('.total').text(total + parseInt($(this).val()))

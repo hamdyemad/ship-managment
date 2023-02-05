@@ -54,6 +54,10 @@
     </ul>
 </div>
 @endif
+<form action="{{route('account_driver')}}" method="get" enctype="multipart/form-data" id="account_driver_pdf">
+    @csrf
+</form>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -62,35 +66,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{route('account_driver')}}" method="get" enctype="multipart/form-data">
-                    @csrf
-                    <div class="container">
-                        <div class="row">
-                            <label for="from" class="col-form-label">driver</label>
-                            <div class="col-md-6">
-                                <select id="driver_id" name="driver_id" class="form-select ">
-                                    <option></option>
-                                    @foreach ($drivers as $drivers )
-                                        <option value="{{$drivers->id}}">{{$drivers->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                <div class="container">
+                    <div class="row">
+                        <label for="from" class="col-form-label">driver</label>
+                        <div class="col-md-6">
+                            <select id="driver_id" name="driver_id" class="form-select" form="account_driver_pdf">
+                                <option></option>
+                                @foreach ($drivers as $drivers )
+                                    <option value="{{$drivers->id}}">{{$drivers->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <label for="from" class="col-form-label">From</label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control input-sm" id="from" name="from">
-                            </div>
-                            <label for="from" class="col-form-label">To</label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control input-sm" id="to" name="to">
-                            </div>
+                        <label for="from" class="col-form-label">From</label>
+                        <div class="col-md-6">
+                            <input type="date" class="form-control input-sm" id="from" name="from" form="account_driver_pdf">
+                        </div>
+                        <label for="from" class="col-form-label">To</label>
+                        <div class="col-md-6">
+                            <input type="date" class="form-control input-sm" id="to" name="to" form="account_driver_pdf">
+                        </div>
 
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-secondary btn-sm" name="exportPDF">export</button>
-                            </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-secondary btn-sm settled_btn" data-settled="export_date">export</button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
 
         </div>
@@ -128,6 +129,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                 @if(Auth::guard('admin')->check() || Auth::guard('employee')->check())
+                    <button class="btn btn-secondary settled_btn" style="margin-inline-end:10px" data-settled="extract">{{ __('site.extract') }}</button>
                     <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                         data-kt-menu-placement="bottom-end" data-bs-toggle="modal" data-bs-target="#exampleModal"
                         data-bs-whatever="@mdo">
@@ -243,11 +245,16 @@
             <!--end::Card toolbar-->
         </div>
         <!--begin::Table-->
-        <table class="table d-block overflow-auto align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+        <table class="table d-block overflow-auto align-middle table-row-dashed fs-6 gy-5">
             <!--begin::Table head-->
             <thead>
                 <!--begin::Table row-->
                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                    <th class="w-10px pe-2">
+                        <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                            <input class="form-check-input all_check" type="checkbox" />
+                        </div>
+                    </th>
                     <th class="min-w-115px">{{__('site.id')}}</th>
                     <th>{{__('site.shippment_barcode')}}</th>
                     <th class="min-w-125px">{{__('site.type')}}</th>
@@ -277,12 +284,12 @@
                 @foreach ($accounts as $account)
                     @if ($account->pickup==null)
                         <tr>
-                            {{-- <td class="d-flex align-items-center">
-                                <div class="d-flex flex-column">
-                                    {{ $account->id }}
+                            <td>
+                                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input check_input" name="shippment[]"  form="account_driver_pdf"
+                                        type="checkbox" value="{{ $account->shippment->id }}" />
                                 </div>
-                            </td> --}}
-                            <!--begin::User=-->
+                            </td>
                             <td>
                                 {{ $account->id }}
                             </td>
@@ -344,13 +351,12 @@
                         </tr>
                     @else
                         <tr>
-                            <!--begin::Checkbox-->
-                            {{-- <td>
+                            <td>
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="1" />
+                                    <input class="form-check-input check_input" name="pickup[]"  form="account_driver_pdf"
+                                        type="checkbox" value="{{ $account->pickup->id }}" />
                                 </div>
-                            </td> --}}
-                            <!--end::Checkbox-->
+                            </td>
 
                             <!--begin::User=-->
                             <td class="d-flex align-items-center">
@@ -449,10 +455,10 @@
                     @endif
                 @endforeach
                 {{-- {{dd($shipment)}} --}}
-
             </tbody>
             <!--end::Table body-->
         </table>
+        {{ $accounts->links() }}
         <!--end::Table-->
     </div>
     <!--end::Card body-->
@@ -513,6 +519,17 @@
             })
         });
     }
+
+
+
+    $(".all_check").on('click', function() {
+        $("input[name='shippment[]']").click();
+    });
+
+    $(".settled_btn").on('click', function() {
+        $("#account_driver_pdf").append(`<input type='hidden' name='type' value='${$(this).data('settled')}'>`)
+        $("#account_driver_pdf").submit();
+    });
 
 
 

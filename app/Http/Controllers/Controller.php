@@ -47,7 +47,7 @@ class Controller extends BaseController
 
     function index()
     {
-        if(Auth::guard('user')->user()) {
+        if (Auth::guard('user')->user()) {
             $city = City::all();
             return view('Dashboard.user.settings', ['city' => $city]);
         } else {
@@ -119,7 +119,7 @@ class Controller extends BaseController
     //download pdf for all shippments and pick up
     function index1(Request $req)
     {
-        if($req->export_by_date) {
+        if ($req->export_by_date) {
             $from = $req->input('from');
             $to   = $req->input('to');
             $pickup = [];
@@ -129,15 +129,15 @@ class Controller extends BaseController
                 'to' => 'required ',
             ]);
             if (!$validator->fails()) {
-                if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+                if (Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
                     $show = Shippment::whereDate('created_at', '>=', $from)
                         ->whereDate('created_at', '<=', $to)->latest()->get();
-                } else if(Auth::guard('driver')->check()) {
+                } else if (Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
                     $show = Shippment::whereIn('id', $assignedShippments)
-                    ->whereDate('created_at', '>=', $from)
-                    ->whereDate('created_at', '<=', $to)->latest()->get();
-                } else if(Auth::guard('user')->check()) {
+                        ->whereDate('created_at', '>=', $from)
+                        ->whereDate('created_at', '<=', $to)->latest()->get();
+                } else if (Auth::guard('user')->check()) {
                     $show = Shippment::whereDate('created_at', '>=', $from)
                         ->whereDate('created_at', '<=', $to)->where('user_id', Auth::guard('user')->user()->id)->latest()->get();
                 }
@@ -148,26 +148,25 @@ class Controller extends BaseController
                     Response::HTTP_BAD_REQUEST
                 );
             }
-        } else if($req->print) {
+        } else if ($req->print) {
             $validator = Validator($req->all(), [
                 'shippment' => 'required'
             ]);
             if (!$validator->fails()) {
-                if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
-                    $shippments = Shippment::whereIn('id',$req->shippment)->latest()->get();
-                } else if(Auth::guard('driver')->check()) {
+                if (Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+                    $shippments = Shippment::whereIn('id', $req->shippment)->latest()->get();
+                } else if (Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
                     $shippments = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
-                } else if(Auth::guard('user')->check()) {
+                } else if (Auth::guard('user')->check()) {
                     $shippments = Shippment::whereIn('id', $req->shippment)
-                    ->where('user_id', Auth::guard('user')->user()->id)
-                    ->latest()->get();
-
+                        ->where('user_id', Auth::guard('user')->user()->id)
+                        ->latest()->get();
                 }
                 $mpdf = new Mpdf();
                 $mpdf->autoScriptToLang = true;
                 $mpdf->autoLangToFont = true;
-                foreach($shippments as $show) {
+                foreach ($shippments as $show) {
                     $mpdf->AddPage();
                     $mpdf->WriteHTML(view('Dashboard.user.shipment.pdf', compact('show'))->render());
                 }
@@ -175,29 +174,27 @@ class Controller extends BaseController
             } else {
                 return redirect()->back()->with('error', 'you should choose shippments');
             }
-        } else if($req->status) {
+        } else if ($req->status) {
             $validator = Validator($req->all(), [
                 'shippment' => 'required'
             ]);
             if (!$validator->fails()) {
-                if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
-                    $shippments = Shippment::whereIn('id',$req->shippment)->latest()->get();
-                } else if(Auth::guard('driver')->check()) {
+                if (Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+                    $shippments = Shippment::whereIn('id', $req->shippment)->latest()->get();
+                } else if (Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
                     $shippments = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
-                } else if(Auth::guard('user')->check()) {
+                } else if (Auth::guard('user')->check()) {
                     $shippments = Shippment::whereIn('id', $req->shippment)
-                    ->where('user_id', Auth::guard('user')->user()->id)
-                    ->latest()->get();
-
+                        ->where('user_id', Auth::guard('user')->user()->id)
+                        ->latest()->get();
                 }
                 // return $shippments;
-                foreach($shippments as $shippment) {
+                foreach ($shippments as $shippment) {
                     $req['shipment_id'] = $shippment->id;
                     $this->status_flow($req);
                 }
                 return redirect()->back()->with('success', 'done !');
-
             } else {
                 return redirect()->back()->with('error', 'you should choose shippments');
             }
@@ -206,127 +203,228 @@ class Controller extends BaseController
                 'shippment' => 'required'
             ]);
             if (!$validator->fails()) {
-                if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+                if (Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
                     $show = Shippment::whereIn('id', $req->shippment)->latest()->get();
-                } else if(Auth::guard('driver')->check()) {
+                } else if (Auth::guard('driver')->check()) {
                     $assignedShippments = Delivery::where('shippment_id', '!=', null)->where('driver_id', Auth::id())->pluck('shippment_id');
                     $show = Shippment::whereIn('id', $assignedShippments)->whereIn('id', $req->shippment)->latest()->get();
-                } else if(Auth::guard('user')->check()) {
+                } else if (Auth::guard('user')->check()) {
                     $show = Shippment::whereIn('id', $req->shippment)
-                    ->where('user_id', Auth::guard('user')->user()->id)
-                    ->latest()->get();
-
+                        ->where('user_id', Auth::guard('user')->user()->id)
+                        ->latest()->get();
                 }
                 return view('Dashboard.user.shipment.execlshippment', ['show' => $show]);
             } else {
                 return redirect()->back()->with('error', 'you should choose shippments');
             }
         }
-
     }
 
-    public function settlement_sellers(Request $request) {
-        $validator = Validator($request->all(), [
-            'seller_id' => 'required ',
-            'from' => 'required',
-            'to' => 'required ',
-        ]);
+    public function settlement_sellers(Request $request)
+    {
+        // return json_decode($request->shippment);
+        if ($request->type == 'export_date') {
+            $validator = Validator($request->all(), [
+                'seller_id' => 'required ',
+                'from' => 'required',
+                'to' => 'required ',
+            ]);
 
-        if (!$validator->fails()) {
-            $fromdate =  Carbon::parse($request->input('from'));
-            $todate  = Carbon::parse($request->input('to'));
-            $user_id_req = $request->input('seller_id');
-            $shippments = AccountSeller::with('shippment')
-                ->whereDate('created_at', '>=', $fromdate)
-                ->whereDate('created_at', '<=', $todate)
-                ->whereNotNull('shippment_id')
-                ->where('user_id', $user_id_req)
-                ->whereHas('shippment', function($query) {
-                    $query->where('seller_settled', 0);
-                })
-                ->get();
-            $pickups = AccountSeller::with('pickup')
-                ->whereDate('created_at', '>=', $fromdate)
-                ->whereDate('created_at', '<=', $todate)
-                ->whereNotNull('pickup_id')
-                ->where('user_id', $user_id_req)
-                ->whereHas('pickup', function($query) {
-                    $query->where('seller_settled', 0);
-                })
-                ->get();
+            if (!$validator->fails()) {
+                $fromdate =  Carbon::parse($request->input('from'));
+                $todate  = Carbon::parse($request->input('to'));
+                $user_id_req = $request->input('seller_id');
+                $shippments = AccountSeller::with('shippment')
+                    ->whereDate('created_at', '>=', $fromdate)
+                    ->whereDate('created_at', '<=', $todate)
+                    ->whereNotNull('shippment_id')
+                    ->where('user_id', $user_id_req)
+                    ->whereHas('shippment', function ($query) {
+                        $query->where('seller_settled', 0);
+                    })
+                    ->get();
+                $pickups = AccountSeller::with('pickup')
+                    ->whereDate('created_at', '>=', $fromdate)
+                    ->whereDate('created_at', '<=', $todate)
+                    ->whereNotNull('pickup_id')
+                    ->where('user_id', $user_id_req)
+                    ->whereHas('pickup', function ($query) {
+                        $query->where('seller_settled', 0);
+                    })
+                    ->get();
+                $show = $shippments->merge($pickups);
+
+                $totalcost = [];
+                $seller_commission = [];
+                if (count($show) > 0) {
+                    foreach ($show as $value) {
+                        if ($value->shippment) {
+                            $value->shippment->seller_settled = 1;
+                            $value->shippment->save();
+                        } else if ($value->pickup) {
+                            $value->pickup->seller_settled = 1;
+                            $value->pickup->save();
+                        }
+                        array_push($totalcost, $value->cost);
+                        array_push($seller_commission, $value->seller_commission);
+                    }
+                    $total = (array_sum($totalcost) + intval($request->additional)) - array_sum($seller_commission);
+                    ScheduleSeller::firstOrCreate([
+                        'user_id' => $user_id_req,
+                        'from' => $request->from,
+                        'to' => $request->to,
+                        'price' => (array_sum($totalcost) - array_sum($seller_commission)),
+                        'additional_price' => $request->additional,
+                        'description' => $request->description,
+                        'costs' => $total
+                    ]);
+                    $seller = User::find($user_id_req);
+                    $seller->balance += $total;
+                    $seller->save();
+                    return redirect()->to(route('ScheduleSeller.index'))->with('success', __('site.save_changes'));
+                } else {
+                    return redirect()->back()->with('error', 'there is no data');
+                }
+            } else {
+                return redirect()->back()->withErrors(
+                    ['withErrors' => 'error in form'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+        } else if ($request->type == 'extract') {
+            $pickups = collect();
+            $shippments = collect();
+
+            if (isset($request->shippment)) {
+                $shippments_ids = json_decode($request->shippment);
+                if ($shippments_ids != '') {
+                    $shippments = AccountSeller::with('shippment')
+                        ->whereIn('shippment_id', $shippments_ids)
+                        ->whereHas('shippment', function ($query) {
+                            $query->where('seller_settled', 0);
+                        })
+                        ->get();
+                }
+            }
+            if (isset($request->pickup)) {
+                $pickups_ids = json_decode($request->pickup);
+                if ($pickups_ids != '') {
+                    $pickups = AccountSeller::with('pickup')
+                        ->whereNotNull('pickup_id')
+                        ->whereIn('pickup_id', $pickups_ids)
+
+                        ->whereHas('pickup', function ($query) {
+                            $query->where('seller_settled', 0);
+                        })
+                        ->get();
+                }
+            }
             $show = $shippments->merge($pickups);
 
             $totalcost = [];
             $seller_commission = [];
-            if(count($show) > 0) {
+            if (count($show) > 0) {
                 foreach ($show as $value) {
-                    if($value->shippment) {
+                    $total = ($value->cost + doubleval($request->additional)) - $value->seller_commission;
+                    $array = [
+                        'user_id' => $value->user_id,
+                        'from' => $request->from,
+                        'to' => $request->to,
+                        'price' => (array_sum($totalcost) - array_sum($seller_commission)),
+                        'additional_price' => $request->additional,
+                        'description' => $request->description,
+                        'costs' => $total
+                    ];
+
+                    if ($value->shippment) {
                         $value->shippment->seller_settled = 1;
                         $value->shippment->save();
-
-                    } else if($value->pickup) {
+                    } else if ($value->pickup) {
                         $value->pickup->seller_settled = 1;
                         $value->pickup->save();
                     }
-                    array_push($totalcost, $value->cost);
-                    array_push($seller_commission, $value->seller_commission);
+
+                    ScheduleSeller::firstOrCreate($array);
+                    $seller = User::find($value->user_id);
+                    $seller->balance += $total;
+                    $seller->save();
                 }
-                $total = (array_sum($totalcost) + intval($request->additional)) - array_sum($seller_commission);
-                ScheduleSeller::firstOrCreate([
-                    'user_id' => $user_id_req,
-                    'from' => $request->from,
-                    'to' => $request->to,
-                    'price' => (array_sum($totalcost) - array_sum($seller_commission)),
-                    'additional_price' => $request->additional,
-                    'description' => $request ->description,
-                    'costs' => $total
-                ]);
-                $seller = User::find($user_id_req);
-                $seller->balance += $total;
-                $seller->save();
-                return redirect()->to(route('ScheduleSeller.index'))->with('success', __('site.save_changes'));
+                return redirect()->back()->with('success', __('site.save_changes'));
             } else {
                 return redirect()->back()->with('error', 'there is no data');
             }
-
-        } else {
-            return redirect()->back()->withErrors(
-                ['withErrors' => 'error in form'],
-                Response::HTTP_BAD_REQUEST
-            );
         }
     }
     // print pdf the shippment from to for special user
     function accountsellerpdf(Request $req)
     {
-        $validator = Validator($req->all(), [
-            'seller_id' => 'required',
-            'from' => 'required',
-            'to' => 'required',
-        ]);
+        if ($req->type == 'export_date') {
+            $validator = Validator($req->all(), [
+                'seller_id' => 'required',
+                'from' => 'required',
+                'to' => 'required',
+            ]);
 
-        if (!$validator->fails()) {
-            $fromdate =  Carbon::parse($req->input('from'));
-            $todate  = Carbon::parse($req->input('to'));
-            $user_id_req = $req->input('seller_id');
-            $shippments = AccountSeller::with('shippment')
-                ->whereDate('created_at', '>=', $fromdate)
-                ->whereDate('created_at', '<=', $todate)
-                ->whereNotNull('shippment_id')
-                ->where('user_id', $user_id_req)
-                ->whereHas('shippment', function($query) {
-                    $query->where('seller_settled', 0);
-                })
-                ->get();
-            $pickups = AccountSeller::with('pickup')
-                ->whereDate('created_at', '>=', $fromdate)
-                ->whereDate('created_at', '<=', $todate)
-                ->whereNotNull('pickup_id')
-                ->where('user_id', $user_id_req)
-                ->whereHas('pickup', function($query) {
-                    $query->where('seller_settled', 0);
-                })
-                ->get();
+            if (!$validator->fails()) {
+                $fromdate =  Carbon::parse($req->input('from'));
+                $todate  = Carbon::parse($req->input('to'));
+                $user_id_req = $req->input('seller_id');
+                $shippments = AccountSeller::with('shippment')
+                    ->whereDate('created_at', '>=', $fromdate)
+                    ->whereDate('created_at', '<=', $todate)
+                    ->whereNotNull('shippment_id')
+                    ->where('user_id', $user_id_req)
+                    ->whereHas('shippment', function ($query) {
+                        $query->where('seller_settled', 0);
+                    })
+                    ->get();
+                $pickups = AccountSeller::with('pickup')
+                    ->whereDate('created_at', '>=', $fromdate)
+                    ->whereDate('created_at', '<=', $todate)
+                    ->whereNotNull('pickup_id')
+                    ->where('user_id', $user_id_req)
+                    ->whereHas('pickup', function ($query) {
+                        $query->where('seller_settled', 0);
+                    })
+                    ->get();
+                $show = $shippments->merge($pickups);
+                $totalcost = [];
+                $seller_commission = [];
+                foreach ($show as $value) {
+                    array_push($totalcost, $value->cost);
+                    array_push($seller_commission, $value->seller_commission);
+                }
+                $total = array_sum($totalcost) - array_sum($seller_commission);
+                return view('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
+            } else {
+                return redirect()->back()->withErrors(
+                    ['withErrors' => 'error in form'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+        } else if ($req->type == 'extract') {
+            $pickups = collect();
+            $shippments = collect();
+
+            if (isset($req->shippment)) {
+                $shippments = AccountSeller::with('shippment')
+                    ->whereIn('shippment_id', $req->shippment)
+                    ->whereHas('shippment', function ($query) {
+                        $query->where('seller_settled', 0);
+                    })
+                    ->get();
+            }
+            if (isset($req->pickup)) {
+                $pickups = AccountSeller::with('pickup')
+                    ->whereNotNull('pickup_id')
+                    ->whereIn('pickup_id', $req->pickup)
+
+                    ->whereHas('pickup', function ($query) {
+                        $query->where('seller_settled', 0);
+                    })
+                    ->get();
+            }
+
             $show = $shippments->merge($pickups);
             $totalcost = [];
             $seller_commission = [];
@@ -336,14 +434,7 @@ class Controller extends BaseController
             }
             $total = array_sum($totalcost) - array_sum($seller_commission);
             return view('Dashboard.admin.accountseller.printtable', ['show' => $show, 'total' => $total]);
-
-        } else {
-            return redirect()->back()->withErrors(
-                ['withErrors' => 'error in form'],
-                Response::HTTP_BAD_REQUEST
-            );
         }
-
     }
     // print pdf the shippment from to
     function accountseller2(Request $req)
@@ -354,11 +445,11 @@ class Controller extends BaseController
         $user_id = $schedule->user_id;
         $seller = User::find($user_id);
         $shippments = AccountSeller::with('shippment')
-        ->whereDate('created_at', '>=', $from)
-        ->whereDate('created_at', '<=', $to)
-        ->whereNotNull('shippment_id')
-        ->where('user_id', $user_id)
-        ->get();
+            ->whereDate('created_at', '>=', $from)
+            ->whereDate('created_at', '<=', $to)
+            ->whereNotNull('shippment_id')
+            ->where('user_id', $user_id)
+            ->get();
         $pickups = AccountSeller::with('pickup')
             ->whereDate('created_at', '>=', $from)
             ->whereDate('created_at', '<=', $to)
@@ -388,12 +479,12 @@ class Controller extends BaseController
     function getshipmentscan(Request $request)
     {
         $barcode = $request->sometext;
-        if(Auth::guard('admin')->check() || Auth::guard('employee')->check() || Auth::guard('user')->check()) {
+        if (Auth::guard('admin')->check() || Auth::guard('employee')->check() || Auth::guard('user')->check()) {
             $shippment = Shippment::where('barcode', $barcode)->first();
-        } elseif(Auth::guard('driver')->check()) {
+        } elseif (Auth::guard('driver')->check()) {
             $shippment = Shippment::where('barcode', $barcode)->first();
             $delivery = Delivery::where('driver_id', Auth::id())->where('shippment_id', $shippment->id)->first();
-            if(!$delivery) {
+            if (!$delivery) {
                 $shippment = null;
             }
         } else {
@@ -401,20 +492,20 @@ class Controller extends BaseController
         }
 
         $user_type = '';
-        if(Auth::guard('admin')->check())
+        if (Auth::guard('admin')->check())
             $user_type = 'admin';
-        elseif(Auth::guard('employee')->check())
+        elseif (Auth::guard('employee')->check())
             $user_type = 'employee';
-        elseif(Auth::guard('driver')->check())
+        elseif (Auth::guard('driver')->check())
             $user_type = 'driver';
-        elseif(Auth::guard('user')->check())
+        elseif (Auth::guard('user')->check())
             $user_type = 'user';
         $shippment_view = ShippmentView::where([
             'shippment_id' => $shippment->id,
             'user_id' => Auth::id(),
             'user_type' => $user_type,
         ])->first();
-        if(!$shippment_view) {
+        if (!$shippment_view) {
             ShippmentView::create([
                 'shippment_id' => $shippment->id,
                 'user_id' => Auth::id(),
@@ -498,7 +589,7 @@ class Controller extends BaseController
 
         foreach ($shippment as  $value) {
             $findedDelivery = Delivery::where('shippment_id', $value->id)->first();
-            if($findedDelivery) {
+            if ($findedDelivery) {
                 $findedDelivery->delete();
                 $isSaved = 1;
             } else {
@@ -514,7 +605,6 @@ class Controller extends BaseController
                 $update = $value->save();
                 $isSaved = $delivery->save();
             }
-
         }
 
 
@@ -543,7 +633,7 @@ class Controller extends BaseController
             ShippmentHistory::create([
                 'user_id' => Auth::id(),
                 'status' => $request->status,
-                'shippment_id'=> $value->id
+                'shippment_id' => $value->id
             ]);
             $update = $value->save();
         }
@@ -560,9 +650,9 @@ class Controller extends BaseController
     function changestatue(Request $request)
     {
         $shippment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
-        if(Auth::guard('driver')->user()) {
+        if (Auth::guard('driver')->user()) {
 
-            if($shippment->driver_changed == 0) {
+            if ($shippment->driver_changed == 0) {
                 $shippment->driver_changed = 1;
             } else {
                 return response()->json(
@@ -572,16 +662,15 @@ class Controller extends BaseController
                     Response::HTTP_BAD_REQUEST
                 );
             }
-
         }
         $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
-        if($shippment->user) {
+        if ($shippment->user) {
             $price = Specialprice::where('user_id', $shippment->user->id)->get();
         } else {
             $price = [];
         }
         $shippment->status = $request->status;
-        if($request->status == 'onhold') {
+        if ($request->status == 'onhold') {
             $shippment->on_hold =  $request->date;
             $shippment->note =  $request->note;
         }
@@ -589,15 +678,13 @@ class Controller extends BaseController
         $tracking = new Tracking();
         $tracking->shippment_id = $shippment->id;
         $tracking->user_id = Auth::id();
-        if(Auth::guard('admin')->check()) {
+        if (Auth::guard('admin')->check()) {
             $tracking->user_type = 'admin';
-        } else if(Auth::guard('employee')->check()) {
+        } else if (Auth::guard('employee')->check()) {
             $tracking->user_type = 'employee';
-
-        } elseif(Auth::guard('user')->check()) {
+        } elseif (Auth::guard('user')->check()) {
             $tracking->user_type = 'user';
-
-        } elseif(Auth::guard('driver')->check()) {
+        } elseif (Auth::guard('driver')->check()) {
             $tracking->user_type = 'driver';
         }
         $tracking->status = $shippment->status;
@@ -609,7 +696,7 @@ class Controller extends BaseController
         ]);
 
         if ($request->status == 'delivered') {
-            if($shippment->user && $delivery) {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $delivery->shippment->id;
                 $accounts->user_id = $shippment->user->id;
@@ -624,7 +711,6 @@ class Controller extends BaseController
                         if ($delivery->shippment->city->id == $val->city_id && $delivery->shippment->area->id == $val->area_id) {
                             $accounts->cost = $delivery->shippment->price - $val->special_price;
                             $accounts->rate = $val->special_price;
-
                         } else {
                             $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
                             $accounts->rate = $delivery->shippment->area->rate;
@@ -634,9 +720,8 @@ class Controller extends BaseController
                 //end cost
                 $accounts->save();
             }
-
         } elseif ($request->status == 'delivered' && $delivery->shippment->shippment_type == 'exchange') {
-            if($shippment->user && $delivery) {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->user_id = $shippment->user->id;
@@ -654,14 +739,13 @@ class Controller extends BaseController
                         } else {
                             $accounts->cost = 0 - $shippment->area->rate;
                             $accounts->rate = $shippment->area->rate;
-
                         }
                     }
                 }
                 $accounts->save();
             }
         } elseif ($request->status == 'rejected') {
-            if($shippment->user) {
+            if ($shippment->user) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->user_id = $shippment->user->id;
@@ -683,14 +767,13 @@ class Controller extends BaseController
                 }
                 $accounts->save();
             }
-
         } elseif ($request->status == 'rejected_fees_paid') {
             $shippment->rejected_fees_paid =  $request->rejected_fees_paid;
-            if($shippment->user && $delivery) {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->user_id = $shippment->user->id;
-                if($delivery->driver) {
+                if ($delivery->driver) {
                     $accounts->delivery_commission = $delivery->driver->special_pickup;
                 }
 
@@ -698,14 +781,12 @@ class Controller extends BaseController
                     $accounts->cash = $shippment->area->rate;
                     $accounts->cost = $accounts->cash - $shippment->area->rate;
                     $accounts->rate = $shippment->area->rate;
-
                 } else {
                     foreach ($price as $val) {
                         if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
                             $accounts->cash = $val->special_price;
                             $accounts->cost = $accounts->cash - $val->special_price;
                             $accounts->rate = $val->special_price;
-
                         } else {
                             $accounts->cash = $shippment->area->rate;
                             $accounts->cost = $accounts->cash - $shippment->area->rate;
@@ -715,11 +796,8 @@ class Controller extends BaseController
                 }
                 $accounts->save();
             }
-
-        }
-
-        elseif ($shippment->shippment_type == 'return_pickup') {
-            if($shippment->user && $delivery) {
+        } elseif ($shippment->shippment_type == 'return_pickup') {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->cash = -$shippment->price;
@@ -757,9 +835,9 @@ class Controller extends BaseController
     function changestatuemany(Request $request)
     {
         $shippment = Shippment::with('city', 'area', 'user')->where('id', $request->shipment_id)->first();
-        if(Auth::guard('driver')->user()) {
+        if (Auth::guard('driver')->user()) {
 
-            if($shippment->driver_changed == 0) {
+            if ($shippment->driver_changed == 0) {
                 $shippment->driver_changed = 1;
             } else {
                 return response()->json(
@@ -769,16 +847,15 @@ class Controller extends BaseController
                     Response::HTTP_BAD_REQUEST
                 );
             }
-
         }
         $delivery = Delivery::with('driver', 'shippment')->where('shippment_id', $request->shipment_id)->first();
-        if($shippment->user) {
+        if ($shippment->user) {
             $price = Specialprice::where('user_id', $shippment->user->id)->get();
         } else {
             $price = [];
         }
         $shippment->status = $request->status;
-        if($request->status == 'onhold') {
+        if ($request->status == 'onhold') {
             $shippment->on_hold =  $request->date;
             $shippment->note =  $request->note;
         }
@@ -786,15 +863,13 @@ class Controller extends BaseController
         $tracking = new Tracking();
         $tracking->shippment_id = $shippment->id;
         $tracking->user_id = Auth::id();
-        if(Auth::guard('admin')->check()) {
+        if (Auth::guard('admin')->check()) {
             $tracking->user_type = 'admin';
-        } else if(Auth::guard('employee')->check()) {
+        } else if (Auth::guard('employee')->check()) {
             $tracking->user_type = 'employee';
-
-        } elseif(Auth::guard('user')->check()) {
+        } elseif (Auth::guard('user')->check()) {
             $tracking->user_type = 'user';
-
-        } elseif(Auth::guard('driver')->check()) {
+        } elseif (Auth::guard('driver')->check()) {
             $tracking->user_type = 'driver';
         }
         $tracking->status = $shippment->status;
@@ -806,7 +881,7 @@ class Controller extends BaseController
         ]);
 
         if ($request->status == 'delivered') {
-            if($shippment->user && $delivery) {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $delivery->shippment->id;
                 $accounts->user_id = $shippment->user->id;
@@ -821,7 +896,6 @@ class Controller extends BaseController
                         if ($delivery->shippment->city->id == $val->city_id && $delivery->shippment->area->id == $val->area_id) {
                             $accounts->cost = $delivery->shippment->price - $val->special_price;
                             $accounts->rate = $val->special_price;
-
                         } else {
                             $accounts->cost = $delivery->shippment->price - $delivery->shippment->area->rate;
                             $accounts->rate = $delivery->shippment->area->rate;
@@ -831,9 +905,8 @@ class Controller extends BaseController
                 //end cost
                 $accounts->save();
             }
-
         } elseif ($request->status == 'delivered' && $delivery->shippment->shippment_type == 'exchange') {
-            if($shippment->user && $delivery) {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->user_id = $shippment->user->id;
@@ -851,14 +924,13 @@ class Controller extends BaseController
                         } else {
                             $accounts->cost = 0 - $shippment->area->rate;
                             $accounts->rate = $shippment->area->rate;
-
                         }
                     }
                 }
                 $accounts->save();
             }
         } elseif ($request->status == 'rejected') {
-            if($shippment->user) {
+            if ($shippment->user) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->user_id = $shippment->user->id;
@@ -880,14 +952,13 @@ class Controller extends BaseController
                 }
                 $accounts->save();
             }
-
         } elseif ($request->status == 'rejected_fees_paid') {
             $shippment->rejected_fees_paid =  $request->rejected_fees_paid;
-            if($shippment->user && $delivery) {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->user_id = $shippment->user->id;
-                if($delivery->driver) {
+                if ($delivery->driver) {
                     $accounts->delivery_commission = $delivery->driver->special_pickup;
                 }
 
@@ -895,14 +966,12 @@ class Controller extends BaseController
                     $accounts->cash = $shippment->area->rate;
                     $accounts->cost = $accounts->cash - $shippment->area->rate;
                     $accounts->rate = $shippment->area->rate;
-
                 } else {
                     foreach ($price as $val) {
                         if ($shippment->city->id == $val->city_id && $shippment->area->id == $val->area_id) {
                             $accounts->cash = $val->special_price;
                             $accounts->cost = $accounts->cash - $val->special_price;
                             $accounts->rate = $val->special_price;
-
                         } else {
                             $accounts->cash = $shippment->area->rate;
                             $accounts->cost = $accounts->cash - $shippment->area->rate;
@@ -912,16 +981,14 @@ class Controller extends BaseController
                 }
                 $accounts->save();
             }
-
         }
 
         /*        elseif ($request->status == 'no_answer') {
                     if($delivery) {
                         $delivery->delete();
                     }
-                }*/
-        elseif ($shippment->shippment_type == 'return_pickup') {
-            if($shippment->user && $delivery) {
+                }*/ elseif ($shippment->shippment_type == 'return_pickup') {
+            if ($shippment->user && $delivery) {
                 $accounts = new AccountSeller();
                 $accounts->shippment_id = $shippment->id;
                 $accounts->cash = -$shippment->price;
@@ -961,13 +1028,12 @@ class Controller extends BaseController
     {
         $assigned = Delivery::with('pickup')->where('pickup_id', '!=', null)->where('driver_id', auth()->user()->id);
 
-        if(request('status')) {
+        if (request('status')) {
             $pickups = Pickup::where('status', request('status'))->pluck('id');
             $assigned = $assigned->whereIn('pickup_id', $pickups);
-
         }
-        if(request('driver_settled')) {
-            if(request('driver_settled') == 2) {
+        if (request('driver_settled')) {
+            if (request('driver_settled') == 2) {
                 $driver_settled = 1;
             } else {
                 $driver_settled = 0;
@@ -980,37 +1046,38 @@ class Controller extends BaseController
         return view('Dashboard.driver.pickups', ['assignedPickups' => $assigned]);
     }
 
-    function drivershippments() {
+    function drivershippments()
+    {
         $this->authorize('shippments.index');
         $assignedShippments = Delivery::with('shippment')
             ->where('shippment_id', '!=', null)
             ->where('driver_id', auth()->user()->id)
             ->pluck('shippment_id');
-        $shipments = Shippment::whereIn('id', $assignedShippments)->where('driver_settled' , 0 )->latest();
+        $shipments = Shippment::whereIn('id', $assignedShippments)->where('driver_settled', 0)->latest();
         $drivers = [];
 
-        if(request('barcode')) {
-            $shipments = $shipments->where('barcode', 'like' , '%' . request('barcode')  . '%');
+        if (request('barcode')) {
+            $shipments = $shipments->where('barcode', 'like', '%' . request('barcode')  . '%');
         }
-        if(request('receiver_name')) {
-            $shipments = $shipments->where('receiver_name', 'like' , '%' . request('receiver_name')  . '%');
+        if (request('receiver_name')) {
+            $shipments = $shipments->where('receiver_name', 'like', '%' . request('receiver_name')  . '%');
         }
-        if(request('receiver_phone')) {
-            $shipments = $shipments->where('receiver_phone', 'like' , '%' . request('receiver_phone')  . '%');
+        if (request('receiver_phone')) {
+            $shipments = $shipments->where('receiver_phone', 'like', '%' . request('receiver_phone')  . '%');
         }
 
-        if(request('shippment_type')) {
+        if (request('shippment_type')) {
             $shipments = $shipments->where('shippment_type', request('shippment_type'));
         }
-        if(request('status')) {
+        if (request('status')) {
             $shipments = $shipments->where('status', request('status'));
         }
-        if(request('driver_settled')) {
+        if (request('driver_settled')) {
             $shipments = $shipments->where('driver_settled', request('driver_settled'));
         }
 
-        if(request('driver_settled')) {
-            if(request('driver_settled') == 2) {
+        if (request('driver_settled')) {
+            if (request('driver_settled') == 2) {
                 $driver_settled = 1;
             } else {
                 $driver_settled = 0;
@@ -1025,82 +1092,82 @@ class Controller extends BaseController
     //show delivery shippments and pickup in accountdriver
     function getaccounts()
     {
-        if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+        if (Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
             $accounts = AccountSeller::latest();
 
-            if(request('settled_id')) {
+            if (request('settled_id')) {
                 $accounts = $accounts->where('id', request('settled_id'));
             }
-            if(request('shippment_code')) {
-                $accounts =  $accounts->whereHas('shippment', function($shipment) {
+            if (request('shippment_code')) {
+                $accounts =  $accounts->whereHas('shippment', function ($shipment) {
                     return $shipment->where('barcode', request('shippment_code'));
                 });
             }
 
-            if(request('shippment_type')) {
-                $accounts =  $accounts->whereHas('shippment', function($shipment) {
+            if (request('shippment_type')) {
+                $accounts =  $accounts->whereHas('shippment', function ($shipment) {
                     return $shipment->where('shippment_type', request('shippment_type'));
                 });
             }
 
-            if(request('seller_settled')) {
+            if (request('seller_settled')) {
                 $settled = 0;
-                if(request('seller_settled') == '2') {
+                if (request('seller_settled') == '2') {
                     $settled = 1;
                 }
-                $accounts =  $accounts->whereHas('shippment', function($shipment) use($settled) {
+                $accounts =  $accounts->whereHas('shippment', function ($shipment) use ($settled) {
                     return $shipment->where('seller_settled', $settled);
                 });
             }
-            if(request('shippment_status')) {
-                $accounts =  $accounts->whereHas('shippment', function($shipment) {
+            if (request('shippment_status')) {
+                $accounts =  $accounts->whereHas('shippment', function ($shipment) {
                     return $shipment->where('status', request('shippment_status'));
                 });
             }
 
-            $accounts = $accounts->get();
+            $accounts = $accounts->paginate(10);
             $drivers = Driver::latest()->get();
-        } else if(Auth::guard('driver')->check()) {
+        } else if (Auth::guard('driver')->check()) {
             $shippments = Delivery::with('shippment')
-            ->where('driver_id', Auth::id())
-            ->whereNull('pickup_id')
-            ->pluck('shippment_id');
+                ->where('driver_id', Auth::id())
+                ->whereNull('pickup_id')
+                ->pluck('shippment_id');
             $pickups = Delivery::with('pickup')
-            ->where('driver_id', Auth::id())
-            ->whereNull('shippment_id')
-            ->pluck('pickup_id');
+                ->where('driver_id', Auth::id())
+                ->whereNull('shippment_id')
+                ->pluck('pickup_id');
             $accountsOfShippments = AccountSeller::with('shippment')->latest()
-            ->whereIn('shippment_id', $shippments);
+                ->whereIn('shippment_id', $shippments);
             $accountsOfPickups = AccountSeller::with('pickup')->latest()
-            ->whereIn('pickup_id', $pickups);
+                ->whereIn('pickup_id', $pickups);
 
 
-            if(request('settled_id')) {
+            if (request('settled_id')) {
                 $accountsOfShippments = $accountsOfShippments->where('id', request('settled_id'));
             }
-            if(request('shippment_code')) {
-                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) {
+            if (request('shippment_code')) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function ($shipment) {
                     return $shipment->where('barcode', request('shippment_code'));
                 });
             }
 
-            if(request('shippment_type')) {
-                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) {
+            if (request('shippment_type')) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function ($shipment) {
                     return $shipment->where('shippment_type', request('shippment_type'));
                 });
             }
 
-            if(request('driver_settled')) {
+            if (request('driver_settled')) {
                 $settled = 0;
-                if(request('driver_settled') == '2') {
+                if (request('driver_settled') == '2') {
                     $settled = 1;
                 }
-                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) use($settled) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function ($shipment) use ($settled) {
                     return $shipment->where('driver_settled', $settled);
                 });
             }
-            if(request('shippment_status')) {
-                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function($shipment) {
+            if (request('shippment_status')) {
+                $accountsOfShippments =  $accountsOfShippments->whereHas('shippment', function ($shipment) {
                     return $shipment->where('status', request('shippment_status'));
                 });
             }
@@ -1110,6 +1177,7 @@ class Controller extends BaseController
             $accountsOfPickups = $accountsOfPickups->get();
 
             $accounts =  $accountsOfShippments->merge($accountsOfPickups);
+            $accounts = $accounts->paginate(10);
             $drivers = [];
         }
         // return $accounts;
@@ -1119,135 +1187,177 @@ class Controller extends BaseController
     }
 
     function paginateCollection($collection, $perPage, $pageName = 'page', $fragment = null)
-{
-    $currentPage = \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage($pageName);
-    $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage);
-    parse_str(request()->getQueryString(), $query);
-    unset($query[$pageName]);
-    $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
-        $currentPageItems,
-        $collection->count(),
-        $perPage,
-        $currentPage,
-        [
-            'pageName' => $pageName,
-            'path' => \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPath(),
-            'query' => $query,
-            'fragment' => $fragment
-        ]
-    );
+    {
+        $currentPage = \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage($pageName);
+        $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage);
+        parse_str(request()->getQueryString(), $query);
+        unset($query[$pageName]);
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            $currentPageItems,
+            $collection->count(),
+            $perPage,
+            $currentPage,
+            [
+                'pageName' => $pageName,
+                'path' => \Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPath(),
+                'query' => $query,
+                'fragment' => $fragment
+            ]
+        );
 
-    return $paginator;
-}
+        return $paginator;
+    }
     // print pdf the accountshippment for drivers with give date from to
     function accountdriver(Request $req)
     {
-        $validator = Validator($req->all(), [
-            'from' => 'required',
-            'to' => 'required',
-            'driver_id' => 'required',
-        ]);
-        if (!$validator->fails()) {
-            $driver_id = $req->input('driver_id');
-            $driver = driver::where('id', $driver_id)->first();
-            $scheduledriver = Scheduledriver::where([
-                'driver_id' => $req->driver_id,
-                'from' => $req->from,
-                'to' => $req->to,
-            ])->first();
 
-            if(!$scheduledriver) {
-                $totalcost = [];
-                $totalcommisson = [];
-                $pickup = [];
-                $shippment = [];
-                $scheduledriverId =0;
-                $from =  Carbon::parse($req->input('from'));
-                $to   = Carbon::parse($req->input('to'));
-                //get data
-                $delivery = Delivery::where('driver_id', $driver_id)->get();
+        if ($req->type == 'export_date') {
+            $validator = Validator($req->all(), [
+                'from' => 'required',
+                'to' => 'required',
+                'driver_id' => 'required',
+            ]);
+            if (!$validator->fails()) {
+                $driver_id = $req->input('driver_id');
+                $driver = driver::where('id', $driver_id)->first();
+                $scheduledriver = Scheduledriver::where([
+                    'driver_id' => $req->driver_id,
+                    'from' => $req->from,
+                    'to' => $req->to,
+                ])->first();
 
-                foreach ($delivery as $val) {
-                    if ($val->shippment_id == null && $val->pickup_id != null) {
+                if (!$scheduledriver) {
+                    $totalcost = [];
+                    $totalcommisson = [];
+                    $pickup = [];
+                    $shippment = [];
+                    $scheduledriverId = 0;
+                    $from =  Carbon::parse($req->input('from'));
+                    $to   = Carbon::parse($req->input('to'));
+                    //get data
+                    $delivery = Delivery::where('driver_id', $driver_id)->get();
+                    foreach ($delivery as $val) {
+                        if ($val->shippment_id == null && $val->pickup_id != null) {
 
-                        array_push($pickup, $val->pickup_id);
-
-                    } elseif ($val->pickup_id == null && $val->shippment_id != null) {
-                        array_push($shippment, $val->shippment_id);
-                    }
-                }
-
-                $shippments = AccountSeller::with('shippment')
-                ->whereHas('shippment', function($query) {
-                    $query->where('driver_settled', 0);
-                })
-                ->whereIn('shippment_id', $shippment)->get();
-                $pickups = AccountSeller::with('pickup')
-                ->whereHas('pickup', function($query) {
-                    $query->where('driver_settled', 0);
-                })
-                ->whereIn('pickup_id', $pickup)->get();
-                $show = $shippments->merge($pickups);
-                if(count($show) > 0) {
-                    foreach ($show as $value) {
-                        if($value->shippment) {
-                            $value->shippment->driver_settled = 1;
-                            $value->shippment->save();
-
-                        } else if($value->pickup) {
-                            $value->pickup->driver_settled = 1;
-                            $value->pickup->save();
+                            array_push($pickup, $val->pickup_id);
+                        } elseif ($val->pickup_id == null && $val->shippment_id != null) {
+                            array_push($shippment, $val->shippment_id);
                         }
-                        array_push($totalcost, $value->cost);
-                        array_push($totalcommisson, $value->delivery_commission);
                     }
-                    $total = array_sum($totalcost);
-                    $totaldrivercommission = array_sum($totalcommisson);
-                    $driver->balance += $totaldrivercommission;
-                    $driver->save();
-                    $scheduledriver = Scheduledriver::firstOrCreate([
-                        'driver_id' => $req->driver_id,
-                        'from' => $req->from,
-                        'to' => $req->to,
-                        'total_cost' => $total,
-                        'total_delivery_commission' => $totaldrivercommission,
-                    ]);
-                    $scheduledriverId = $scheduledriver->id;
+
+                    $shippments = AccountSeller::with('shippment')
+                        ->whereHas('shippment', function ($query) {
+                            $query->where('driver_settled', 0);
+                        })
+                        ->whereIn('shippment_id', $shippment)->get();
+                    $pickups = AccountSeller::with('pickup')
+                        ->whereHas('pickup', function ($query) {
+                            $query->where('driver_settled', 0);
+                        })
+                        ->whereIn('pickup_id', $pickup)->get();
+                    $show = $shippments->merge($pickups);
+                    if (count($show) > 0) {
+                        foreach ($show as $value) {
+                            if ($value->shippment) {
+                                $value->shippment->driver_settled = 1;
+                                $value->shippment->save();
+                            } else if ($value->pickup) {
+                                $value->pickup->driver_settled = 1;
+                                $value->pickup->save();
+                            }
+                            array_push($totalcost, $value->cost);
+                            array_push($totalcommisson, $value->delivery_commission);
+                        }
+                        $total = array_sum($totalcost);
+                        $totaldrivercommission = array_sum($totalcommisson);
+                        $driver->balance += $totaldrivercommission;
+                        $driver->save();
+                        $scheduledriver = Scheduledriver::firstOrCreate([
+                            'driver_id' => $req->driver_id,
+                            'from' => $req->from,
+                            'to' => $req->to,
+                            'total_cost' => $total,
+                            'total_delivery_commission' => $totaldrivercommission,
+                        ]);
+                        $scheduledriverId = $scheduledriver->id;
+                    } else {
+                        $show = [];
+                        $total = 0;
+                        $totaldrivercommission = 0;
+                    }
+                    $scheduledriverUp = Scheduledriver::find($scheduledriverId);
+                    foreach ($show as $value) {
+                        if ($value->shippment) {
+
+                            Delivery::where("shippment_id", $value->shippment->id)
+                                ->update(["scheduledrivers_id" => $scheduledriverUp->id]);
+                        } else if ($value->pickup) {
+
+                            Delivery::where("pickup_id", $value->pickup->id)
+                                ->update(["scheduledrivers_id" => $scheduledriverUp->id]);
+                        }
+                    }
                 } else {
                     $show = [];
                     $total = 0;
                     $totaldrivercommission = 0;
                 }
-                $scheduledriverUp = Scheduledriver::find( $scheduledriverId);
-                foreach ($show as $value) {
-                    if($value->shippment) {
-
-                        Delivery::where("shippment_id", $value->shippment->id)
-                            ->update(["scheduledrivers_id" => $scheduledriverUp->id]);
-                    } else if($value->pickup) {
-
-                        Delivery::where("pickup_id", $value->pickup->id)
-                            ->update(["scheduledrivers_id" => $scheduledriverUp->id]);
-                    }
-
-                }
-
-//                $deliveryUp = Delivery::where('driver_id', $driver_id);
-/*                   Delivery::where("shippment_id", $shippment->id)
-                    ->update(["scheduledrivers_id" => $scheduledriverUp->id]);*/
-
-
+                return view('Dashboard.admin.accountdriver.data', ['show' => $show, 'total' => $total, 'totaldrivercommission' => $totaldrivercommission, 'driver' => $driver]);
             } else {
-                $show = [];
-                $total = 0;
-                $totaldrivercommission = 0;
+                return redirect()->back()->withErrors(
+                    ['withErrors' => 'error in form'],
+                    Response::HTTP_BAD_REQUEST
+                );
             }
-            return view('Dashboard.admin.accountdriver.data', ['show' => $show, 'total' => $total, 'totaldrivercommission' => $totaldrivercommission, 'driver' => $driver]);
-        } else {
-            return redirect()->back()->withErrors(
-                ['withErrors' => 'error in form'],
-                Response::HTTP_BAD_REQUEST
-            );
+        } else if ($req->type == 'extract') {
+
+            $pickup = [];
+            $shippment = [];
+            if(isset($req->pickup)) {
+                $pickup = $req->pickup;
+            }
+            if(isset($req->shippment)) {
+                $shippment = $req->shippment;
+            }
+
+            $shippments = AccountSeller::with('shippment')
+                ->whereHas('shippment', function ($query) {
+                    $query->where('driver_settled', 0);
+                })
+                ->whereIn('shippment_id', $shippment)->get();
+            $pickups = AccountSeller::with('pickup')
+                ->whereHas('pickup', function ($query) {
+                    $query->where('driver_settled', 0);
+                })
+                ->whereIn('pickup_id', $pickup)->get();
+            $show = $shippments->merge($pickups);
+            if (count($show) > 0) {
+                foreach ($show as $value) {
+                    if(isset($value->shippment->deliveries)) {
+                        foreach($value->shippment->deliveries as $delivery) {
+                            $total = $value->cost;
+                            $totaldrivercommission = $value->delivery_commission;
+                            $delivery->driver->balance += $totaldrivercommission;
+                            $delivery->driver->save();
+
+                            if ($value->shippment) {
+                                $value->shippment->driver_settled = 1;
+                                $value->shippment->save();
+                            } else if ($value->pickup) {
+                                $value->pickup->driver_settled = 1;
+                                $value->pickup->save();
+                            }
+                            $scheduledriver = Scheduledriver::firstOrCreate([
+                                'driver_id' => $delivery->driver_id,
+                                'total_cost' => $total,
+                                'total_delivery_commission' => $totaldrivercommission,
+                            ]);
+                            $scheduledriverId = $scheduledriver->id;
+                        }
+                    }
+                }
+                return redirect()->back()->with('success', __('site.save_changes'));
+            }
         }
     }
 
@@ -1255,7 +1365,7 @@ class Controller extends BaseController
     function accountdriver2(Request $req)
     {
         $schedule = Scheduledriver::find($req->schedule_id);
-        if($schedule) {
+        if ($schedule) {
             //get data
             $delivery = Delivery::where('driver_id', $schedule->driver_id)->where('scheduledrivers_id', $schedule->id)->get();
             $pickup = [];
@@ -1345,7 +1455,7 @@ class Controller extends BaseController
         $sellers = User::count();
         $settled_sellers_prices = 0;
         $sellers_should_to_pays = 0;
-        if(Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
+        if (Auth::guard('admin')->check() || Auth::guard('employee')->check()) {
             $settled_sellers_prices = ScheduleSeller::sum('costs');
             $sellers_should_to_pays = Shippment::with('city', 'area')->where('seller_settled', 0)->get();
             $areasCosts = [];
@@ -1353,11 +1463,10 @@ class Controller extends BaseController
             $costs = [];
             foreach ($sellers_should_to_pays as $sellers_should_to_pay) {
                 array_push($costs, $sellers_should_to_pay->price);
-                if($sellers_should_to_pay->area) {
+                if ($sellers_should_to_pay->area) {
                     array_push($areasCosts, $sellers_should_to_pay->area->rate);
                 } else {
                     array_push($citiesCosts, $sellers_should_to_pay->city->rate);
-
                 }
             }
             $areasCosts = array_sum($areasCosts);
@@ -1371,15 +1480,14 @@ class Controller extends BaseController
             $receiver_at_hub =  Shippment::where('status', 'receiver_at_hub')->count();
             $out_for_delivery =  Shippment::where('status', 'out_for_delivery')->count();
             $created =  Shippment::where('status', 'created')->count();
-
-        } else if( Auth::guard('user')->check()) {
+        } else if (Auth::guard('user')->check()) {
             $delivered =  Shippment::where(['status' => 'delivered', 'user_id' => Auth::id()])->count();
             $rejected =  Shippment::where(['status' => 'rejected', 'user_id' => Auth::id()])->count();
             $rejected_fees_paid =  Shippment::where(['status' => 'rejected_fees_paid', 'user_id' => Auth::id()])->count();
             $receiver_at_hub =  Shippment::where(['status' => 'receiver_at_hub', 'user_id' => Auth::id()])->count();
             $out_for_delivery =  Shippment::where(['status' => 'out_for_delivery', 'user_id' => Auth::id()])->count();
             $created =  Shippment::where(['status' => 'created', 'user_id' => Auth::id()])->count();
-        } else if( Auth::guard('driver')->check()) {
+        } else if (Auth::guard('driver')->check()) {
             $shippments = Delivery::where('driver_id', Auth::id())->whereNull('pickup_id')->pluck('shippment_id');
             $delivered =  Shippment::where(['status' => 'delivered'])->whereIn('id', $shippments)->count();
             $rejected =  Shippment::where(['status' => 'rejected'])->whereIn('id', $shippments)->count();
@@ -1419,7 +1527,7 @@ class Controller extends BaseController
     function gettrackingnumber(Request $request)
     {
         $data = Tracking::with('shippment')->whereRelation('shippment', 'barcode', $request->tracking_number)->get();
-        if(count($data) > 0) {
+        if (count($data) > 0) {
             return view('Dashboard.tracking', ['data' => $data]);
         } else {
             return redirect()->back()->with('error', 'رقم الشحنة خطأ');
@@ -1452,10 +1560,10 @@ class Controller extends BaseController
     function importShippment(Request $request)
     {
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:xlsx,xls',
         ]);
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return redirect()->back()->withErrors(
                 [
                     'withErrors' =>  'Error ! Check The File'
@@ -1463,15 +1571,11 @@ class Controller extends BaseController
             );
         } else {
             $path1 = $request->file('file')->store('temp');
-            $path2=storage_path('app').'/'.$path1;
+            $path2 = storage_path('app') . '/' . $path1;
             $import = new ShippmentImport;
             $import->import($path2);
 
             return redirect()->back()->with('success', __('site.create'));
-
         }
-
-
-
     }
 }
