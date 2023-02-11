@@ -11,12 +11,7 @@ class Driver extends Authenticatable
 {
     use HasFactory, HasRoles;
 
-    protected $fillable = [
-        'id',
-        'name',
-        'email',
-        'special_pickup',
-    ];
+    protected $guarded = [];
 
     public function roles() {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id');

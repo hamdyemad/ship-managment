@@ -121,12 +121,13 @@ class ShippmentController extends Controller
 
 
         if (!$validator->fails()) {
-            $code =Shippment::latest()->first()->id +1;
-            $shipment = new Shippment();
-            if ($code < 5000 ){
-                $shipment->id = 5001;
-                $code = 5001;
+            $first = Shippment::latest()->first();
+            if($first) {
+                $code = $first->id +1;
+            } else {
+                $code = 1;
             }
+            $shipment = new Shippment();
             if ($request->active == 1) {
                 $shipment->allow_open = 'true';
             } elseif ($request->active == 0) {

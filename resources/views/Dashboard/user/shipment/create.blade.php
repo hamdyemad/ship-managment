@@ -74,7 +74,6 @@
                                 @foreach ($sellers as $seller)
                                     <option value="{{ $seller->id }}">{{ $seller->name }}</option>
                                 @endforeach
-
                             </select>
                         </div>
                         <!--end::shipment type-->
@@ -399,6 +398,14 @@
                 document.getElementById('address').style.borderColor = "#f5f8fa";
                 document.getElementById('city').style.borderColor = "#f5f8fa";
                 document.getElementById('area').style.borderColor = "#f5f8fa";
+
+                if (error.response.data.errors['user_id']){
+                    document.getElementById('shipment_seller').style.borderColor = "red";
+                }
+                if (error.response.data.errors['price']){
+                    document.getElementById('price').style.borderColor = "red";
+                }
+
                 if (error.response.data.errors['business']){
                     document.getElementById('business').style.borderColor = "red";
                 }

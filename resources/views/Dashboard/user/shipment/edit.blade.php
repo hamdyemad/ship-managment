@@ -396,8 +396,47 @@
 
             })
             .catch(function (error) {
-                //4xx - 5xx
-                console.log(error.response.data.message);
+                document.getElementById('business').style.borderColor = "#f5f8fa";
+                document.getElementById('shipment_type').style.borderColor = "#f5f8fa";
+                document.getElementById('shipper').style.borderColor = "#f5f8fa";
+                document.getElementById('receiver_name').style.borderColor = "#f5f8fa";
+                document.getElementById('receiver_phone').style.borderColor = "#f5f8fa";
+                document.getElementById('address').style.borderColor = "#f5f8fa";
+                document.getElementById('city').style.borderColor = "#f5f8fa";
+                document.getElementById('area').style.borderColor = "#f5f8fa";
+
+                if (error.response.data.errors['user_id']){
+                    document.getElementById('shipment_seller').style.borderColor = "red";
+                }
+                if (error.response.data.errors['price']){
+                    document.getElementById('price').style.borderColor = "red";
+                }
+
+                if (error.response.data.errors['business']){
+                    document.getElementById('business').style.borderColor = "red";
+                }
+                if (error.response.data.errors['shipment_type']){
+                    document.getElementById('shipment_type').style.borderColor = "red";
+                }
+                if (error.response.data.errors['shipper']){
+                    document.getElementById('shipper').style.borderColor = "red";
+                }
+                if (error.response.data.errors['receiver_name']){
+                    document.getElementById('receiver_name').style.borderColor = "red";
+                }
+                if (error.response.data.errors['receiver_phone']){
+                    document.getElementById('receiver_phone').style.borderColor = "red";
+                }
+                if (error.response.data.errors['address']){
+                    document.getElementById('address').style.borderColor = "red";
+                }
+                if (error.response.data.errors['city']){
+                    document.getElementById('city').style.borderColor = "red";
+                }
+                if (error.response.data.errors['area']){
+                    document.getElementById('area').style.borderColor = "red";
+                }
+                console.log(error.response.data.errors);
                 Swal.fire({
                 position: 'top-end',
                 icon: 'error',

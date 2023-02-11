@@ -234,8 +234,8 @@
                 showConfirmButton: false,
                 timer: 1500
                 });
-                document.getElementById('kt_account_profile_details_form').reset();
-                window.location.href = "/dashboard/driver";
+                // document.getElementById('kt_account_profile_details_form').reset();
+                // window.location.href = "/dashboard/driver";
 
             })
             .catch(function (error) {
