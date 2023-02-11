@@ -121,11 +121,11 @@ class ShippmentController extends Controller
 
 
         if (!$validator->fails()) {
-            $first = Shippment::latest()->first();
-            if($first) {
-                $code = $first->id +1;
+            $ship = Shippment::latest()->first();
+            if($ship) {
+                $code = $ship->barcode +1;
             } else {
-                $code = 1;
+                $code = 5000;
             }
             $shipment = new Shippment();
             if ($request->active == 1) {
